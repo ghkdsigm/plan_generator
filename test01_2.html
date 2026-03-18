@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UX/UI & AI 서비스 기획서</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --bg: #f3f4f8;
+      --surface: #ffffff;
+      --surface-soft: #f7f8fc;
+      --text: #111111;
+      --muted: #6d7280;
+      --line: rgba(38, 38, 38, 0.08);
+      --primary: #4452ff;
+      --primary-dark: #2f39c8;
+      --primary-soft: rgba(68, 82, 255, 0.1);
+      --green: #00694d;
+      --shadow-lg: 0 30px 80px rgba(35, 42, 89, 0.12);
+      --shadow-md: 0 16px 40px rgba(35, 42, 89, 0.08);
+      --max-width: 1920px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 1920px;
+      background:
+        radial-gradient(circle at top right, rgba(68, 82, 255, 0.18), transparent 24%),
+        linear-gradient(180deg, #f4f6fb 0%, #eef1f8 100%);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .document {
+      width: 100%;
+    }
+
+    .section {
+      position: relative;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .section-shell {
+      width: min(100%, var(--max-width));
+      min-height: calc(100vh - 80px);
+      margin: 0 auto;
+      padding: 56px 64px;
+      background: var(--surface);
+      border-radius: 36px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .section-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 36px;
+    }
+
+    .floating-nav {
+      position: fixed;
+      top: 28px;
+      right: 28px;
+      z-index: 20;
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(68, 82, 255, 0.08);
+      border-radius: 999px;
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .floating-nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 44px;
+      padding: 0 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      transition: 0.2s ease;
+    }
+
+    .floating-nav a:hover,
+    .floating-nav a.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .brand-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--primary);
+      text-decoration: underline;
+      text-decoration-thickness: 4px;
+      text-underline-offset: 8px;
+    }
+
+    .dot-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+      min-height: calc(100vh - 210px);
+    }
+
+    .hero-copy h1 {
+      margin: 32px 0 18px;
+      font-size: 112px;
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+      font-weight: 900;
+    }
+
+    .hero-copy h1 span {
+      color: var(--primary);
+    }
+
+    .hero-copy p {
+      max-width: 760px;
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .meta-list {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      height: 46px;
+      padding: 0 18px;
+      border-radius: 999px;
+      background: #f5f7ff;
+      border: 1px solid rgba(68, 82, 255, 0.12);
+      font-size: 16px;
+      font-weight: 700;
+      color: #2b3270;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 760px;
+      display: grid;
+      place-items: center;
+    }
+
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      right: -220px;
+      top: 40px;
+      width: 900px;
+      height: 900px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4a56ff 0%, #6a76ff 100%);
+    }
+
+    .phone-mockup {
+      position: relative;
+      z-index: 1;
+      width: 460px;
+      padding: 28px;
+      border-radius: 46px;
+      background: #ffffff;
+      transform: rotate(-8deg);
+      box-shadow: 0 40px 80px rgba(28, 34, 82, 0.28);
+    }
+
+    .phone-notch {
+      width: 158px;
+      height: 24px;
+      margin: -28px auto 18px;
+      border-radius: 0 0 18px 18px;
+      background: #111;
+    }
+
+    .phone-card {
+      padding: 24px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, #f9faff 0%, #ffffff 100%);
+      border: 1px solid rgba(68, 82, 255, 0.08);
+      margin-bottom: 14px;
+    }
+
+    .phone-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+      color: var(--muted);
+    }
+
+    .phone-card span {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .phone-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .phone-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: #f7f8fc;
+      border: 1px solid rgba(17, 17, 17, 0.06);
+      font-size: 17px;
+    }
+
+    .phone-item b {
+      color: var(--primary);
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin: 24px 0 18px;
+      font-size: 64px;
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+      font-weight: 900;
+    }
+
+    .section-copy {
+      margin: 0;
+      max-width: 860px;
+      font-size: 24px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .card {
+      padding: 32px;
+      border-radius: 28px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card.soft {
+      background: var(--surface-soft);
+    }
+
+    .card h3 {
+      margin: 18px 0 12px;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .card p,
+    .card li {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .number {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .mini-title {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+    }
+
+    .tag-list,
+    .kpi-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .tag,
+    .kpi {
+      padding: 14px 18px;
+      border-radius: 999px;
+      background: #f5f7ff;
+      border: 1px solid rgba(68, 82, 255, 0.12);
+      color: #2b3270;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .problem-layout {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 28px;
+      margin-top: 46px;
+      align-items: stretch;
+    }
+
+    .problem-visual {
+      position: relative;
+      min-height: 620px;
+      border-radius: 32px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 80% 30%, rgba(68, 82, 255, 0.16), transparent 24%),
+        linear-gradient(180deg, #f8f9fe 0%, #f1f3fb 100%);
+      border: 1px solid rgba(68, 82, 255, 0.08);
+    }
+
+    .problem-visual .circle {
+      position: absolute;
+      right: -120px;
+      bottom: -160px;
+      width: 620px;
+      height: 620px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4452ff 0%, #6b77ff 100%);
+    }
+
+    .visual-card {
+      position: absolute;
+      left: 54px;
+      right: 54px;
+      top: 84px;
+      z-index: 1;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .visual-card + .visual-card {
+      top: auto;
+      bottom: 78px;
+    }
+
+    .visual-card strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .visual-card p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .roadmap {
+      margin-top: 46px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .roadmap-item {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr) 240px;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .roadmap-step {
+      display: grid;
+      place-items: center;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #4452ff 0%, #2f39c8 100%);
+      color: #fff;
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .roadmap-body,
+    .roadmap-metric {
+      padding: 28px;
+      border-radius: 24px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+    }
+
+    .roadmap-body h3,
+    .roadmap-metric h3 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .roadmap-body p,
+    .roadmap-metric p {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .footer-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    @media print {
+      body {
+        min-width: auto;
+        background: #fff;
+      }
+
+      .floating-nav {
+        display: none;
+      }
+
+      .section {
+        padding: 0;
+        page-break-after: always;
+      }
+
+      .section-shell {
+        width: 1920px;
+        min-height: 1080px;
+        border-radius: 0;
+        box-shadow: none;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="floating-nav">
+    <a href="#cover" class="active">01</a>
+    <a href="#overview">02</a>
+    <a href="#strategy">03</a>
+    <a href="#roadmap">04</a>
+  </nav>
+
+  <main class="document">
+    <section class="section" id="cover">
+      <div class="section-shell">
+        <div class="brand-row">
+          <div class="brand-mark">plan</div>
+          <div class="dot-group">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+
+        <div class="hero">
+          <div class="hero-copy">
+            <div class="section-label">UX/UI & AI Service Planning</div>
+            <h1>Make UX<br /><span>Work Smarter</span></h1>
+            <p>
+              사용자 경험 설계와 AI 기능 전략을 하나의 문서 구조로 연결해,
+              서비스 방향성부터 실행 로드맵까지 한 번에 설득하는 발표형 기획서입니다.
+            </p>
+            <div class="meta-list">
+              <span class="meta-item">Plan Pilot</span>
+              <span class="meta-item">1920 x 1080 Base</span>
+              <span class="meta-item">Pretendard</span>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="phone-mockup">
+              <div class="phone-notch"></div>
+              <div class="phone-card">
+                <strong>Planning Impact</strong>
+                <span>+40%</span>
+              </div>
+              <div class="phone-card">
+                <strong>Automation Scope</strong>
+                <span>4 Core Flows</span>
+              </div>
+              <div class="phone-list">
+                <div class="phone-item">
+                  <span>Target</span>
+                  <b>서비스 기획 조직</b>
+                </div>
+                <div class="phone-item">
+                  <span>Focus</span>
+                  <b>UX + AI Workflow</b>
+                </div>
+                <div class="phone-item">
+                  <span>Output</span>
+                  <b>전략 문서 + 실행안</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-line">
+          <span>UX/UI & AI Service Planner Document</span>
+          <span>01</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="overview">
+      <div class="section-shell">
+        <div class="section-label">Service Overview</div>
+        <h2 class="section-title">What This Planning Document Solves</h2>
+        <p class="section-copy">
+          이 문서는 기획, 디자인, 개발, 운영 간에 분산된 요구사항을 하나의 구조 안에 정리해
+          빠른 의사결정과 일관된 사용자 경험 설계를 가능하게 합니다.
+        </p>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="number">1</div>
+            <h3>문제 정의</h3>
+            <p>
+              서비스 요구사항과 UX 설계 문서, AI 기능 명세가 서로 다른 형식으로 존재해
+              커뮤니케이션 비용이 커지고 실행 우선순위가 흔들립니다.
+            </p>
+          </article>
+
+          <article class="card soft">
+            <div class="number">2</div>
+            <h3>핵심 가치</h3>
+            <p>
+              사용자 중심 구조와 AI 기능 설명 가능성을 동시에 확보해,
+              전략 문서와 실무 실행안 사이의 간극을 줄입니다.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="number">3</div>
+            <h3>문서 역할</h3>
+            <p>
+              발표용 제안서, 내부 공유 문서, 프로젝트 출발점 역할을 동시에 수행할 수 있는
+              프레젠테이션형 기획서 포맷입니다.
+            </p>
+          </article>
+        </div>
+
+        <div class="grid-2">
+          <article class="card soft">
+            <p class="mini-title">Target User</p>
+            <h3>초기 서비스 팀과 운영 조직</h3>
+            <p>
+              전략 수립부터 화면 정의, AI 기능 우선순위 조정까지 빠르게 합의가 필요한 팀에 적합합니다.
+            </p>
+          </article>
+
+          <article class="card">
+            <p class="mini-title">Key Keywords</p>
+            <h3>Efficiency, Consistency, Collaboration</h3>
+            <div class="tag-list">
+              <span class="tag">AI Workflow</span>
+              <span class="tag">UX Clarity</span>
+              <span class="tag">Decision Speed</span>
+              <span class="tag">Structured Docs</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="footer-line">
+          <span>Service Overview</span>
+          <span>02</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="strategy">
+      <div class="section-shell">
+        <div class="section-label">UX Strategy & AI</div>
+        <h2 class="section-title">Strategy Structure For Product Teams</h2>
+        <p class="section-copy">
+          UX 설계와 AI 기능을 따로 보지 않고, 실제 사용자 흐름 속에서 어떤 자동화가 가치를 만드는지 문서 구조 자체로 설명합니다.
+        </p>
+
+        <div class="problem-layout">
+          <div class="problem-visual">
+            <div class="visual-card">
+              <strong>Current Pain Point</strong>
+              <p>
+                요구사항 문서, 화면 정의서, 운영 이슈가 서로 따로 움직이면서
+                제품 방향성과 사용자 경험이 일관되게 관리되지 않습니다.
+              </p>
+            </div>
+            <div class="visual-card">
+              <strong>AI Planning Point</strong>
+              <p>
+                리서치 요약 자동화, 화면별 UX 개선 제안, KPI 리포트 초안 생성 등
+                반복적인 기획 작업을 AI가 지원하도록 설계합니다.
+              </p>
+            </div>
+            <div class="circle"></div>
+          </div>
+
+          <div class="grid-2" style="margin-top: 0;">
+            <article class="card">
+              <p class="mini-title">01. User Problem</p>
+              <h3>의사결정 속도 저하</h3>
+              <p>핵심 이슈가 문서마다 다르게 표현되어 팀 간 정렬이 늦어집니다.</p>
+            </article>
+
+            <article class="card soft">
+              <p class="mini-title">02. UX Goal</p>
+              <h3>정보 구조 일관화</h3>
+              <p>누가 보더라도 같은 맥락으로 이해되는 화면 흐름과 문서 구조를 만듭니다.</p>
+            </article>
+
+            <article class="card soft">
+              <p class="mini-title">03. AI Feature</p>
+              <h3>기획 생산성 자동화</h3>
+              <p>행동 데이터 요약, 시나리오 초안 작성, 개선 포인트 추천을 자동화합니다.</p>
+            </article>
+
+            <article class="card">
+              <p class="mini-title">04. Team Impact</p>
+              <h3>협업 밀도 향상</h3>
+              <p>기획, 디자인, 개발, 운영 조직이 동일한 메시지와 KPI를 공유할 수 있습니다.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="footer-line">
+          <span>Strategy Structure</span>
+          <span>03</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="roadmap">
+      <div class="section-shell">
+        <div class="section-label">Execution Roadmap</div>
+        <h2 class="section-title">Roadmap & Expected Impact</h2>
+        <p class="section-copy">
+          문제 정의에서 MVP 검증, 운영 최적화까지 단계별 산출물과 KPI를 연결해 실무에서 바로 사용할 수 있는 실행 계획으로 정리합니다.
+        </p>
+
+        <div class="kpi-list">
+          <span class="kpi">기획 리드타임 40% 단축</span>
+          <span class="kpi">문서 작성 시간 60% 절감</span>
+          <span class="kpi">AI 제안 채택률 35%</span>
+          <span class="kpi">협업 만족도 4.7 / 5</span>
+        </div>
+
+        <div class="roadmap">
+          <div class="roadmap-item">
+            <div class="roadmap-step">01</div>
+            <div class="roadmap-body">
+              <h3>리서치와 문제 정의</h3>
+              <p>핵심 사용자 여정과 운영 이슈를 분석해 해결해야 할 우선 과제를 명확히 정리합니다.</p>
+            </div>
+            <div class="roadmap-metric">
+              <h3>Output</h3>
+              <p>JTBD, pain point map, 핵심 기획 가설</p>
+            </div>
+          </div>
+
+          <div class="roadmap-item">
+            <div class="roadmap-step">02</div>
+            <div class="roadmap-body">
+              <h3>AI 워크플로우 설계</h3>
+              <p>어떤 입력을 받아 어떤 추천을 반환할지 정의하여 AI 경험을 서비스 흐름 안에 녹여냅니다.</p>
+            </div>
+            <div class="roadmap-metric">
+              <h3>Output</h3>
+              <p>AI 기능 명세, UX 플로우, 예외 케이스 정의</p>
+            </div>
+          </div>
+
+          <div class="roadmap-item">
+            <div class="roadmap-step">03</div>
+            <div class="roadmap-body">
+              <h3>MVP 구축과 검증</h3>
+              <p>핵심 시나리오를 빠르게 구현하고 사용성, 정확도, 협업 효율 측면에서 성과를 검증합니다.</p>
+            </div>
+            <div class="roadmap-metric">
+              <h3>Output</h3>
+              <p>프로토타입, 테스트 리포트, 개선 우선순위</p>
+            </div>
+          </div>
+
+          <div class="roadmap-item">
+            <div class="roadmap-step">04</div>
+            <div class="roadmap-body">
+              <h3>운영 지표 최적화</h3>
+              <p>기획 생산성과 추천 기능 활용도를 추적하며 문서 체계와 기능 구조를 지속 개선합니다.</p>
+            </div>
+            <div class="roadmap-metric">
+              <h3>Output</h3>
+              <p>KPI 대시보드, 운영 가이드, 고도화 백로그</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-line">
+          <span>Generated For UX/UI & AI Service Planners</span>
+          <span>04</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const links = document.querySelectorAll(".floating-nav a");
+    const sections = document.querySelectorAll(".section");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          links.forEach((link) => {
+            link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`);
+          });
+        });
+      },
+      { threshold: 0.45 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>

@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 서비스 기획자 포트폴리오</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --bg: #eef1f7;
+      --surface: #ffffff;
+      --surface-soft: #f7f8fc;
+      --text: #161616;
+      --muted: #6e7280;
+      --line: rgba(22, 22, 22, 0.08);
+      --blue: #4452ff;
+      --blue-dark: #2f39c8;
+      --blue-soft: rgba(68, 82, 255, 0.1);
+      --blue-pale: #eef0ff;
+      --green: #00ad50;
+      --shadow-lg: 0 32px 80px rgba(40, 46, 92, 0.12);
+      --shadow-md: 0 16px 40px rgba(40, 46, 92, 0.08);
+      --shell-width: 1920px;
+      --shell-radius: 34px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, rgba(68, 82, 255, 0.18), transparent 22%),
+        linear-gradient(180deg, #f4f6fb 0%, #edf1f8 100%);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+      min-width: 1540px;
+    }
+
+    .deck {
+      scroll-snap-type: y mandatory;
+    }
+
+    .slide {
+      min-height: 100vh;
+      padding: 30px;
+      display: grid;
+      place-items: center;
+      scroll-snap-align: start;
+      position: relative;
+    }
+
+    .slide-shell {
+      /* width: min(calc(100vw - 60px), var(--shell-width));
+      min-height: calc(100vh - 60px); */
+      width: 1920px;
+        height: 1080px;
+      /* aspect-ratio: 16 / 9; */
+      background: var(--surface);
+      border-radius: var(--shell-radius);
+      box-shadow: var(--shadow-lg);
+      padding: 48px 56px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: var(--shell-radius);
+      pointer-events: none;
+    }
+
+    .slide-shell::after {
+      content: "";
+      position: absolute;
+      right: -200px;
+      bottom: -240px;
+      width: 720px;
+      height: 720px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4452ff 0%, #6672ff 100%);
+      opacity: 0.96;
+      z-index: 0;
+    }
+
+    .slide.minimal-accent .slide-shell::after {
+      width: 540px;
+      height: 540px;
+      right: -180px;
+      bottom: -190px;
+      opacity: 0.18;
+    }
+
+    .slide-header,
+    .slide-footer,
+    .slide-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide-header,
+    .slide-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--blue);
+      text-decoration: underline;
+      text-decoration-thickness: 4px;
+      text-underline-offset: 8px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 10px;
+    }
+
+    .dots span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .eyebrow.dark {
+      background: rgba(22, 22, 22, 0.06);
+      color: var(--text);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    ul {
+      margin: 0;
+    }
+
+    .title-hero {
+      margin-top: 26px;
+      font-size: 108px;
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+      font-weight: 900;
+    }
+
+    .title-hero .accent {
+      color: var(--blue);
+    }
+
+    .title-xl {
+      margin-top: 22px;
+      font-size: 66px;
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+      font-weight: 900;
+    }
+
+    .title-lg {
+      font-size: 40px;
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+    }
+
+    .body-lg {
+      margin-top: 18px;
+      font-size: 28px;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 860px;
+    }
+
+    .body-md,
+    .list li {
+      font-size: 20px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .meta-row,
+    .chip-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .meta-row {
+      margin-top: 28px;
+    }
+
+    .meta-chip,
+    .chip,
+    .tool-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 18px;
+      min-height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(68, 82, 255, 0.12);
+      background: var(--blue-pale);
+      color: #2c3372;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .layout-2,
+    .layout-3,
+    .layout-4 {
+      display: grid;
+      gap: 20px;
+    }
+
+    .layout-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .layout-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .layout-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: 28px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card.soft {
+      background: var(--surface-soft);
+    }
+
+    .card.dark {
+      background: linear-gradient(180deg, #22263b 0%, #161927 100%);
+      color: #fff;
+      border: 0;
+    }
+
+    .card h3,
+    .card h4 {
+      margin-top: 16px;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+    }
+
+    .card p {
+      margin-top: 12px;
+      font-size: 19px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .card.dark p,
+    .card.dark .label,
+    .card.dark .metric-label {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .number {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .label {
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .highlight {
+      color: var(--blue);
+    }
+
+    .hero-cover {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 20px;
+      align-items: center;
+      flex: 1;
+    }
+
+    .hero-visual {
+      position: relative;
+      height: 100%;
+      display: grid;
+      place-items: center;
+    }
+
+    .device {
+      width: 440px;
+      padding: 26px;
+      border-radius: 42px;
+      background: #fff;
+      box-shadow: 0 40px 90px rgba(29, 35, 86, 0.28);
+      transform: rotate(-8deg);
+      position: relative;
+      z-index: 1;
+    }
+
+    .device::before {
+      content: "";
+      width: 152px;
+      height: 22px;
+      background: #111;
+      border-radius: 0 0 18px 18px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .device-panel {
+      margin-top: 18px;
+      padding: 24px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, #f8f9ff 0%, #ffffff 100%);
+      border: 1px solid rgba(68, 82, 255, 0.08);
+    }
+
+    .device-panel strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+      color: var(--muted);
+    }
+
+    .device-panel span {
+      font-size: 40px;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+    }
+
+    .device-list {
+      margin-top: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .device-item {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: #f5f7fd;
+      border: 1px solid rgba(22, 22, 22, 0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 17px;
+    }
+
+    .device-item b {
+      color: var(--blue);
+    }
+
+    .footer-text,
+    .page-no {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 34px;
+      margin-top: 28px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(68, 82, 255, 0.18), rgba(68, 82, 255, 0.72));
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 26px 24px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -30px;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 8px rgba(68, 82, 255, 0.1);
+    }
+
+    .timeline-item strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .venn {
+      position: relative;
+      width: 760px;
+      height: 520px;
+      margin: 24px auto 0;
+    }
+
+    .venn-circle {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      padding: 52px 44px;
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(12px);
+    }
+
+    .venn-circle h3 {
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .venn-circle p {
+      margin-top: 14px;
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .venn-circle.tech {
+      left: 50px;
+      top: 100px;
+      background: rgba(68, 82, 255, 0.14);
+    }
+
+    .venn-circle.design {
+      right: 50px;
+      top: 100px;
+      background: rgba(0, 173, 80, 0.14);
+    }
+
+    .venn-circle.biz {
+      left: 220px;
+      top: 10px;
+      background: rgba(22, 22, 22, 0.08);
+    }
+
+    .venn-center {
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4452ff 0%, #2f39c8 100%);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 34px;
+      box-shadow: 0 30px 80px rgba(68, 82, 255, 0.32);
+    }
+
+    .venn-center strong {
+      font-size: 34px;
+      line-height: 1.18;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+    }
+
+    .skills-grid .card h3 {
+      font-size: 26px;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 34px;
+    }
+
+    .tool-card {
+      padding: 24px 18px;
+      border-radius: 24px;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      text-align: center;
+      box-shadow: var(--shadow-md);
+    }
+
+    .tool-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 22px;
+      margin: 0 auto 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #4452ff 0%, #6470ff 100%);
+      color: #fff;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .tool-card strong {
+      display: block;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .tool-card span {
+      display: block;
+      margin-top: 8px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .project-head {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-top: 28px;
+    }
+
+    .project-kicker {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      padding: 20px 22px;
+      border-radius: 22px;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+    }
+
+    .stat strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .stat span {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+      align-items: center;
+    }
+
+    .arch-node {
+      padding: 24px;
+      border-radius: 24px;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+      min-height: 180px;
+      position: relative;
+    }
+
+    .arch-node h3 {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .arch-node p {
+      margin-top: 10px;
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .arch-arrow {
+      position: absolute;
+      top: 50%;
+      right: -22px;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      font-weight: 900;
+      box-shadow: var(--shadow-md);
+    }
+
+    .flow-list {
+      margin-top: 26px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .flow-step {
+      display: grid;
+      grid-template-columns: 140px minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .flow-step .step-no {
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #4452ff 0%, #2f39c8 100%);
+      color: #fff;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .flow-step .step-body {
+      border-radius: 22px;
+      padding: 24px 26px;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+    }
+
+    .flow-step h3 {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .flow-step p {
+      margin-top: 10px;
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .image-placeholder {
+      margin-top: 24px;
+      min-height: 260px;
+      border-radius: 28px;
+      border: 2px dashed rgba(68, 82, 255, 0.28);
+      background:
+        linear-gradient(180deg, rgba(68, 82, 255, 0.05) 0%, rgba(68, 82, 255, 0.09) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 28px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+    }
+
+    .image-placeholder.tall {
+      min-height: 340px;
+    }
+
+    .image-placeholder.wide {
+      min-height: 300px;
+    }
+
+    .image-placeholder strong {
+      display: block;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--blue);
+      letter-spacing: -0.03em;
+    }
+
+    .image-placeholder span {
+      display: block;
+      margin-top: 10px;
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .placeholder-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      margin-top: 28px;
+    }
+
+    .quote-box {
+      padding: 36px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #4452ff 0%, #5663ff 100%);
+      color: #fff;
+      box-shadow: 0 32px 70px rgba(68, 82, 255, 0.24);
+    }
+
+    .quote-box p {
+      font-size: 34px;
+      line-height: 1.42;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .metric-card {
+      padding: 24px;
+      border-radius: 24px;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+    }
+
+    .metric-value {
+      display: block;
+      margin-top: 8px;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .final-contact {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 26px;
+      align-items: center;
+      flex: 1;
+    }
+
+    .contact-list {
+      margin-top: 30px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .contact-item {
+      padding: 18px 22px;
+      border-radius: 20px;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      font-size: 20px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .thanks-box {
+      height: 100%;
+      min-height: 520px;
+      border-radius: 32px;
+      background: linear-gradient(135deg, #4452ff 0%, #2f39c8 100%);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 50px;
+      box-shadow: 0 36px 80px rgba(68, 82, 255, 0.28);
+    }
+
+    .thanks-box strong {
+      display: block;
+      font-size: 74px;
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+      font-weight: 900;
+    }
+
+    .thanks-box span {
+      display: block;
+      margin-top: 16px;
+      font-size: 28px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .pager {
+      position: fixed;
+      right: 28px;
+      bottom: 28px;
+      z-index: 30;
+      min-width: 112px;
+      padding: 14px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(68, 82, 255, 0.08);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(12px);
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--blue);
+      text-align: center;
+    }
+
+    @media print {
+      body {
+        min-width: auto;
+        background: #fff;
+      }
+
+      .slide {
+        padding: 0;
+        min-height: auto;
+        page-break-after: always;
+      }
+
+      .slide-shell {
+        width: 1920px;
+        min-height: 1080px;
+        aspect-ratio: auto;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .pager {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide" data-page="01">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">portfolio</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content hero-cover">
+          <div>
+            <div class="eyebrow">AI Service Planner Portfolio</div>
+            <h1 class="title-hero">
+              개발의 뼈대,<br />
+              <span class="accent">디자인의 디테일,</span><br />
+              비즈니스의 방향
+            </h1>
+            <p class="body-lg">
+              기술, 디자인, 비즈니스를 모두 이해하며 문제를 제품 언어로 연결하는
+              AI 서비스 기획자 <strong>OOO</strong>의 포트폴리오입니다.
+            </p>
+            <div class="meta-row">
+              <span class="meta-chip">지원 직무: AI 서비스 기획자 / PM</span>
+              <span class="meta-chip">Portfolio 2026</span>
+              <span class="meta-chip">16:9 PDF Ready</span>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="device">
+              <div class="device-panel">
+                <strong>Core Positioning</strong>
+                <span>Connect 3 Domains</span>
+              </div>
+              <div class="device-panel">
+                <strong>Key Value</strong>
+                <span>AI x UX x Business</span>
+              </div>
+              <div class="device-list">
+                <div class="device-item"><span>Tech</span><b>Node.js / Vue</b></div>
+                <div class="device-item"><span>Design</span><b>UX / UI / Figma</b></div>
+                <div class="device-item"><span>Business</span><b>KPI / Team Lead</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Introduction / Cover</span>
+          <span class="page-no">01</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="02">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">summary</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">Executive Summary</div>
+          <h2 class="title-xl">개발자에서 디자이너/기획을 거쳐<br /><span class="highlight">리더</span>로 확장된 커리어</h2>
+          <div class="layout-2" style="margin-top: 30px; align-items: start;">
+            <div class="card soft">
+              <p class="label">Career Timeline</p>
+              <div class="timeline">
+                <div class="timeline-item">
+                  <strong>Tech Foundation</strong>
+                  <p class="body-md">Node.js, Vue 생태계를 직접 다루며 제품 구조와 개발 흐름을 이해한 실무 기반 확보</p>
+                </div>
+                <div class="timeline-item">
+                  <strong>Design & Planning Expansion</strong>
+                  <p class="body-md">사용자 중심 화면 설계, 와이어프레임, 프로토타이핑을 통해 제품 경험 설계 역량 축적</p>
+                </div>
+                <div class="timeline-item">
+                  <strong>Leadership & Business</strong>
+                  <p class="body-md">팀장 역할을 수행하며 일정 관리, KPI 설계, 협업 프로세스 개선까지 리딩</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="layout-2">
+                <article class="card">
+                  <p class="label">Core Achievement</p>
+                  <h3>릴리즈 주기 2주 단축</h3>
+                  <p>디자인-개발 커뮤니케이션 프로세스를 표준화해 의사결정 병목을 해소했습니다.</p>
+                </article>
+                <article class="card soft">
+                  <p class="label">Core Achievement</p>
+                  <h3>기획 생산성 40% 향상</h3>
+                  <p>문서 구조와 AI 자동화 포인트를 정리해 반복 업무의 시간을 줄였습니다.</p>
+                </article>
+                <article class="card soft">
+                  <p class="label">Core Achievement</p>
+                  <h3>직군 간 언어 장벽 최소화</h3>
+                  <p>개발, 디자인, 비즈니스 언어를 번역하는 연결자로서 협업 효율을 높였습니다.</p>
+                </article>
+                <article class="card">
+                  <p class="label">Core Achievement</p>
+                  <h3>제품 방향성과 실행안 동시 설계</h3>
+                  <p>전략 문서와 기능 정의, 화면 흐름을 하나의 논리 구조로 제시합니다.</p>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Introduction / Executive Summary</span>
+          <span class="page-no">02</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="03">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">identity</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">Core Identity</div>
+          <h2 class="title-xl">Tech, Design, Business가 교차하는 지점에서<br />나는 <span class="highlight">AI Product Manager</span>로 작동합니다</h2>
+          <div class="venn">
+            <div class="venn-circle biz">
+              <h3>Business</h3>
+              <p>KPI 개선, 우선순위 정의, 팀 리딩, BM 설계, 시장 타당성 검증</p>
+            </div>
+            <div class="venn-circle tech">
+              <h3>Tech</h3>
+              <p>Node.js, Vue, API 연동 구조, 시스템 플로우 이해, 개발 커뮤니케이션</p>
+            </div>
+            <div class="venn-circle design">
+              <h3>Design</h3>
+              <p>UI/UX 설계, 와이어프레임, 사용자 여정, Figma 프로토타이핑</p>
+            </div>
+            <div class="venn-center">
+              <strong>AI Product<br />Manager</strong>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Introduction / Core Identity</span>
+          <span class="page-no">03</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="04">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">capability</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">Skills & Capabilities</div>
+          <h2 class="title-xl">기획자가 아니라, 제품을 끝까지 연결하는<br /><span class="highlight">실행형 PM</span>의 역량</h2>
+          <div class="layout-3 skills-grid" style="margin-top: 34px;">
+            <article class="card">
+              <div class="number">01</div>
+              <h3>기획 / 비즈니스</h3>
+              <p>데이터 분석, KPI 수립 및 관리, 애자일 스프린트 리딩, BM 검토, 우선순위 조정</p>
+            </article>
+            <article class="card soft">
+              <div class="number">02</div>
+              <h3>AI / Tech</h3>
+              <p>LLM 프롬프트 엔지니어링, API 연동 구조 이해, 서비스 아키텍처 흐름 설계, 기술 리스크 검토</p>
+            </article>
+            <article class="card">
+              <div class="number">03</div>
+              <h3>디자인</h3>
+              <p>Figma, 와이어프레임, 인터랙션 설계, 프로토타이핑, 정보 구조 정리</p>
+            </article>
+          </div>
+          <div class="layout-2" style="margin-top: 20px;">
+            <article class="card soft">
+              <p class="label">Planning Strength</p>
+              <h3>문제를 구조화하고 팀이 움직일 수 있는 언어로 바꿉니다</h3>
+              <p>막연한 아이디어를 기능 정의, 화면 흐름, 요구사항, 개발 범위로 명확히 정리합니다.</p>
+            </article>
+            <article class="card">
+              <p class="label">Leadership Strength</p>
+              <h3>직군 사이의 번역자가 아니라 추진력을 만드는 연결자입니다</h3>
+              <p>리스크를 사전에 감지하고 의사결정 속도를 높여 팀이 같은 방향으로 움직이게 만듭니다.</p>
+            </article>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Core Competency / Skills</span>
+          <span class="page-no">04</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="05">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">tools</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">Tech & Tools</div>
+          <h2 class="title-xl">내가 다루는 무기들은 단순한 툴이 아니라<br /><span class="highlight">기획의 해상도를 높이는 장치</span>입니다</h2>
+          <div class="tool-grid">
+            <div class="tool-card"><div class="tool-icon">N</div><strong>Node.js</strong><span>백엔드 구조 이해와 API 요구사항 정합성 확보</span></div>
+            <div class="tool-card"><div class="tool-icon">V</div><strong>Vue</strong><span>프론트엔드 상태 흐름과 컴포넌트 구조 관점에서 화면 정의</span></div>
+            <div class="tool-card"><div class="tool-icon">F</div><strong>Figma</strong><span>와이어프레임과 프로토타입으로 빠른 시각화</span></div>
+            <div class="tool-card"><div class="tool-icon">L</div><strong>LLM</strong><span>프롬프트 전략, 컨텍스트 주입, 응답 품질 기획</span></div>
+            <div class="tool-card"><div class="tool-icon">A</div><strong>Analytics</strong><span>지표 기반 우선순위 설정 및 개선 방향 도출</span></div>
+          </div>
+          <div class="quote-box" style="margin-top: 28px;">
+            <p>
+              기획자로서 Node.js와 Vue 생태계를 이해하고 있어
+              프론트엔드와 백엔드 개발자와의 소통 비용을 거의 0에 가깝게 만듭니다.
+            </p>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Core Competency / Tools</span>
+          <span class="page-no">05</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="06">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 1</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="project-kicker">Project 01 / DW-Brain · AI 개입형 브레인스토밍 협업 채팅 데스크톱앱 &amp; WEB</div>
+          <h2 class="title-xl">분리된 협업툴을 넘어서<br /><span class="highlight">대화 자체가 자산이 되는 브레인 시스템</span></h2>
+          <div class="layout-2" style="margin-top: 28px;">
+            <article class="card dark">
+              <p class="label">1.1 전략 정의</p>
+              <h3>협업 과정 전체를 하나의 데이터 흐름으로 기록하는 구조 설계</h3>
+              <p>채팅, 문서, AI, 실행이 분리된 업무 환경을 통합해 대화 → 아이디어 → 문서 → 스펙 → 실행이 연결되는 AI 개입형 협업 구조를 목표로 설정했습니다.</p>
+            </article>
+            <article class="card soft">
+              <p class="label">1.2 문제 정의</p>
+              <h3>브레인스토밍은 진행되지만, 사고 흐름은 축적되지 않았습니다</h3>
+              <p>아이디어는 메신저에 흩어지고 정리는 다시 문서로 작성되며 AI는 개별 도구로 호출되는 구조여서, 의사결정 인과관계 추적과 지식 축적이 어려운 문제가 존재했습니다.</p>
+            </article>
+          </div>
+          <div class="stat-row">
+            <div class="stat"><strong>Current Flow</strong><span>대화 / 문서 / AI 분리</span></div>
+            <div class="stat"><strong>Main Issue</strong><span>사고 흐름 단절</span></div>
+            <div class="stat"><strong>Goal</strong><span>조직 단위 지식 축적</span></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 01 / 전략 정의 & 문제 정의</span>
+          <span class="page-no">06</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="07">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 1</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">1.3 해결 전략 설계</div>
+          <h2 class="title-xl">AI는 보조 기능이 아니라<br /><span class="highlight">협업 과정에 직접 개입하는 엔진</span>으로 정의</h2>
+          <div class="flow-list">
+            <div class="flow-step">
+              <div class="step-no">01</div>
+              <div class="step-body">
+                <h3>채팅 기반 협업 환경 통합</h3>
+                <p>기존 채팅, 문서, AI툴의 분리 구조에서 벗어나 대화 자체가 기록되고 구조화되며 결과로 이어지도록 시스템을 설계했습니다.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-no">02</div>
+              <div class="step-body">
+                <h3>대화 → 아이디어 → 문서 → 스펙 → 실행 흐름 구성</h3>
+                <p>브레인스토밍 중 생성되는 대화, 결정, 아이디어가 자동 정리되고 문서와 스펙으로 전환될 수 있는 데이터 흐름을 만들었습니다.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-no">03</div>
+              <div class="step-body">
+                <h3>로그 기반 추적 구조 설계</h3>
+                <p>어떤 논의가 어떤 결과로 이어졌는지 추적할 수 있도록 협업 로그와 의사결정 인과관계 분석 구조를 함께 설계했습니다.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-no">04</div>
+              <div class="step-body">
+                <h3>AI 역할 재정의</h3>
+                <p>AI가 요약, 구조화, 문서 생성, 스펙 생성, 지식 정리까지 수행하는 협업 개입형 역할을 하도록 제품 방향을 정의했습니다.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 01 / 해결 전략 설계</span>
+          <span class="page-no">07</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="08">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 1</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">1.4 실행</div>
+          <h2 class="title-xl">데스크톱앱과 WEB 프로토타입으로<br /><span class="highlight">실제 협업 가능성 검증</span></h2>
+          <div class="layout-2" style="margin-top: 28px;">
+            <article class="card dark">
+              <p class="label">Prototype Scope</p>
+              <h3>채팅 인터페이스 + AI 응답 + 문서 생성 + 지식 저장 구조 구현</h3>
+              <p>대화, 아이디어, 문서, 스펙, 실행 흐름이 하나의 시스템 안에서 이어지도록 핵심 기능을 프로토타입으로 구현했습니다.</p>
+            </article>
+            <article class="card soft">
+              <p class="label">Validation</p>
+              <h3>AI가 협업 생산성에 실제 개입할 수 있는지 테스트</h3>
+              <p>내부 사용 테스트를 통해 자동 정리, 구조화, 문서화, 스펙화 흐름이 기존 협업 방식보다 빠르게 작동하는지 검증했습니다.</p>
+            </article>
+          </div>
+          <div class="image-placeholder wide">
+            <div>
+              <strong>이미지 영역</strong>
+              <span>DW-Brain 데스크톱앱 메인 화면, WEB 협업 화면, 대화 → 문서 전환 플로우 이미지 삽입 영역</span>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 01 / 실행 & 프로토타입</span>
+          <span class="page-no">08</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="09">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 1</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">성과 & 검증</div>
+          <h2 class="title-xl">브레인스토밍을 결과로 연결하는 속도와 전환율을<br /><span class="highlight">실제 지표로 확인</span></h2>
+          <div class="metric-grid" style="margin-top: 28px;">
+            <div class="metric-card"><span class="label">문서 작성 시간</span><span class="metric-value">-40%</span></div>
+            <div class="metric-card"><span class="label">회의 정리 시간</span><span class="metric-value">-60%</span></div>
+            <div class="metric-card"><span class="label">PRD 리드타임</span><span class="metric-value">-30%</span></div>
+            <div class="metric-card"><span class="label">회의 후 실행항목 생성률</span><span class="metric-value">+35%</span></div>
+          </div>
+          <div class="layout-2" style="margin-top: 22px;">
+            <article class="card">
+              <p class="label">Before / After</p>
+              <h3>아이디어 → 문서 전환 효율 개선</h3>
+              <p>회의 정리 시간 30분 → 12분, 문서 작성 시간 40분 → 20분, 실행 항목 생성 1.5개 → 3.2개, 회의 횟수 주 4회 → 주 2회로 개선되었습니다.</p>
+            </article>
+            <article class="card soft">
+              <p class="label">검증 방법</p>
+              <h3>로그 이벤트 측정, Before/After 비교, A/B 테스트, KPI 비교</h3>
+              <p>자동 문서 생성 비율 70%, AI 응답 활용률, AI 개입 빈도, 지식 재사용률과 같은 핵심 지표를 중심으로 효과를 검증했습니다.</p>
+            </article>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 01 / 성과 & 검증</span>
+          <span class="page-no">09</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="10">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 2</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="project-kicker">Project 02 / AI 360 파노라마 인테리어 제너레이터</div>
+          <h2 class="title-xl">3D 모델링 중심 제작 방식에서<br /><span class="highlight">AI 기반 자동 생성 구조</span>로의 전환</h2>
+          <div class="layout-2" style="margin-top: 28px;">
+            <article class="card dark">
+              <p class="label">2.1 전략 정의</p>
+              <h3>360 촬영과 AI 이미지 처리를 결합해 제작비와 시간을 줄이는 방향 설정</h3>
+              <p>촬영, 모델링, 텍스처 적용, 렌더링에 많은 비용이 드는 기존 구조를 줄이고 XR/VR 확장 기반을 확보하는 것을 목표로 프로젝트를 기획했습니다.</p>
+            </article>
+            <article class="card soft">
+              <p class="label">2.2 문제 정의</p>
+              <h3>공간 기반 컨텐츠 제작은 반복 공정과 수동 작업이 많았습니다</h3>
+              <p>벽, 바닥, 천장 마스킹과 텍스처 합성을 수동으로 반복해야 했고, 수정 요청이 생길 때마다 같은 작업을 다시 수행해야 하는 비효율이 존재했습니다.</p>
+            </article>
+          </div>
+          <div class="stat-row">
+            <div class="stat"><strong>Current Cost</strong><span>모델링 / 렌더링 중심</span></div>
+            <div class="stat"><strong>Main Pain</strong><span>반복 수정 비용</span></div>
+            <div class="stat"><strong>Target Output</strong><span>VR / 360 / 시뮬레이션</span></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 02 / 전략 정의 & 문제 정의</span>
+          <span class="page-no">10</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="11">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 2</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">2.3 해결 전략 설계 / 2.4 실행</div>
+          <h2 class="title-xl">촬영 → 업로드 → 분석 → 합성 → 결과 생성까지<br /><span class="highlight">하나의 파이프라인으로 설계</span></h2>
+          <div class="flow-list">
+            <div class="flow-step">
+              <div class="step-no">01</div>
+              <div class="step-body">
+                <h3>Insta360 촬영 데이터 업로드 구조 구성</h3>
+                <p>실제 공간을 360 파노라마로 촬영하고 서버로 자동 전송하는 구조를 설계했습니다.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-no">02</div>
+              <div class="step-body">
+                <h3>AI 기반 영역 인식 및 마스킹</h3>
+                <p>벽, 바닥, 천장 영역을 자동 구분하고 텍스처가 적용될 수 있는 마스킹 구조를 설계하고 구현했습니다.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-no">03</div>
+              <div class="step-body">
+                <h3>텍스처 라이브러리와 합성 엔진 구성</h3>
+                <p>동화자연마루 및 벽지 텍스처를 라이브러리화하고 동일 공간에 여러 제품을 반복 적용할 수 있도록 만들었습니다.</p>
+              </div>
+            </div>
+          </div>
+          <div class="image-placeholder wide">
+            <div>
+              <strong>이미지 영역</strong>
+              <span>360 파노라마 원본, 영역 인식 결과, 텍스처 자동 합성 결과 이미지 삽입 영역</span>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 02 / 해결 전략 설계 & 실행</span>
+          <span class="page-no">11</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="12">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 2</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">성과 & 검증</div>
+          <h2 class="title-xl">컨텐츠 제작 시간과 비용을 줄이며<br /><span class="highlight">AI 기반 자동 생성 기술 기반 확보</span></h2>
+          <div class="metric-grid" style="margin-top: 28px;">
+            <div class="metric-card"><span class="label">컨텐츠 제작 시간</span><span class="metric-value">감소</span></div>
+            <div class="metric-card"><span class="label">외주 / 렌더링 비용</span><span class="metric-value">절감</span></div>
+            <div class="metric-card"><span class="label">텍스처 합성 자동화</span><span class="metric-value">확보</span></div>
+            <div class="metric-card"><span class="label">XR / VR 확장성</span><span class="metric-value">기반 확보</span></div>
+          </div>
+          <div class="layout-2" style="margin-top: 22px;">
+            <article class="card">
+              <p class="label">핵심 성과</p>
+              <h3>3D 모델링 중심 제작 방식의 대체 가능성 검증</h3>
+              <p>반복 수정 시간 감소, 이미지 생성 자동화, VR/360 활용 가능성 검증, 초기 기술 진입장벽 확보 가능성을 확인했습니다.</p>
+            </article>
+            <article class="card soft">
+              <p class="label">검증 방법</p>
+              <h3>Before / After 비교, 제작 시간 측정, 내부 테스트, 반복 생성 테스트, KPI 비교</h3>
+              <p>실제 공간 기반 360 이미지에 대한 반복 테스트를 통해 자동 생성 구조의 효율성과 확장성을 검증했습니다.</p>
+            </article>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 02 / 성과 & 검증</span>
+          <span class="page-no">12</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="13">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 3</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="project-kicker">Project 03 / AI 스마트 카메이트 RAG 상담 시스템</div>
+          <h2 class="title-xl">10만대 이상 차량 재고 데이터를 활용한<br /><span class="highlight">B2B AI 상담 플랫폼</span></h2>
+          <div class="layout-2" style="margin-top: 28px;">
+            <article class="card dark">
+              <p class="label">3.1 전략 정의</p>
+              <h3>B2C에서 B2B로 타깃 전환해 운영비와 경쟁력을 동시에 설계</h3>
+              <p>토큰 비용 이슈로 대중 대상 서비스 대신 단지 입점 딜러와 상사를 위한 구독형 AI 상담 시스템으로 방향을 재설정했습니다.</p>
+            </article>
+            <article class="card soft">
+              <p class="label">3.2 문제 정의</p>
+              <h3>기존 시스템은 조회 중심이라 상담, 검색, 추천 자동화가 어려웠습니다</h3>
+              <p>자연어 기반 검색이 부족하고 데이터는 많지만 활용 구조가 약해, 반복 조회와 응답 업무에 시간이 많이 소요되는 문제가 존재했습니다.</p>
+            </article>
+          </div>
+          <div class="stat-row">
+            <div class="stat"><strong>Target</strong><span>딜러 / 상사</span></div>
+            <div class="stat"><strong>Data Scale</strong><span>10만대+ 재고</span></div>
+            <div class="stat"><strong>Core Engine</strong><span>RAG + LLM</span></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 03 / 전략 정의 & 문제 정의</span>
+          <span class="page-no">13</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="14">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 3</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">3.3 해결 전략 설계 / 3.4 실행</div>
+          <h2 class="title-xl">차량 데이터를 검색 가능한 자산으로 바꾸고<br /><span class="highlight">질문 기반 응답 구조</span>를 구현</h2>
+          <div class="architecture">
+            <article class="arch-node">
+              <h3>Vehicle Data</h3>
+              <p>차량 정보, 옵션, 가격, 재고 데이터를 검색 가능한 형태로 구성</p>
+              <div class="arch-arrow">→</div>
+            </article>
+            <article class="arch-node">
+              <h3>Vector Store</h3>
+              <p>차량 재고 데이터를 벡터화하여 저장하고 질문 맥락에 맞는 정보를 검색</p>
+              <div class="arch-arrow">→</div>
+            </article>
+            <article class="arch-node">
+              <h3>RAG + LLM</h3>
+              <p>검색된 차량 데이터를 기반으로 상담 응답과 추천, 비교 결과를 생성</p>
+              <div class="arch-arrow">→</div>
+            </article>
+            <article class="arch-node">
+              <h3>B2B Service</h3>
+              <p>딜러/상사 대상 검색, 상담, 구독형 운영 모델로 연결</p>
+            </article>
+          </div>
+          <div class="image-placeholder wide">
+            <div>
+              <strong>이미지 영역</strong>
+              <span>RAG 상담 화면, 차량 검색 결과, 상담 플로우, 시스템 구조도 이미지 삽입 영역</span>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 03 / 해결 전략 설계 & 실행</span>
+          <span class="page-no">14</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="15">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 3</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">성과 & 확장 계획</div>
+          <h2 class="title-xl">검색 속도, 상담 응답 시간, 데이터 활용 효과를 개선하고<br /><span class="highlight">플랫폼 확장성</span>까지 확보</h2>
+          <div class="metric-grid" style="margin-top: 28px;">
+            <div class="metric-card"><span class="label">검색 / 상담 속도</span><span class="metric-value">개선</span></div>
+            <div class="metric-card"><span class="label">반복 조회 업무</span><span class="metric-value">감소</span></div>
+            <div class="metric-card"><span class="label">AI 기능 차별화</span><span class="metric-value">확보</span></div>
+            <div class="metric-card"><span class="label">구독형 모델</span><span class="metric-value">테스트</span></div>
+          </div>
+          <div class="layout-2" style="margin-top: 22px;">
+            <article class="card">
+              <p class="label">사용 테스트</p>
+              <h3>소수 상사 / 딜러 실제 사용 환경 검증</h3>
+              <p>상담 속도, 검색 편의성, 정보 조회 효율이 개선되었다는 긍정적인 피드백을 확보했고, 데이터 기반 AI 상담 서비스의 경쟁력을 확인했습니다.</p>
+            </article>
+            <article class="card soft">
+              <p class="label">확장 계획 / 검증</p>
+              <h3>다국어 상담, 해외 수출 대응, 차량 평가·밸류에이션까지 확장</h3>
+              <p>내부 테스트, 사용자 테스트, Before/After 비교, KPI 비교, 로그 기반 측정을 통해 서비스 지속 가능성과 확장 방향을 함께 검증했습니다.</p>
+            </article>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 03 / 성과 & 확장 계획</span>
+          <span class="page-no">15</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="16">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 4</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="project-kicker">Project 04 / Dongwha AI Orchestration Platform (DAOP)</div>
+          <h2 class="title-xl">데이터, 정책, 액션, AI를 연결해<br /><span class="highlight">전사 자동화를 조립하는 플랫폼</span></h2>
+          <div class="layout-2" style="margin-top: 28px;">
+            <article class="card dark">
+              <p class="label">4.1 전략 정의</p>
+              <h3>현업 사용자가 직접 자동화를 조립할 수 있는 AI Orchestration Platform 기획</h3>
+              <p>분산된 시스템과 데이터, 문서, 프로세스를 연결하고 업무 자동화와 AI 활용을 전사 차원으로 확장할 수 있는 플랫폼을 목표로 설정했습니다.</p>
+            </article>
+            <article class="card soft">
+              <p class="label">4.2 문제 정의</p>
+              <h3>자동화 로직이 시스템과 코드에 갇혀 현업이 직접 활용하기 어려웠습니다</h3>
+              <p>데이터, 정책, 액션, 문서, API가 분리되어 있고 자동화가 개발 조직 중심으로 수행되어 확장성과 사용자 참여가 낮은 한계가 존재했습니다.</p>
+            </article>
+          </div>
+          <div class="stat-row">
+            <div class="stat"><strong>Current Limit</strong><span>데이터 사일로</span></div>
+            <div class="stat"><strong>Needed</strong><span>No-code / Low-code</span></div>
+            <div class="stat"><strong>Goal</strong><span>전사 AX 기반</span></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 04 / 전략 정의 & 문제 정의</span>
+          <span class="page-no">16</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="17">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 4</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">4.3 해결 전략 설계</div>
+          <h2 class="title-xl">소스 등록, 정책 정의, 액션 설정을 조합해<br /><span class="highlight">에이전트를 만드는 구조</span>로 설계</h2>
+          <div class="flow-list">
+            <div class="flow-step">
+              <div class="step-no">01</div>
+              <div class="step-body">
+                <h3>데이터 / 정책 / 액션 조합형 구조</h3>
+                <p>소스 등록, 정책 정의, 액션 설정을 통해 업무 자동화 로직을 구성할 수 있도록 에이전트 조립형 구조를 설계했습니다.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-no">02</div>
+              <div class="step-body">
+                <h3>No-code / Low-code 인터페이스</h3>
+                <p>현업 사용자가 직접 자동화를 구성하고 수정할 수 있도록 개발 의존도를 낮춘 UI 구조를 설계했습니다.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-no">03</div>
+              <div class="step-body">
+                <h3>AI Builder + Workspace + Dashboard</h3>
+                <p>설정만으로 프로그램을 자동 생성하고, 워크스페이스에서 실행하며, 대시보드에서 상태와 주요 지표를 확인하는 흐름을 구성했습니다.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 04 / 해결 전략 설계</span>
+          <span class="page-no">17</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="18">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 4</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">4.4 실행</div>
+          <h2 class="title-xl">대시보드, 스튜디오, 워크스페이스, AI Builder를 포함한<br /><span class="highlight">플랫폼 프로토타입 구현</span></h2>
+          <div class="layout-2" style="margin-top: 28px;">
+            <article class="card dark">
+              <p class="label">Implemented Modules</p>
+              <h3>Studio / Workspace / Dashboard / AI Builder</h3>
+              <p>스튜디오에서 소스, 정책, 액션을 설정하고 워크스페이스에서 에이전트를 실행하며, 대시보드로 자동화 상태를 관리할 수 있도록 구현했습니다.</p>
+            </article>
+            <article class="card soft">
+              <p class="label">Validation Scope</p>
+              <h3>프로그램 자동 생성, 에이전트 실행, 협업 환경 참여 가능성 검증</h3>
+              <p>에이전트가 회의, 채팅, 업무 흐름에 실시간으로 개입할 수 있는 구조와 자동화 시나리오의 적용 가능성을 테스트했습니다.</p>
+            </article>
+          </div>
+          <div class="image-placeholder wide">
+            <div>
+              <strong>이미지 영역</strong>
+              <span>DAOP 대시보드, 스튜디오 빌더, 워크스페이스, 에이전트 실행 화면 이미지 삽입 영역</span>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 04 / 실행 & 프로토타입</span>
+          <span class="page-no">18</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="19">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">project 4</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">성과 & 검증</div>
+          <h2 class="title-xl">전사 자동화 효율과 사용자 참여를 동시에 높이는<br /><span class="highlight">플랫폼 기반</span> 확보</h2>
+          <div class="metric-grid" style="margin-top: 28px;">
+            <div class="metric-card"><span class="label">개발 요청 감소</span><span class="metric-value">효율 향상</span></div>
+            <div class="metric-card"><span class="label">현업 직접 자동화</span><span class="metric-value">가능</span></div>
+            <div class="metric-card"><span class="label">에이전트 기반 실행</span><span class="metric-value">검증</span></div>
+            <div class="metric-card"><span class="label">전사 AX 기반</span><span class="metric-value">확보</span></div>
+          </div>
+          <div class="layout-2" style="margin-top: 22px;">
+            <article class="card">
+              <p class="label">핵심 성과</p>
+              <h3>데이터 / 정책 / 액션 통합과 템플릿 재사용 구조 확보</h3>
+              <p>업무 자동화 효율 향상, 반복 업무 감소, 자동화 구성 시간 감소, 사용자 참여 증가, 플랫폼 기반 확장 구조를 확인했습니다.</p>
+            </article>
+            <article class="card soft">
+              <p class="label">검증 방법</p>
+              <h3>내부 테스트, 자동화 시나리오 테스트, 사용자 테스트, KPI 비교, 로그 기반 측정</h3>
+              <p>전사 구성원이 직접 자동화를 조립하고 AI 기반 업무 오케스트레이션을 수행할 수 있는 구조의 실현 가능성을 검증했습니다.</p>
+            </article>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Project 04 / 성과 & 검증</span>
+          <span class="page-no">19</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="20">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">philosophy</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">My Product Philosophy</div>
+          <h2 class="title-xl">기획자로서 제가 지키는 세 가지 원칙</h2>
+          <div class="layout-3" style="margin-top: 36px;">
+            <article class="card dark">
+              <div class="number">01</div>
+              <h3>기술을 위한 AI가 아닌,<br />문제를 해결하는 AI를 기획합니다</h3>
+              <p>기술 도입보다 사용자의 불편과 비즈니스 맥락이 먼저라는 원칙으로 접근합니다.</p>
+            </article>
+            <article class="card soft">
+              <div class="number">02</div>
+              <h3>직군 간 언어 장벽을 허물어<br />팀의 속도를 높입니다</h3>
+              <p>개발, 디자인, 비즈니스가 같은 그림을 보도록 만드는 것이 기획자의 핵심 역할이라고 믿습니다.</p>
+            </article>
+            <article class="card">
+              <div class="number">03</div>
+              <h3>아름다움과 사용성을 넘어<br />비즈니스 임팩트를 만듭니다</h3>
+              <p>좋은 경험은 결국 지표와 시장 반응으로 이어져야 한다는 기준으로 제품을 바라봅니다.</p>
+            </article>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Outro / Philosophy</span>
+          <span class="page-no">20</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide minimal-accent" data-page="21">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">vision</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content">
+          <div class="eyebrow">Vision</div>
+          <h2 class="title-hero" style="font-size: 92px;">
+            AI를 통해<br />
+            <span class="accent">복잡한 의사결정이</span><br />
+            더 명확해지는 제품을 만들고 싶습니다
+          </h2>
+          <p class="body-lg" style="max-width: 980px;">
+            앞으로는 AI가 단순 자동화 도구를 넘어, 사람과 팀이 더 빠르고 정확하게 판단할 수 있도록 돕는 제품을 만들고 싶습니다.
+            특히 협업, 생산성, 헬스케어, 펫테크처럼 데이터와 경험이 함께 중요한 도메인에서 문제를 풀어가고자 합니다.
+          </p>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Outro / Vision</span>
+          <span class="page-no">21</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="22">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">contact</div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="slide-content final-contact">
+          <div>
+            <div class="eyebrow">Contact & Q&A</div>
+            <h2 class="title-xl">함께 더 좋은 AI 제품을 만들 준비가 되어 있습니다</h2>
+            <p class="body-lg">
+              기술과 디자인, 비즈니스 사이를 연결하는 PM이 필요하다면 언제든 편하게 연락 주세요.
+            </p>
+            <div class="contact-list">
+              <div class="contact-item">Email / yourname@email.com</div>
+              <div class="contact-item">LinkedIn / linkedin.com/in/yourname</div>
+              <div class="contact-item">GitHub / github.com/yourname</div>
+              <div class="contact-item">Blog / yourblog.com</div>
+            </div>
+          </div>
+          <div class="thanks-box">
+            <div>
+              <strong>Thank<br />You</strong>
+              <span>Questions & Discussion</span>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Outro / Contact</span>
+          <span class="page-no">22</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="pager" id="pager">01 / 22</div>
+
+  <script>
+    const slides = document.querySelectorAll(".slide");
+    const pager = document.getElementById("pager");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const current = entry.target.dataset.page;
+          pager.textContent = `${current} / 22`;
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    slides.forEach((slide) => observer.observe(slide));
+  </script>
+</body>
+</html>

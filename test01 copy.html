@@ -754,188 +754,6 @@
       margin-top: 24px;
     }
 
-    .infographic-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 22px;
-    }
-
-    .chart-card {
-      padding: 24px;
-      border-radius: 26px;
-      background: linear-gradient(180deg, #fcfcff 0%, #f5f7ff 100%);
-      border: 1px solid rgba(68, 82, 255, 0.1);
-      box-shadow: var(--shadow-md);
-    }
-
-    .chart-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--blue);
-      letter-spacing: -0.02em;
-    }
-
-    .chart-title .emoji {
-      width: 36px;
-      height: 36px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: rgba(68, 82, 255, 0.12);
-      font-size: 18px;
-    }
-
-    .chart-note {
-      margin-top: 10px;
-      font-size: 15px;
-      line-height: 1.7;
-      color: var(--muted);
-    }
-
-    .bar-stack {
-      margin-top: 18px;
-      display: grid;
-      gap: 14px;
-    }
-
-    .bar-row {
-      display: grid;
-      grid-template-columns: 120px minmax(0, 1fr) 70px;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .bar-row strong,
-    .compare-row strong {
-      font-size: 14px;
-      color: var(--text);
-      font-weight: 800;
-    }
-
-    .bar-track {
-      height: 12px;
-      border-radius: 999px;
-      background: rgba(68, 82, 255, 0.08);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .bar-fill {
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #4452ff 0%, #6470ff 100%);
-    }
-
-    .bar-value {
-      text-align: right;
-      font-size: 14px;
-      color: var(--muted);
-      font-weight: 800;
-    }
-
-    .compare-table {
-      margin-top: 18px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .compare-row {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr 0.8fr;
-      gap: 10px;
-      align-items: center;
-      padding: 14px 16px;
-      border-radius: 18px;
-      background: #fff;
-      border: 1px solid rgba(68, 82, 255, 0.08);
-      font-size: 14px;
-    }
-
-    .compare-row span {
-      color: var(--muted);
-      font-weight: 700;
-      text-align: center;
-    }
-
-    .chart-svg {
-      margin-top: 16px;
-      width: 100%;
-      height: 180px;
-      display: block;
-    }
-
-    .icon-list {
-      margin-top: 18px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .icon-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      border-radius: 18px;
-      background: #fff;
-      border: 1px solid rgba(68, 82, 255, 0.08);
-      font-size: 15px;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .icon-badge {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #4452ff 0%, #6470ff 100%);
-      color: #fff;
-      font-size: 18px;
-      flex: 0 0 auto;
-    }
-
-    .insight-banner {
-      margin-top: 22px;
-      padding: 22px 24px;
-      border-radius: 26px;
-      background: linear-gradient(135deg, #5d6aff 0%, #4452ff 100%);
-      color: #fff;
-      box-shadow: 0 24px 50px rgba(68, 82, 255, 0.22);
-      display: grid;
-      grid-template-columns: 88px minmax(0, 1fr);
-      gap: 18px;
-      align-items: center;
-    }
-
-    .insight-icon {
-      width: 88px;
-      height: 88px;
-      border-radius: 24px;
-      background: rgba(255, 255, 255, 0.12);
-      display: grid;
-      place-items: center;
-      font-size: 40px;
-    }
-
-    .insight-banner strong {
-      display: block;
-      font-size: 24px;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-    }
-
-    .insight-banner p {
-      margin-top: 8px;
-      font-size: 17px;
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.84);
-    }
-
     .impact-grid {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
@@ -1430,45 +1248,6 @@
             <div class="metric-card"><span class="label">PRD 리드타임</span><span class="metric-value">-30%</span></div>
             <div class="metric-card"><span class="label">회의 후 실행항목 생성률</span><span class="metric-value">+35%</span></div>
           </div>
-          <div class="infographic-grid">
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">📝</span> 문서화 효율 비교</div>
-              <div class="bar-stack">
-                <div class="bar-row"><strong>회의 정리</strong><div class="bar-track"><div class="bar-fill" style="width:40%;"></div></div><span class="bar-value">12분</span></div>
-                <div class="bar-row"><strong>기존 방식</strong><div class="bar-track"><div class="bar-fill" style="width:100%; opacity:0.35;"></div></div><span class="bar-value">30분</span></div>
-                <div class="bar-row"><strong>문서 작성</strong><div class="bar-track"><div class="bar-fill" style="width:50%;"></div></div><span class="bar-value">20분</span></div>
-                <div class="bar-row"><strong>기존 방식</strong><div class="bar-track"><div class="bar-fill" style="width:100%; opacity:0.35;"></div></div><span class="bar-value">40분</span></div>
-              </div>
-            </div>
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">📈</span> 전환율 및 생산성 흐름</div>
-              <svg class="chart-svg" viewBox="0 0 320 180" aria-hidden="true">
-                <line x1="30" y1="150" x2="300" y2="150" stroke="rgba(68,82,255,0.14)" stroke-width="2"/>
-                <line x1="30" y1="35" x2="30" y2="150" stroke="rgba(68,82,255,0.14)" stroke-width="2"/>
-                <polyline fill="none" stroke="#4452ff" stroke-width="4" points="40,128 95,112 150,92 205,68 260,48"/>
-                <circle cx="40" cy="128" r="5" fill="#4452ff"/>
-                <circle cx="95" cy="112" r="5" fill="#4452ff"/>
-                <circle cx="150" cy="92" r="5" fill="#4452ff"/>
-                <circle cx="205" cy="68" r="5" fill="#4452ff"/>
-                <circle cx="260" cy="48" r="5" fill="#4452ff"/>
-                <text x="38" y="168" font-size="12" fill="#6e7280">회의</text>
-                <text x="86" y="168" font-size="12" fill="#6e7280">정리</text>
-                <text x="142" y="168" font-size="12" fill="#6e7280">문서</text>
-                <text x="194" y="168" font-size="12" fill="#6e7280">스펙</text>
-                <text x="249" y="168" font-size="12" fill="#6e7280">실행</text>
-              </svg>
-              <p class="chart-note">대화가 실행 가능한 결과물로 연결될수록 전환율이 상승하는 구조를 시각화했습니다.</p>
-            </div>
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">🤖</span> AI 개입 효과</div>
-              <div class="icon-list">
-                <div class="icon-item"><span class="icon-badge">💬</span> 회의 요약 자동화 적용</div>
-                <div class="icon-item"><span class="icon-badge">📄</span> 문서 초안 자동 생성 비율 70%</div>
-                <div class="icon-item"><span class="icon-badge">🧠</span> 아이디어 재사용률 증가</div>
-                <div class="icon-item"><span class="icon-badge">⚡</span> 의사결정 리드타임 25% 감소</div>
-              </div>
-            </div>
-          </div>
           <div class="layout-2" style="margin-top: 22px;">
             <article class="card">
               <p class="label">Before / After</p>
@@ -1480,13 +1259,6 @@
               <h3>로그 이벤트 측정, Before/After 비교, A/B 테스트, KPI 비교</h3>
               <p>자동 문서 생성 비율 70%, AI 응답 활용률, AI 개입 빈도, 지식 재사용률과 같은 핵심 지표를 중심으로 효과를 검증했습니다.</p>
             </article>
-          </div>
-          <div class="insight-banner">
-            <div class="insight-icon">🧩</div>
-            <div>
-              <strong>Insight</strong>
-              <p>DW-Brain의 핵심 가치는 채팅 기능 자체가 아니라, 협업 과정이 데이터로 남고 AI가 그 흐름을 실시간으로 구조화한다는 점에 있습니다.</p>
-            </div>
           </div>
         </div>
         <div class="slide-footer">
@@ -1591,41 +1363,6 @@
             <div class="metric-card"><span class="label">텍스처 합성 자동화</span><span class="metric-value">확보</span></div>
             <div class="metric-card"><span class="label">XR / VR 확장성</span><span class="metric-value">기반 확보</span></div>
           </div>
-          <div class="infographic-grid">
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">🏠</span> 제작 공정 단축</div>
-              <div class="bar-stack">
-                <div class="bar-row"><strong>모델링 공정</strong><div class="bar-track"><div class="bar-fill" style="width:32%;"></div></div><span class="bar-value">자동화</span></div>
-                <div class="bar-row"><strong>텍스처 합성</strong><div class="bar-track"><div class="bar-fill" style="width:78%;"></div></div><span class="bar-value">고속화</span></div>
-                <div class="bar-row"><strong>반복 수정</strong><div class="bar-track"><div class="bar-fill" style="width:40%;"></div></div><span class="bar-value">감소</span></div>
-              </div>
-            </div>
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">📊</span> 생성 파이프라인 흐름</div>
-              <svg class="chart-svg" viewBox="0 0 320 180" aria-hidden="true">
-                <rect x="24" y="105" width="42" height="45" rx="12" fill="#dfe3ff"/>
-                <rect x="86" y="82" width="42" height="68" rx="12" fill="#cfd5ff"/>
-                <rect x="148" y="58" width="42" height="92" rx="12" fill="#bfc8ff"/>
-                <rect x="210" y="42" width="42" height="108" rx="12" fill="#92a0ff"/>
-                <rect x="272" y="28" width="42" height="122" rx="12" fill="#4452ff"/>
-                <text x="28" y="168" font-size="11" fill="#6e7280">촬영</text>
-                <text x="87" y="168" font-size="11" fill="#6e7280">분석</text>
-                <text x="145" y="168" font-size="11" fill="#6e7280">마스킹</text>
-                <text x="206" y="168" font-size="11" fill="#6e7280">합성</text>
-                <text x="272" y="168" font-size="11" fill="#6e7280">결과</text>
-              </svg>
-              <p class="chart-note">촬영 데이터가 자동 분석과 텍스처 합성을 거쳐 빠르게 결과물로 연결되는 구조입니다.</p>
-            </div>
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">🧪</span> 기술 확보 포인트</div>
-              <div class="icon-list">
-                <div class="icon-item"><span class="icon-badge">📷</span> Insta360 기반 촬영 데이터 활용</div>
-                <div class="icon-item"><span class="icon-badge">🧱</span> 벽 / 바닥 / 천장 자동 인식</div>
-                <div class="icon-item"><span class="icon-badge">🎨</span> 텍스처 자동 합성 엔진</div>
-                <div class="icon-item"><span class="icon-badge">🌐</span> XR / VR 확장 기반 확보</div>
-              </div>
-            </div>
-          </div>
           <div class="layout-2" style="margin-top: 22px;">
             <article class="card">
               <p class="label">핵심 성과</p>
@@ -1637,13 +1374,6 @@
               <h3>Before / After 비교, 제작 시간 측정, 내부 테스트, 반복 생성 테스트, KPI 비교</h3>
               <p>실제 공간 기반 360 이미지에 대한 반복 테스트를 통해 자동 생성 구조의 효율성과 확장성을 검증했습니다.</p>
             </article>
-          </div>
-          <div class="insight-banner">
-            <div class="insight-icon">🪄</div>
-            <div>
-              <strong>Insight</strong>
-              <p>이 프로젝트의 차별점은 단순 이미지 생성이 아니라, 360 공간 데이터를 재사용 가능한 자산으로 전환했다는 데 있습니다.</p>
-            </div>
           </div>
         </div>
         <div class="slide-footer">
@@ -1746,37 +1476,6 @@
             <div class="metric-card"><span class="label">AI 기능 차별화</span><span class="metric-value">확보</span></div>
             <div class="metric-card"><span class="label">구독형 모델</span><span class="metric-value">테스트</span></div>
           </div>
-          <div class="infographic-grid">
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">🚗</span> RAG 상담 구조 가치</div>
-              <div class="icon-list">
-                <div class="icon-item"><span class="icon-badge">🔎</span> 차량 검색 시간 감소</div>
-                <div class="icon-item"><span class="icon-badge">💬</span> 상담 응답 시간 감소</div>
-                <div class="icon-item"><span class="icon-badge">🗂</span> 정보 조회 단계 감소</div>
-                <div class="icon-item"><span class="icon-badge">🧠</span> 대량 데이터 기반 정확도 향상</div>
-              </div>
-            </div>
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">📈</span> 업무 효율 체감 추이</div>
-              <svg class="chart-svg" viewBox="0 0 320 180" aria-hidden="true">
-                <line x1="30" y1="150" x2="300" y2="150" stroke="rgba(68,82,255,0.14)" stroke-width="2"/>
-                <polyline fill="none" stroke="#a8b2ff" stroke-width="4" points="40,118 90,108 140,96 190,88 240,80 290,76"/>
-                <polyline fill="none" stroke="#4452ff" stroke-width="4" points="40,138 90,122 140,102 190,82 240,60 290,44"/>
-                <text x="42" y="168" font-size="12" fill="#6e7280">도입전</text>
-                <text x="250" y="168" font-size="12" fill="#6e7280">도입후</text>
-              </svg>
-              <p class="chart-note">검색 편의성, 상담 정확도, 응답 속도 개선에 대한 긍정적 평가 흐름을 시각화했습니다.</p>
-            </div>
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">🌍</span> 확장 로드맵</div>
-              <div class="compare-table">
-                <div class="compare-row"><strong>다국어 상담</strong><span>준비</span><span>확장</span></div>
-                <div class="compare-row"><strong>해외 수출 대응</strong><span>기획</span><span>확장</span></div>
-                <div class="compare-row"><strong>차량 밸류에이션</strong><span>연계</span><span>고도화</span></div>
-                <div class="compare-row"><strong>거래 투명성 강화</strong><span>검토</span><span>적용</span></div>
-              </div>
-            </div>
-          </div>
           <div class="layout-2" style="margin-top: 22px;">
             <article class="card">
               <p class="label">사용 테스트</p>
@@ -1788,13 +1487,6 @@
               <h3>다국어 상담, 해외 수출 대응, 차량 평가·밸류에이션까지 확장</h3>
               <p>내부 테스트, 사용자 테스트, Before/After 비교, KPI 비교, 로그 기반 측정을 통해 서비스 지속 가능성과 확장 방향을 함께 검증했습니다.</p>
             </article>
-          </div>
-          <div class="insight-banner">
-            <div class="insight-icon">🚘</div>
-            <div>
-              <strong>Insight</strong>
-              <p>스마트 카메이트의 핵심은 AI 그 자체보다, 10만대 이상의 차량 재고 데이터를 검색 가능한 상담 자산으로 전환한 플랫폼 전략에 있습니다.</p>
-            </div>
           </div>
         </div>
         <div class="slide-footer">
@@ -1928,40 +1620,6 @@
             <div class="metric-card"><span class="label">에이전트 기반 실행</span><span class="metric-value">검증</span></div>
             <div class="metric-card"><span class="label">전사 AX 기반</span><span class="metric-value">확보</span></div>
           </div>
-          <div class="infographic-grid">
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">⚙️</span> 자동화 가치 요소</div>
-              <div class="icon-list">
-                <div class="icon-item"><span class="icon-badge">🧩</span> 데이터 / 정책 / 액션 통합</div>
-                <div class="icon-item"><span class="icon-badge">👤</span> 현업 직접 자동화 가능</div>
-                <div class="icon-item"><span class="icon-badge">🤖</span> 에이전트 기반 실행</div>
-                <div class="icon-item"><span class="icon-badge">📚</span> 템플릿 재사용 구조</div>
-              </div>
-            </div>
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">📊</span> 플랫폼 활용 흐름</div>
-              <svg class="chart-svg" viewBox="0 0 320 180" aria-hidden="true">
-                <rect x="28" y="112" width="46" height="38" rx="12" fill="#dfe3ff"/>
-                <rect x="94" y="88" width="46" height="62" rx="12" fill="#c8d0ff"/>
-                <rect x="160" y="64" width="46" height="86" rx="12" fill="#a7b2ff"/>
-                <rect x="226" y="36" width="46" height="114" rx="12" fill="#4452ff"/>
-                <text x="27" y="168" font-size="11" fill="#6e7280">소스</text>
-                <text x="91" y="168" font-size="11" fill="#6e7280">정책</text>
-                <text x="158" y="168" font-size="11" fill="#6e7280">에이전트</text>
-                <text x="223" y="168" font-size="11" fill="#6e7280">실행</text>
-              </svg>
-              <p class="chart-note">구성 요소를 조합할수록 자동화 수준과 사용자 참여 범위가 확대되는 구조를 표현했습니다.</p>
-            </div>
-            <div class="chart-card">
-              <div class="chart-title"><span class="emoji">🧪</span> 검증 프레임</div>
-              <div class="compare-table">
-                <div class="compare-row"><strong>내부 테스트</strong><span>구조</span><span>검증</span></div>
-                <div class="compare-row"><strong>시나리오 테스트</strong><span>자동화</span><span>검증</span></div>
-                <div class="compare-row"><strong>사용자 테스트</strong><span>현업</span><span>검증</span></div>
-                <div class="compare-row"><strong>로그 기반 측정</strong><span>KPI</span><span>비교</span></div>
-              </div>
-            </div>
-          </div>
           <div class="layout-2" style="margin-top: 22px;">
             <article class="card">
               <p class="label">핵심 성과</p>
@@ -1973,13 +1631,6 @@
               <h3>내부 테스트, 자동화 시나리오 테스트, 사용자 테스트, KPI 비교, 로그 기반 측정</h3>
               <p>전사 구성원이 직접 자동화를 조립하고 AI 기반 업무 오케스트레이션을 수행할 수 있는 구조의 실현 가능성을 검증했습니다.</p>
             </article>
-          </div>
-          <div class="insight-banner">
-            <div class="insight-icon">🏢</div>
-            <div>
-              <strong>Insight</strong>
-              <p>DAOP는 단일 AI 기능이 아니라, 전사 시스템과 업무 흐름을 재구성하는 오케스트레이션 레이어로서 의미가 있습니다.</p>
-            </div>
           </div>
         </div>
         <div class="slide-footer">

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>반려동물 양육 포기 및 파양 고려 경험</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --blue: #155da9;
+      --title-blue: #3057aa;
+      --gray: #8f8f8f;
+      --line: #d4d4d4;
+      --text: #222222;
+      --muted: #6e6e6e;
+      --paper: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #f2f2f2;
+      font-family: "Pretendard", "Noto Sans KR", sans-serif;
+      color: var(--text);
+    }
+
+    .figure {
+      width: 1024px;
+      height: 768px;
+      background: var(--paper);
+      border: 1px solid #cfcfcf;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .title {
+      margin: 12px 0 0;
+      text-align: center;
+      font-size: 39px;
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--title-blue);
+    }
+
+    .section-label {
+      position: absolute;
+      top: 72px;
+      height: 60px;
+      border: 3px solid #dedede;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: #fff;
+      font-size: 22px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: #111;
+    }
+
+    .section-left {
+      left: 48px;
+      width: 362px;
+    }
+
+    .section-right {
+      right: 56px;
+      width: 460px;
+    }
+
+    .divider {
+      position: absolute;
+      left: 431px;
+      top: 110px;
+      width: 0;
+      height: 455px;
+      border-left: 2px dashed #d8d8d8;
+    }
+
+    .left-panel {
+      position: absolute;
+      left: 38px;
+      top: 150px;
+      width: 362px;
+      height: 450px;
+    }
+
+    .legend {
+      position: absolute;
+      left: 25px;
+      top: 170px;
+      display: flex;
+      flex-direction: column;
+      gap: 34px;
+      font-size: 18px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 500;
+    }
+
+    .swatch {
+      width: 9px;
+      height: 9px;
+      display: inline-block;
+    }
+
+    .swatch.blue {
+      background: var(--blue);
+    }
+
+    .swatch.gray {
+      background: var(--gray);
+    }
+
+    .donut-wrap {
+      position: absolute;
+      left: 108px;
+      top: 80px;
+      width: 240px;
+      height: 240px;
+    }
+
+    .donut-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .donut-number {
+      font-size: 22px;
+      font-weight: 700;
+      fill: #111;
+    }
+
+    .bar-panel {
+      position: absolute;
+      left: 450px;
+      top: 145px;
+      width: 525px;
+      height: 500px;
+    }
+
+    .base-note {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .base-note strong {
+      font-weight: 800;
+    }
+
+    .bar-svg {
+      width: 100%;
+      height: 420px;
+      overflow: visible;
+    }
+
+    .label-text {
+      font-size: 14px;
+      fill: #1f1f1f;
+    }
+
+    .value-text {
+      font-size: 18px;
+      font-weight: 700;
+      fill: #111;
+    }
+
+    .footer-left,
+    .footer-right,
+    .watermark {
+      position: absolute;
+      font-weight: 500;
+    }
+
+    .footer-left {
+      right: 245px;
+      bottom: 16px;
+      color: #7a7a7a;
+      font-size: 16px;
+    }
+
+    .footer-right {
+      right: 28px;
+      bottom: 16px;
+      color: #7a7a7a;
+      font-size: 16px;
+    }
+
+    .watermark {
+      left: 360px;
+      bottom: 48px;
+      font-size: 70px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: rgba(186, 178, 163, 0.24);
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="figure">
+    <h1 class="title">반려동물 양육 포기 및 파양 고려 경험</h1>
+
+    <div class="section-label section-left">반려동물 양육포기<br />또는 파양 고려 경험</div>
+    <div class="section-label section-right">양육포기 또는 파양 고려 이유 (중복응답)</div>
+
+    <div class="divider" aria-hidden="true"></div>
+
+    <section class="left-panel" aria-label="반려동물 양육포기 또는 파양 고려 경험">
+      <div class="legend" aria-hidden="true">
+        <div class="legend-item"><span class="swatch blue"></span><span>있다</span></div>
+        <div class="legend-item"><span class="swatch gray"></span><span>없다</span></div>
+      </div>
+      <div class="donut-wrap">
+        <svg class="donut-svg" viewBox="0 0 240 240" aria-hidden="true">
+          <g id="donut-chart"></g>
+        </svg>
+      </div>
+    </section>
+
+    <section class="bar-panel" aria-label="양육포기 또는 파양 고려 이유">
+      <div class="base-note">Base: 양육포기 또는 파양 고려 경험자(<strong>n=256</strong>)</div>
+      <svg class="bar-svg" viewBox="0 0 525 420" aria-hidden="true">
+        <g id="bar-chart"></g>
+      </svg>
+    </section>
+
+    <div class="watermark">DAILYVET</div>
+    <div class="footer-left">[Base: 반려동물 양육자(<strong>n=1,410</strong>),</div>
+    <div class="footer-right">Unit: %]</div>
+  </div>
+
+  <script>
+    const donutData = [
+      { label: "있다", value: 18.2, color: "#155da9" },
+      { label: "없다", value: 81.8, color: "#8f8f8f" }
+    ];
+
+    const barData = [
+      { label: "물건훼손·짖음 등 동물의 행동문제", value: 45.7 },
+      { label: "예상보다 지출이 많음", value: 40.2 },
+      { label: "이사·취업 등 여건이 변화", value: 25.0 },
+      { label: "동물이 질병에 걸리거나 사고를 당함", value: 23.4 },
+      { label: "예상보다 시간이 많이 소요", value: 19.1 },
+      { label: "해당 반려동물로 인한 알레르기 등\n이상 반응 발생", value: 17.2 },
+      { label: "반려동물 양육의 어려움", value: 3.1 },
+      { label: "성장 후 외모가 기대와 달라서", value: 2.0 },
+      { label: "기타", value: 2.0 }
+    ];
+
+    function polarToCartesian(cx, cy, r, angleDeg) {
+      const rad = ((angleDeg - 90) * Math.PI) / 180;
+      return {
+        x: cx + r * Math.cos(rad),
+        y: cy + r * Math.sin(rad)
+      };
+    }
+
+    function describeArc(cx, cy, rOuter, rInner, startAngle, endAngle) {
+      const outerStart = polarToCartesian(cx, cy, rOuter, endAngle);
+      const outerEnd = polarToCartesian(cx, cy, rOuter, startAngle);
+      const innerStart = polarToCartesian(cx, cy, rInner, startAngle);
+      const innerEnd = polarToCartesian(cx, cy, rInner, endAngle);
+      const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+
+      return [
+        `M ${outerStart.x} ${outerStart.y}`,
+        `A ${rOuter} ${rOuter} 0 ${largeArcFlag} 0 ${outerEnd.x} ${outerEnd.y}`,
+        `L ${innerStart.x} ${innerStart.y}`,
+        `A ${rInner} ${rInner} 0 ${largeArcFlag} 1 ${innerEnd.x} ${innerEnd.y}`,
+        "Z"
+      ].join(" ");
+    }
+
+    function createSvgNode(tag, attrs = {}) {
+      const node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+      return node;
+    }
+
+    function renderDonut() {
+      const root = document.getElementById("donut-chart");
+      const cx = 120;
+      const cy = 120;
+      const outerR = 96;
+      const innerR = 44;
+      let startAngle = 0;
+
+      donutData.forEach((item) => {
+        const sweep = (item.value / 100) * 360;
+        const endAngle = startAngle + sweep;
+        const path = createSvgNode("path", {
+          d: describeArc(cx, cy, outerR, innerR, startAngle, endAngle),
+          fill: item.color,
+          stroke: "#ffffff",
+          "stroke-width": 2
+        });
+        root.appendChild(path);
+
+        const midAngle = startAngle + sweep / 2;
+        const labelPoint = polarToCartesian(cx, cy, (outerR + innerR) / 2, midAngle);
+        const text = createSvgNode("text", {
+          x: labelPoint.x,
+          y: labelPoint.y + 7,
+          "text-anchor": "middle",
+          class: "donut-number"
+        });
+        text.textContent = item.value.toFixed(1);
+        if (item.label === "있다") {
+          text.setAttribute("fill", "#ffffff");
+        }
+        root.appendChild(text);
+
+        startAngle = endAngle;
+      });
+    }
+
+    function renderBars() {
+      const root = document.getElementById("bar-chart");
+      const labelX = 238;
+      const axisX = 275;
+      const barX = 282;
+      const maxBarWidth = 122;
+      const rowGap = 41;
+      const startY = 32;
+      const maxValue = 50;
+
+      const axis = createSvgNode("line", {
+        x1: axisX,
+        y1: 10,
+        x2: axisX,
+        y2: 395,
+        stroke: "#d9d9d9",
+        "stroke-width": 1.5
+      });
+      root.appendChild(axis);
+
+      barData.forEach((item, index) => {
+        const y = startY + index * rowGap;
+        const width = (item.value / maxValue) * maxBarWidth;
+        const lines = item.label.split("\n");
+
+        lines.forEach((line, lineIndex) => {
+          const label = createSvgNode("text", {
+            x: labelX,
+            y: y + lineIndex * 16 + (lines.length > 1 ? -7 : 6),
+            "text-anchor": "end",
+            class: "label-text"
+          });
+          label.textContent = line;
+          root.appendChild(label);
+        });
+
+        const rect = createSvgNode("rect", {
+          x: barX,
+          y: y - 10,
+          width,
+          height: 22,
+          fill: "#155da9"
+        });
+        root.appendChild(rect);
+
+        const value = createSvgNode("text", {
+          x: barX + width + 24,
+          y: y + 7,
+          class: "value-text"
+        });
+        value.textContent = item.value.toFixed(1);
+        root.appendChild(value);
+      });
+    }
+
+    renderDonut();
+    renderBars();
+  </script>
+</body>
+</html>

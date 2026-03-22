@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LEEJUNYONG Portfolio Deck</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --bg: #edf1f7;
+      --surface: #ffffff;
+      --surface-strong: #f6f8fc;
+      --surface-dark: #0f1728;
+      --text: #151823;
+      --muted: #667085;
+      --line: rgba(15, 23, 40, 0.08);
+      --blue: #4f62ff;
+      --blue-dark: #2638d8;
+      --cyan: #4fc3ff;
+      --mint: #7ae3c6;
+      --violet: #a18cff;
+      --shadow: 0 24px 80px rgba(31, 46, 91, 0.12);
+      --shell-width: 1920px;
+      --shell-height: 1080px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 1540px;
+      background:
+        radial-gradient(circle at top right, rgba(79, 98, 255, 0.16), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(79, 195, 255, 0.1), transparent 20%),
+        linear-gradient(180deg, #f4f6fb 0%, #edf1f7 100%);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    main {
+      scroll-snap-type: y mandatory;
+    }
+
+    .slide {
+      min-height: 100vh;
+      padding: 30px;
+      display: grid;
+      place-items: center;
+      scroll-snap-align: start;
+    }
+
+    .slide-shell {
+      width: var(--shell-width);
+      height: var(--shell-height);
+      padding: 46px 56px;
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .slide-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      pointer-events: none;
+    }
+
+    .slide-shell::after {
+      content: "";
+      position: absolute;
+      right: -220px;
+      bottom: -240px;
+      width: 760px;
+      height: 760px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(79, 98, 255, 0.92), rgba(79, 195, 255, 0.7));
+      filter: blur(4px);
+      opacity: 0.95;
+      z-index: 0;
+    }
+
+    .slide.dark .slide-shell {
+      background:
+        radial-gradient(circle at top left, rgba(79, 98, 255, 0.22), transparent 28%),
+        linear-gradient(180deg, #11192d 0%, #0b1220 100%);
+      color: #f4f7fb;
+    }
+
+    .slide.dark .slide-shell::after {
+      background: linear-gradient(135deg, rgba(79, 98, 255, 0.55), rgba(161, 140, 255, 0.42));
+      opacity: 1;
+    }
+
+    .slide.dark .muted,
+    .slide.dark .body,
+    .slide.dark .list,
+    .slide.dark .kicker,
+    .slide.dark .footer-text,
+    .slide.dark .meta-text {
+      color: rgba(244, 247, 251, 0.76);
+    }
+
+    .slide.dark .card,
+    .slide.dark .stat,
+    .slide.dark .quote,
+    .slide.dark .image-box,
+    .slide.dark .timeline-item {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f4f7fb;
+    }
+
+    .slide-header,
+    .slide-footer,
+    .slide-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide-header,
+    .slide-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 26px;
+    }
+
+    .brand {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--blue);
+    }
+
+    .slide.dark .brand {
+      color: #d7e2ff;
+    }
+
+    .kicker {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .title-hero {
+      font-size: 104px;
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+      font-weight: 900;
+      max-width: 1100px;
+    }
+
+    .title-xl {
+      font-size: 68px;
+      line-height: 1.08;
+      letter-spacing: -0.05em;
+      font-weight: 900;
+      max-width: 1240px;
+    }
+
+    .title-lg {
+      font-size: 44px;
+      line-height: 1.14;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+      max-width: 1200px;
+    }
+
+    .body {
+      font-size: 26px;
+      line-height: 1.65;
+      color: var(--muted);
+      max-width: 1180px;
+    }
+
+    .body.compact {
+      font-size: 23px;
+    }
+
+    .accent {
+      color: var(--blue);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .meta-row,
+    .chip-row,
+    .stats,
+    .card-grid,
+    .image-grid,
+    .two-col,
+    .three-col,
+    .testimonial-grid,
+    .skill-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .meta-row {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .chip-row {
+      grid-template-columns: repeat(auto-fit, minmax(140px, max-content));
+      align-items: start;
+    }
+
+    .two-col {
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: stretch;
+    }
+
+    .three-col {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .image-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .skill-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .testimonial-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .meta,
+    .chip,
+    .card,
+    .stat,
+    .quote,
+    .timeline-item,
+    .image-box {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+
+    .meta,
+    .card,
+    .stat,
+    .quote,
+    .timeline-item {
+      padding: 22px 24px;
+    }
+
+    .meta-title,
+    .card-title,
+    .stat-title,
+    .quote-title,
+    .timeline-title {
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .slide.dark .meta-title,
+    .slide.dark .card-title,
+    .slide.dark .stat-title,
+    .slide.dark .quote-title,
+    .slide.dark .timeline-title {
+      color: rgba(244, 247, 251, 0.7);
+    }
+
+    .meta-text,
+    .card p,
+    .stat p,
+    .quote p,
+    .timeline-item p {
+      font-size: 22px;
+      line-height: 1.55;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .slide.dark .meta-text,
+    .slide.dark .card p,
+    .slide.dark .stat p,
+    .slide.dark .quote p,
+    .slide.dark .timeline-item p {
+      color: #f4f7fb;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(79, 98, 255, 0.1);
+      color: var(--blue);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .slide.dark .chip {
+      background: rgba(255, 255, 255, 0.08);
+      color: #dce5ff;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 48px;
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      margin-bottom: 10px;
+    }
+
+    .card ul,
+    .list {
+      margin: 0;
+      padding-left: 24px;
+      color: var(--muted);
+      font-size: 22px;
+      line-height: 1.6;
+    }
+
+    .slide.dark .card ul,
+    .slide.dark .list {
+      color: rgba(244, 247, 251, 0.82);
+    }
+
+    .image-box {
+      min-height: 260px;
+      border-radius: 28px;
+      padding: 24px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .image-box.large {
+      min-height: 360px;
+    }
+
+    .image-box.tall {
+      min-height: 460px;
+    }
+
+    .image-box::before {
+      content: "이미지 영역";
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(15, 23, 40, 0.08);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .slide.dark .image-box::before {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .image-label {
+      font-size: 32px;
+      line-height: 1.2;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      max-width: 90%;
+    }
+
+    .image-note {
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 84%;
+    }
+
+    .slide.dark .image-note {
+      color: rgba(244, 247, 251, 0.76);
+    }
+
+    .image-gradient {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: -70px;
+      height: 180px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(79, 98, 255, 0.35), rgba(79, 195, 255, 0.22));
+      filter: blur(18px);
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .footer-text,
+    .page-no {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .page-no {
+      font-size: 20px;
+      letter-spacing: 0.08em;
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .contact-block {
+      display: grid;
+      gap: 12px;
+    }
+
+    .contact-item {
+      font-size: 26px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 18px;
+      justify-items: end;
+    }
+
+    .hero-side .image-box {
+      width: 100%;
+    }
+
+    .quote p {
+      font-size: 26px;
+      line-height: 1.6;
+    }
+
+    .quote .author {
+      margin-top: 16px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .big-number {
+      font-size: 96px;
+      line-height: 0.95;
+      letter-spacing: -0.08em;
+      font-weight: 900;
+      color: var(--blue);
+    }
+
+    .slide.dark .big-number {
+      color: #dce5ff;
+    }
+
+    .pager {
+      position: fixed;
+      right: 28px;
+      bottom: 28px;
+      z-index: 30;
+      min-width: 120px;
+      padding: 14px 18px;
+      border-radius: 999px;
+      background: rgba(15, 23, 40, 0.82);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 0.08em;
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="slide dark" data-page="1">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">LEEJUNYONG</div>
+          <div class="kicker">Preface</div>
+        </div>
+        <div class="slide-content cover-grid">
+          <div>
+            <div class="kicker">AI Native Product Manager</div>
+            <h1 class="title-hero">진짜 문제를 찾기 위해<br /><span class="accent">가끔 목숨을 겁니다</span></h1>
+            <p class="body">
+              본 포트폴리오는 문제 정의와 해결 중심으로 쓰였습니다. 하드 스킬의 나열보다 왜 이 프로젝트를 했는지,
+              핵심 문제는 무엇이었는지, 어떻게 해결했고 무엇을 배웠는지에 집중했습니다.
+            </p>
+            <div class="contact-block">
+              <div class="contact-item">hyungwoon.kr@gmail.com</div>
+              <div class="contact-item">010 - 4810 - 9142</div>
+            </div>
+          </div>
+          <div class="hero-side">
+            <div class="image-box tall">
+              <div class="image-label">표지 비주얼 / 인물 사진 / 타이포 커버</div>
+              <div class="image-note">원본 PDF의 표지 이미지는 별도 이미지 삽입 위치로 남겨두고, 하단 그라데이션으로 무드를 이어갑니다.</div>
+              <div class="image-gradient"></div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Preface</span>
+          <span class="page-no">01</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="2">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Intro</div>
+          <div class="kicker">Career Summary</div>
+        </div>
+        <div class="slide-content">
+          <div>
+            <div class="kicker">Causality principles shaping my reality</div>
+            <h2 class="title-xl">명확한 인과관계를 바탕으로,<br />간명하게 일하는 PM입니다</h2>
+            <p class="body">
+              Two-sided market에서 각 유저 사이드의 문제를 해결하고 가치를 만드는 데 집중해왔습니다. AI로 문제 해결의 속도가 빨라진 만큼,
+              문제 정의를 제대로 해내는 PM만이 살아남는다고 믿습니다.
+            </p>
+          </div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-title">Kakaopay · 2025.07 - 2026.02</div>
+              <p>마이데이터 활용 개인 PB 구축, 청소년 마이데이터 런칭, 가상자산 거래소 연동, 신용플래너 개선, 호출 최적화, 연계 BM 개발.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-title">Greenlabs · 2023.11 - 2025.06</div>
+              <p>농민 데이터 기반 그로스, AI와 LLM 활용, 데이터 수집을 위한 커뮤니티 활성화, 악성 재고 40% 이상 소진.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-title">elecvery · 2023.05 - 2023.09</div>
+              <p>조직 내 유일한 PO로 제품 기획 및 운영 총괄, 제품 체계와 일하는 방식 수립, 9명의 주니어 개발 조직 리드.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-title">Rocketpunch · 2021.06 - 2023.05</div>
+              <p>셀 리드 PM, 매출 180%, MAU 125%, W+1 리텐션 120% 개선. 한정된 자원으로 집요하게 매출 발생.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Introduction</span>
+          <span class="page-no">02</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dark" data-page="3">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Greenlabs</div>
+          <div class="kicker">2024.05</div>
+        </div>
+        <div class="slide-content">
+          <div class="kicker">Case 01</div>
+          <h2 class="title-xl">유저 세그먼트 구분으로<br />광고 구좌 개인화 및 매출 재현</h2>
+          <p class="body compact">
+            한정된 네이티브 광고 슬롯을 구분하여 매출 감소를 최소화하면서도 데이터 획득 넛지를 함께 운영한 프로젝트.
+          </p>
+          <div class="chip-row">
+            <div class="chip">Data Driven</div>
+            <div class="chip">Efficiency Optimization</div>
+            <div class="chip">Strategic Thinking</div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Title</span>
+          <span class="page-no">03</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="4">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Problem</div>
+          <div class="kicker">Case 01</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">한정된 홈피드 구좌에서<br />누구에게 무엇을 보여줄지 정해야 했습니다</h2>
+            <p class="body compact">
+              팜모닝은 농민 데이터를 빠르게 확보해야 했고, 홈피드에는 장터 구좌와 데이터 획득용 넛지가 함께 경쟁하고 있었습니다.
+              매출을 방어하면서도 다양한 퍼널을 구현해야 했습니다.
+            </p>
+            <div class="card-grid">
+              <div class="card">
+                <div class="card-title">핵심 문제</div>
+                <p>구매 가능성이 높은 유저를 식별하지 못하면 장터 매출을 해치거나, 반대로 데이터 획득 기회를 놓치게 됩니다.</p>
+              </div>
+              <div class="card">
+                <div class="card-title">주요 고민</div>
+                <p>매출을 보전하면서도 홈피드 구좌를 나눠 쓸 수 없을까?</p>
+              </div>
+            </div>
+          </div>
+          <div class="image-box tall">
+            <div class="image-label">홈피드 구좌 / 장터 캐러셀 / 데이터 획득 넛지 UI 모음</div>
+            <div class="image-note">PDF에 있던 다양한 카드 UI, 댓글, 장터, 넛지 비교 스크린샷이 들어갈 자리입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Problem</span>
+          <span class="page-no">04</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="5">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Hypothesis</div>
+          <div class="kicker">Case 01</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">해당 구좌를 통해 구매할 것 같은 유저에게만 노출하면<br />재현율은 유지하고 슬롯을 확보할 수 있을 것이다</h2>
+          <div class="two-col">
+            <div class="card">
+              <div class="card-title">가설</div>
+              <ul>
+                <li>장터 구매 가능성이 높은 사용자를 사전에 식별한다.</li>
+                <li>반응 가능성이 높은 유저에게만 장터 캐러셀을 노출한다.</li>
+                <li>나머지 사용자에게는 데이터 획득용 넛지를 노출한다.</li>
+                <li>최종 구매자 중 장터 반응 유저 비율을 높여 매출을 방어한다.</li>
+              </ul>
+            </div>
+            <div class="image-box large">
+              <div class="image-label">선택 노출 플로우 / 장터 반응 유저 vs 미반응 유저</div>
+              <div class="image-note">기존 PDF의 의사결정 다이어그램, 데이터 기준, 버튼 UI 영역을 대체합니다.</div>
+              <div class="image-gradient"></div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Hypothesis</span>
+          <span class="page-no">05</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="6">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Solution</div>
+          <div class="kicker">Case 01</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">최근 30일 기준 방문 2회 이상, 300초 이상 체류한 사용자만<br />장터 구좌를 선택적으로 노출했습니다</h2>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-title">Lookback</div>
+              <strong>30d</strong>
+              <p>최근 30일 기준 행동 데이터 분석</p>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Visit</div>
+              <strong>2+</strong>
+              <p>장터 2회 이상 방문</p>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Duration</div>
+              <strong>300s</strong>
+              <p>누적 체류시간 300초 이상</p>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Revenue</div>
+              <strong>96.22%</strong>
+              <p>매출 재현율 유지</p>
+            </div>
+          </div>
+          <div class="image-box large">
+            <div class="image-label">세그먼트 분석 표 / 재현율 테이블 / 기준 기간 비교표</div>
+            <div class="image-note">원본 PDF의 분석 테이블과 수치 비교 차트가 들어갈 자리입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Solution</span>
+          <span class="page-no">06</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="7">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Result & Lesson</div>
+          <div class="kicker">Case 01</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">매출 손실을 최소화하면서 데이터 획득을 극대화했습니다</h2>
+            <p class="body compact">
+              단순 랜덤 노출이 아니라 실제 데이터를 바탕으로 타깃을 정의하고 실행한 경험이었습니다.
+              무엇을 할 수 있는지가 아니라 왜 해야 하는지를 먼저 세운 프로젝트였습니다.
+            </p>
+            <div class="chip-row">
+              <div class="chip">데이터 드리븐</div>
+              <div class="chip">매출 집착</div>
+              <div class="chip">뾰족한 문제 정의</div>
+            </div>
+          </div>
+          <div class="quote">
+            <div class="quote-title">Lesson</div>
+            <p>실행 가능한 가설을 세우고, 매출과 데이터 획득의 균형점을 찾는 방식으로 조직과 개인 모두 크게 성장한 계기였습니다.</p>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Result</span>
+          <span class="page-no">07</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dark" data-page="8">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Greenlabs</div>
+          <div class="kicker">2025.02</div>
+        </div>
+        <div class="slide-content">
+          <div class="kicker">Case 02</div>
+          <h2 class="title-xl">Recency 7m+ 이탈 유저의<br />획득 비용 감소를 위한 수량한정판매</h2>
+          <p class="body compact">
+            한정수량 재고와 파격적인 프로모션 콘셉트로, 이탈 유저를 낮은 CAC로 부활시킬 수 있는지 검증한 프로젝트.
+          </p>
+          <div class="chip-row">
+            <div class="chip">Viral Loop</div>
+            <div class="chip">Growth Mindset</div>
+            <div class="chip">Data Driven</div>
+            <div class="chip">User Focus</div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Title</span>
+          <span class="page-no">08</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="9">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Problem</div>
+          <div class="kicker">Case 02</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">Recency 7m+ 유저를 되살리기 위해서는<br />인당 1,400원 이상의 비용이 필요했습니다</h2>
+            <p class="body compact">
+              평균 활성화 비용은 약 400원이었지만, 7개월 이상 이탈한 사용자 부활에는 훨씬 큰 CAC가 들었습니다.
+              매월 2,600명을 활성화하기 위해 364만 원을 소진하는 구조였습니다.
+            </p>
+            <div class="stats">
+              <div class="stat"><div class="stat-title">CAC</div><strong>1,400원</strong><p>Recency 7m+ 부활 비용</p></div>
+              <div class="stat"><div class="stat-title">Volume</div><strong>2,600명</strong><p>매월 활성화 목표</p></div>
+              <div class="stat"><div class="stat-title">Spend</div><strong>364만</strong><p>월 마케팅 비용</p></div>
+              <div class="stat"><div class="stat-title">Trend</div><strong>상승</strong><p>시간이 갈수록 비효율 악화</p></div>
+            </div>
+          </div>
+          <div class="image-box tall">
+            <div class="image-label">Recency 구간별 CAC 비교 차트</div>
+            <div class="image-note">PDF에 있던 획득 비용 현황 그래프와 비교 막대 차트용 자리입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Problem</span>
+          <span class="page-no">09</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="10">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Hypothesis</div>
+          <div class="kicker">Case 02</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">파격적인 프로모션 혜택을 제공하면<br />CAC 1,400원 미만으로 부활시킬 수 있을 것이다</h2>
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-title">아이디어</div>
+              <p>100만 원의 마케팅 비용을 미디어에 쓰는 대신, 100명에게 1만 원 수준의 강한 혜택을 제공하는 이벤트로 전환했습니다.</p>
+            </div>
+            <div class="card">
+              <div class="card-title">기대 효과</div>
+              <p>Organic-Viral 확산을 통해 1,000명 이상만 활성화되어도 기존 CAC 대비 개선 여지가 충분했습니다.</p>
+            </div>
+          </div>
+          <div class="image-box large">
+            <div class="image-label">획득 비용 개선 벤치마크 & Projection</div>
+            <div class="image-note">활성화 사용자 수 대비 인당 획득 비용, 절감률, 효율 증가율을 보여주는 원본 차트 자리입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Hypothesis</span>
+          <span class="page-no">10</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="11">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Solution</div>
+          <div class="kicker">Case 02</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">농자재 100원 딜 랜딩 페이지와<br />오픈 알림 신청 플로우를 만들었습니다</h2>
+            <ul class="list">
+              <li>한정판매용 간단한 랜딩 페이지 제작</li>
+              <li>매일 오전 10시 오픈 알림 신청 기능 제공</li>
+              <li>홈 퀵메뉴와 푸시만 활용해 유료 매체 비중 최소화</li>
+              <li>예산 100만 원 미만으로 통제하며 실험</li>
+              <li>캠페인 반응 유저의 리텐션 극대화 설계</li>
+            </ul>
+          </div>
+          <div class="image-grid">
+            <div class="image-box">
+              <div class="image-label">한정판매 랜딩 / 알림 신청 화면</div>
+              <div class="image-note">오픈 알림 CTA, 이벤트 상세 디자인, 수량 제한 카피가 들어갈 자리.</div>
+              <div class="image-gradient"></div>
+            </div>
+            <div class="image-box">
+              <div class="image-label">플로우 차트 / 푸시 / 구매 전환 흐름</div>
+              <div class="image-note">알림 신청, 오픈, 결제, 배송 흐름을 정리한 다이어그램 영역.</div>
+              <div class="image-gradient"></div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Solution</span>
+          <span class="page-no">11</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="12">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Result & Lesson</div>
+          <div class="kicker">Case 02</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">푸시 오픈율은 강했지만, Churned 유저를<br />Resurrected시키는 데에는 실패했습니다</h2>
+          <div class="two-col">
+            <div class="card">
+              <div class="card-title">Result</div>
+              <p>Recency 0m 유저가 6.7만 명 참여했고 푸시 오픈율은 평균 대비 2.7배 우수했습니다. 하지만 목표했던 이탈 유저 부활은 충분히 만들지 못했습니다.</p>
+            </div>
+            <div class="card">
+              <div class="card-title">Lesson</div>
+              <p>'알림 신청' 장치는 이벤트 기간 동안 D+N 리텐션에 기여했습니다. 예산 안에서 최대 효율을 내는 CRM 설계에 대해 깊게 배운 프로젝트였습니다.</p>
+            </div>
+          </div>
+          <div class="image-box large">
+            <div class="image-label">CAC 비교표 / 푸시 오픈율 / 신청 유저 리텐션 차트</div>
+            <div class="image-note">PDF의 결과 그래프를 이 자리에서 이미지 또는 SVG로 교체할 수 있습니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Result</span>
+          <span class="page-no">12</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dark" data-page="13">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Greenlabs</div>
+          <div class="kicker">2025.04</div>
+        </div>
+        <div class="slide-content">
+          <div class="kicker">Case 03</div>
+          <h2 class="title-xl">법적 규제를 우회하여<br />농약사-농민 온라인 매칭</h2>
+          <p class="body compact">
+            병해충 상담 커뮤니티 카테고리를 활용해, 온라인 판매가 불가한 농약사의 판로와 농민의 비교 구매 문제를 동시에 해결한 프로젝트.
+          </p>
+          <div class="chip-row">
+            <div class="chip">Network Effect</div>
+            <div class="chip">Cold Start Problem</div>
+            <div class="chip">Continuous Improvement</div>
+            <div class="chip">User Focus</div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Title</span>
+          <span class="page-no">13</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="14">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Problem</div>
+          <div class="kicker">Case 03</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">농약사는 온라인 판매가 불가하고,<br />농민은 비교 구매가 어려웠습니다</h2>
+            <p class="body compact">
+              농약사는 입소문 외에 마케팅 채널이 없었고, 농민은 아는 농약사에 의존하거나 직접 매장을 방문해야 했습니다.
+              병해충 상담이라는 특성상 오프라인 의존도가 매우 높았습니다.
+            </p>
+            <div class="card-grid">
+              <div class="card"><div class="card-title">농약사 Pain</div><p>온라인 마케팅 전무, 오프라인 판매만 가능, 지역 입소문에 의존.</p></div>
+              <div class="card"><div class="card-title">농민 Pain</div><p>가격 비교 불가, 이동 제약, 아는 농약사에 의존.</p></div>
+            </div>
+          </div>
+          <div class="image-box tall">
+            <div class="image-label">농약사와 농민의 페인 포인트 인포그래픽</div>
+            <div class="image-note">원본 PDF의 캐릭터/사진/문제 구조 다이어그램이 들어갈 자리입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Problem</span>
+          <span class="page-no">14</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="15">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Hypothesis A</div>
+          <div class="kicker">Case 03</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">병해충 상담 시 지역 농약사 답변이 붙고<br />가격 비교까지 이어진다면 농민은 더 적극적으로 상담할 것이다</h2>
+            <p class="body compact">
+              농민 입장에서 핵심 문제는 가격 비교와 신뢰 가능한 상담이었습니다. 내 지역 주변의 농약사가 댓글로 직접 답변한다면 강한 가치가 된다고 판단했습니다.
+            </p>
+          </div>
+          <div class="image-box large">
+            <div class="image-label">병해충 상담 게시글 / 농약사 답변 예시</div>
+            <div class="image-note">농민 질문, 농약사 A/B 댓글, 알림 구조 등 원본 예시 화면 대체 영역.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Hypothesis A</span>
+          <span class="page-no">15</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="16">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Hypothesis B</div>
+          <div class="kicker">Case 03</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">지역 내 농약 수요 농민을 모아주면,<br />농약사는 팜모닝을 통해 고객을 유치할 것이다</h2>
+            <p class="body compact">
+              농약사에게는 내 매장으로 고객을 유도할 수 있는 수단이 거의 없었습니다. 병해충을 겪고 있는 지역 농민 리드는 매우 강력한 디지털 명함이 될 수 있었습니다.
+            </p>
+          </div>
+          <div class="image-box large">
+            <div class="image-label">내 근처 병해충 상담 알림 / 농민 리드 확보 흐름</div>
+            <div class="image-note">지역 알림, 매장 방문 유도 문구, 문자/상담 연결 예시를 위한 자리입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Hypothesis B</span>
+          <span class="page-no">16</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="17">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Solution</div>
+          <div class="kicker">Case 03</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">기존 병해충 상담 기능에 지역 필터와 농약사 하이라이트를 더해<br />간결하게 빠르게 배포했습니다</h2>
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-title">핵심 실행</div>
+              <ul>
+                <li>기존 기능에 병해충 / 지역 필터 추가</li>
+                <li>농약사 댓글 하이라이트</li>
+                <li>농약사 프로필에 답변 모아보기와 전화하기 추가</li>
+                <li>내 주변 질문글 알림 제공</li>
+              </ul>
+            </div>
+            <div class="image-grid">
+              <div class="image-box">
+                <div class="image-label">질문 피드 / 필터 / 농약사 프로필</div>
+                <div class="image-note">검색, 최신순, 지역구분, 농약사 뱃지 등 인터페이스 영역.</div>
+                <div class="image-gradient"></div>
+              </div>
+              <div class="image-box">
+                <div class="image-label">농약사 답변 하이라이트 / 전화 문의 CTA</div>
+                <div class="image-note">답변 카드, 문의 버튼, 알림 UI를 대체합니다.</div>
+                <div class="image-gradient"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Solution</span>
+          <span class="page-no">17</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="18">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Result & Lesson</div>
+          <div class="kicker">Case 03</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">유저 피드백에서 시작해,<br />법적 규제의 빈틈을 간결하게 활용했습니다</h2>
+            <p class="body compact">
+              이 프로젝트는 데이터가 아니라 현장의 농약사 피드백에서 시작됐습니다. 기존 기능의 가치를 높이면서도 본질적 문제를 해결한 경험이었습니다.
+            </p>
+            <div class="chip-row">
+              <div class="chip">유저 피드백 수취</div>
+              <div class="chip">법적 규제의 빈틈 발견</div>
+              <div class="chip">빠른 합의</div>
+              <div class="chip">간결한 개발</div>
+            </div>
+          </div>
+          <div class="quote">
+            <div class="quote-title">User Voice</div>
+            <p>“팜모닝에는 이미 농민이 많이 있는데, 이거 만드시면 저희도 잘 쓸 것 같아요.”</p>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Result</span>
+          <span class="page-no">18</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dark" data-page="19">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Greenlabs</div>
+          <div class="kicker">2025.03</div>
+        </div>
+        <div class="slide-content">
+          <div class="kicker">Case 04</div>
+          <h2 class="title-xl">공동구매를 통한 가격 파괴 및<br />유저 획득</h2>
+          <p class="body compact">
+            공동구매를 온라인으로 모객하고 MOQ별 할인율과 배송 구조를 설계해, 소농에게 가격 경쟁력을 제공하려 한 프로젝트.
+          </p>
+          <div class="chip-row">
+            <div class="chip">Viral Loop</div>
+            <div class="chip">Strategic Thinking</div>
+            <div class="chip">Value Add</div>
+            <div class="chip">Network Effect</div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Title</span>
+          <span class="page-no">19</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="20">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Problem</div>
+          <div class="kicker">Case 04</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">소농은 배송료 때문에 온라인보다<br />오프라인 구매를 선호했습니다</h2>
+            <p class="body compact">
+              대한민국 농민의 약 80%는 소농이며, 대량구매 할인 혜택을 누리기 어렵습니다. 온라인에서는 배송료가 붙기 때문에 가격 경쟁력이 약했습니다.
+            </p>
+            <div class="card-grid">
+              <div class="card"><div class="card-title">시장 구조</div><p>대농 20%만 할인 혜택을 받는 반면, 소농 80%는 소비자가 + 배송료를 감당해야 합니다.</p></div>
+              <div class="card"><div class="card-title">문제 정의</div><p>온라인 농자재 구매 경쟁력이 부족했습니다.</p></div>
+            </div>
+          </div>
+          <div class="image-box tall">
+            <div class="image-label">농민 비율 / 생산 자재비 구조 / 온라인 vs 오프라인 비교</div>
+            <div class="image-note">원본 인포그래픽과 계산 구조 다이어그램을 대체합니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Problem</span>
+          <span class="page-no">20</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="21">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Hypothesis</div>
+          <div class="kicker">Case 04</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">읍면동리 단위로 일괄 배송하면 더 낮은 비용으로<br />고품질 제품을 제공할 수 있을 것이다</h2>
+          <div class="two-col">
+            <div class="card">
+              <div class="card-title">가설 구조</div>
+              <ul>
+                <li>소농들의 구매 수요를 모은다.</li>
+                <li>파트너 업체의 MOQ를 충족한다.</li>
+                <li>지역 일괄 배송으로 물류비를 줄인다.</li>
+                <li>소농은 배송료를 절약하고, 파트너는 유효 시장을 확보한다.</li>
+              </ul>
+            </div>
+            <div class="image-box large">
+              <div class="image-label">지역 일괄 배송 / 수요 취합 / 네트워크 효과 다이어그램</div>
+              <div class="image-note">공동구매 구조와 가치 흐름을 보여주던 원본 그래픽 자리입니다.</div>
+              <div class="image-gradient"></div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Hypothesis</span>
+          <span class="page-no">21</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="22">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Solution</div>
+          <div class="kicker">Case 04</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">기능 개발 없이 폼 빌더와 CRM만으로<br />공동구매 수요를 빠르게 검증했습니다</h2>
+            <ul class="list">
+              <li>오프라인 매장 기준 반경 40km 인근 농민 약 1만 명 확보</li>
+              <li>파트너 업체와 SKU 및 MOQ 협의</li>
+              <li>공동구매 신청 폼과 CRM으로 PoC 실행</li>
+              <li>Recency 2~6m, 7m+ 유저 반응률과 임팩트 매출 검증</li>
+            </ul>
+          </div>
+          <div class="image-grid">
+            <div class="image-box">
+              <div class="image-label">공동구매 신청폼</div>
+              <div class="image-note">신청 입력 폼과 CTA 컴포넌트가 들어갈 자리입니다.</div>
+              <div class="image-gradient"></div>
+            </div>
+            <div class="image-box">
+              <div class="image-label">공동구매 CRM / 타깃 지표 보드</div>
+              <div class="image-note">CRM 노출과 실험 타깃 지표 정리 영역.</div>
+              <div class="image-gradient"></div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Solution</span>
+          <span class="page-no">22</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="23">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Result & Lesson</div>
+          <div class="kicker">Case 04</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">Retain 유저에게는 강하게 소구되었지만,<br />Churned 유저를 다시 데려오지는 못했습니다</h2>
+          <div class="stats">
+            <div class="stat"><div class="stat-title">Impact GMV</div><strong>530만</strong><p>단 하루 추가 거래액</p></div>
+            <div class="stat"><div class="stat-title">Base GMV</div><strong>700만</strong><p>기존 일매출 기준</p></div>
+            <div class="stat"><div class="stat-title">Retention</div><strong>Strong</strong><p>기존 충성 고객 소구</p></div>
+            <div class="stat"><div class="stat-title">Resurrection</div><strong>Fail</strong><p>이탈 유저 부활 실패</p></div>
+          </div>
+          <div class="quote">
+            <div class="quote-title">Lesson</div>
+            <p>빠르게 실험하는 것만큼, 유저 입장에서 어떤 가치가 본질적인지 놓치지 않는 일이 중요하다는 점을 확인했습니다.</p>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Result</span>
+          <span class="page-no">23</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dark" data-page="24">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Greenlabs</div>
+          <div class="kicker">2024.07</div>
+        </div>
+        <div class="slide-content">
+          <div class="kicker">Case 05</div>
+          <h2 class="title-xl">구매 포텐셜 상품의 노출 늘리기를 통한<br />매출 증대</h2>
+          <p class="body compact">
+            노출 대비 조회, 조회 대비 구매 전환율 기준으로 '낮은 노출, 우수 전환' 상품을 식별하고 핵심 지면 노출을 늘린 프로젝트.
+          </p>
+          <div class="chip-row">
+            <div class="chip">Data Driven</div>
+            <div class="chip">Strategic Thinking</div>
+            <div class="chip">Continuous Improvement</div>
+            <div class="chip">Value Add</div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Title</span>
+          <span class="page-no">24</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="25">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Problem</div>
+          <div class="kicker">Case 05</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">팜모닝 사용자 대부분은<br />보이는 상품을 바로 구매했습니다</h2>
+            <p class="body compact">
+              전체 구매의 약 80%가 첫 노출 세션 안에서 발생했습니다. 즉, 무엇을 보여주느냐가 매출을 결정하는 구조였고,
+              전체 노출 대비 구매 전환율 개선이 핵심 과제가 되었습니다.
+            </p>
+            <div class="stats">
+              <div class="stat"><div class="stat-title">First View = Purchase</div><strong>80%</strong><p>시니어 중심 구매 패턴</p></div>
+              <div class="stat"><div class="stat-title">Search-led</div><strong>20%</strong><p>탐색 중심 구매 비중</p></div>
+            </div>
+          </div>
+          <div class="image-box tall">
+            <div class="image-label">시니어 구매 패턴 / 유저 인터뷰 / first_view_session 인사이트</div>
+            <div class="image-note">원본 PDF의 발화 인용과 패턴 도식이 들어갈 영역입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Problem</span>
+          <span class="page-no">25</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="26">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Hypothesis</div>
+          <div class="kicker">Case 05</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">잘 클릭되고 잘 구매되는 상품의 노출을 늘리면<br />전체 노출 대비 구매 전환율이 개선될 것이다</h2>
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-title">포텐셜 상품 정의</div>
+              <ul>
+                <li>노출 대비 조회율이 높다.</li>
+                <li>조회 대비 구매율이 높다.</li>
+                <li>아직 노출 규모는 크지 않다.</li>
+              </ul>
+            </div>
+            <div class="image-box large">
+              <div class="image-label">AS-IS / TO-BE 전환 퍼널 다이어그램</div>
+              <div class="image-note">노출, 조회, 구매 전환 구조와 조작 포인트를 나타내는 그래픽 자리.</div>
+              <div class="image-gradient"></div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Hypothesis</span>
+          <span class="page-no">26</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="27">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Solution</div>
+          <div class="kicker">Case 05</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">구매 포텐셜 상품을 정의하고,<br />핵심 지면 상단 고정으로 노출을 강제했습니다</h2>
+            <ul class="list">
+              <li>노출 수 3천~1만 사이, 주문 수 3건 이상인 상품 추가 필터링</li>
+              <li>홈 관련 지면 상단 고정과 인기 캐러셀 고정 사용</li>
+              <li>조건이 맞는 상품의 노출을 의도적으로 확대</li>
+            </ul>
+          </div>
+          <div class="image-grid">
+            <div class="image-box">
+              <div class="image-label">장터 상단 고정 / 홈 추천 UI</div>
+              <div class="image-note">상품 카드, 캐러셀, 출석체크 지면 등 원본 모바일 화면 자리.</div>
+              <div class="image-gradient"></div>
+            </div>
+            <div class="image-box">
+              <div class="image-label">조건 1·2·3 프로토콜 정리</div>
+              <div class="image-note">노출 대비 조회율, 조회 대비 구매율, 노출량 필터를 정리한 자리.</div>
+              <div class="image-gradient"></div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Solution</span>
+          <span class="page-no">27</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="28">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Result & Lesson</div>
+          <div class="kicker">Case 05</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">구매 포텐셜 상품이 전체 매출의 약 60%를 차지했습니다</h2>
+          <div class="stats">
+            <div class="stat"><div class="stat-title">Sales Mix</div><strong>60%</strong><p>구매 포텐셜 상품 매출 비중</p></div>
+            <div class="stat"><div class="stat-title">General</div><strong>40%</strong><p>일반 상품 매출 비중</p></div>
+            <div class="stat"><div class="stat-title">Method</div><strong>Protocol</strong><p>데이터 기반 노출 운영</p></div>
+            <div class="stat"><div class="stat-title">Learning</div><strong>Simple</strong><p>운영 프로토콜의 힘 확인</p></div>
+          </div>
+          <div class="quote">
+            <div class="quote-title">Lesson</div>
+            <p>일정 수준 이상의 노출이 이뤄진 뒤 구매 전환율이 낮아지면 자연스럽게 추천 로직에서 제외되도록 흐름을 설계했습니다.</p>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Result</span>
+          <span class="page-no">28</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dark" data-page="29">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Greenlabs</div>
+          <div class="kicker">2023.11 - 2023.12</div>
+        </div>
+        <div class="slide-content">
+          <div class="kicker">Case 06</div>
+          <h2 class="title-xl">농민 소싱 데이터 프로덕트<br />FMS 출시</h2>
+          <p class="body compact">
+            팜모닝 회원 DB와 외부 데이터를 기반으로, 농민 직소싱을 위한 인터널 제품을 개발하여 소싱 비용을 혁신적으로 낮춘 프로젝트.
+          </p>
+          <div class="chip-row">
+            <div class="chip">Data Driven</div>
+            <div class="chip">Strategic Thinking</div>
+            <div class="chip">End to End</div>
+            <div class="chip">Value Add</div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Title</span>
+          <span class="page-no">29</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="30">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Problem</div>
+          <div class="kicker">Case 06</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">농민 직소싱을 하려면<br />파편화된 농민 정보를 정제해 활용해야 했습니다</h2>
+            <p class="body compact">
+              그린랩스의 경쟁력은 팜모닝에서 나오는 대규모 농민 DB였습니다. 그러나 유통 단계를 줄이고 농민에게 직접 원물을 매입하려면,
+              농민과 작물 정보를 검색 가능한 형태로 구조화해야 했습니다.
+            </p>
+            <div class="card-grid">
+              <div class="card"><div class="card-title">사업 문제</div><p>중간 유통 단계를 줄여 가격 경쟁력과 속도를 확보해야 했습니다.</p></div>
+              <div class="card"><div class="card-title">데이터 문제</div><p>농민 데이터가 흩어져 있어 소싱 담당자가 바로 활용하기 어려웠습니다.</p></div>
+            </div>
+          </div>
+          <div class="image-box tall">
+            <div class="image-label">농민 → Greenlabs → 소비자 유통 구조 / 중간 유통 패스 전략</div>
+            <div class="image-note">원본 도식의 공급망 구조와 비용 절감 논리 시각화 자리입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Problem</span>
+          <span class="page-no">30</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="31">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Hypothesis</div>
+          <div class="kicker">Case 06</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">농민과 작물 정보를 스코어링해 바이어에게 전달하면<br />직소싱 비용을 극단적으로 낮출 수 있다</h2>
+          <div class="meta-row">
+            <div class="meta"><div class="meta-title">Inputs</div><div class="meta-text">지역, 재배 여부, 재배 규모, 주거래처, 농사 실력</div></div>
+            <div class="meta"><div class="meta-title">Signals</div><div class="meta-text">프로필 주소, 영농일지, 공판장 정보, 커뮤니티 활동, 구매 이력</div></div>
+            <div class="meta"><div class="meta-title">Request</div><div class="meta-text">예: 설향 딸기 상등급 1톤, 경북 지역, Loss 3% 미만</div></div>
+            <div class="meta"><div class="meta-title">Output</div><div class="meta-text">소싱 적합 생산자 후보 리스트업</div></div>
+          </div>
+          <div class="image-box large">
+            <div class="image-label">바이어 요구사항 → 데이터 스코어링 → 농민 프로파일링 흐름</div>
+            <div class="image-note">원본 PDF의 데이터 연결 다이어그램과 속성 리스트 영역입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Hypothesis</span>
+          <span class="page-no">31</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="32">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Solution</div>
+          <div class="kicker">Case 06</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">팜모닝 데이터와 외부 농민 데이터를 결합한<br />사내용 FMS를 제공했습니다</h2>
+            <ul class="list">
+              <li>프로필 정보 입력과 영농일지로 데이터 최신화</li>
+              <li>FMS 어드민에서 농민 데이터 조회 기능 제공</li>
+              <li>자연어 조건 입력 시 LLM 기반 후보 자동 리스트업</li>
+              <li>팜모닝 활동 내역을 점수화해 우선순위 정렬</li>
+            </ul>
+          </div>
+          <div class="image-grid">
+            <div class="image-box">
+              <div class="image-label">FMS 후보 리스트 화면</div>
+              <div class="image-note">프로젝트 조건별 후보 리스트와 요약 카드 자리입니다.</div>
+              <div class="image-gradient"></div>
+            </div>
+            <div class="image-box">
+              <div class="image-label">FMS 후보 상세 정보 화면</div>
+              <div class="image-note">생산자 상세 프로필, 활동 이력, 스코어 정보 영역.</div>
+              <div class="image-gradient"></div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Solution</span>
+          <span class="page-no">32</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="33">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Result & Lesson</div>
+          <div class="kicker">Case 06</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">그린랩스 창립 이래 최초로<br />농민 직소싱 매출 17%를 달성했습니다</h2>
+          <div class="stats">
+            <div class="stat"><div class="stat-title">Direct Sourcing</div><strong>17%</strong><p>팜모닝 직소싱 매출 비중</p></div>
+            <div class="stat"><div class="stat-title">Vendor Sourcing</div><strong>83%</strong><p>기존 중도매인 소싱 비중</p></div>
+            <div class="stat"><div class="stat-title">Company Sales</div><strong>1,000억</strong><p>2024년 총매출 기준 언급</p></div>
+            <div class="stat"><div class="stat-title">Value</div><strong>혁신</strong><p>유통 마진 삭제와 빠른 대응</p></div>
+          </div>
+          <div class="quote">
+            <div class="quote-title">Why It Mattered</div>
+            <p>중간 벤더를 통하지 않고 농민에게 직접 원물을 소싱하는 구조를 만들며, 가격 경쟁력과 소싱 대응력을 동시에 확보했습니다.</p>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Greenlabs / Result</span>
+          <span class="page-no">33</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dark" data-page="34">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Rocketpunch</div>
+          <div class="kicker">2022.09 - 2023.05</div>
+        </div>
+        <div class="slide-content">
+          <div class="kicker">Case 07</div>
+          <h2 class="title-xl">B2C 로켓펀치 프리미엄 출시</h2>
+          <p class="body compact">
+            로켓펀치의 프로필 데이터 조회 기능을 유료 전환하고, 구직자의 관심 기업 인사이트를 대시보드로 제공해 수익화를 만든 프로젝트.
+          </p>
+          <div class="chip-row">
+            <div class="chip">Data Driven</div>
+            <div class="chip">User Focus</div>
+            <div class="chip">End to End</div>
+            <div class="chip">Network Effect</div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Rocketpunch / Title</span>
+          <span class="page-no">34</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="35">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Problem</div>
+          <div class="kicker">Case 07</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">구직 속도가 리텐션과 상관관계가 있었고,<br />현재 유저들의 구직 속도는 느렸습니다</h2>
+            <p class="body compact">
+              유저들은 '로켓펀치에서 채용을 경험했기 때문에 다시 돌아왔다'고 말했습니다. 최초 합격까지의 평균 지원 수를 줄이는 것이
+              재방문과 만족도에 중요했습니다.
+            </p>
+            <div class="stats">
+              <div class="stat"><div class="stat-title">Average Apply</div><strong>19회</strong><p>최초 합격까지 평균 지원 수</p></div>
+              <div class="stat"><div class="stat-title">Min</div><strong>7회</strong><p>최소 지원 수</p></div>
+              <div class="stat"><div class="stat-title">Max</div><strong>98회</strong><p>최대 지원 수</p></div>
+              <div class="stat"><div class="stat-title">Return</div><strong>1년</strong><p>최종 합격 후 평균 재방문 시점</p></div>
+            </div>
+          </div>
+          <div class="image-box tall">
+            <div class="image-label">지원-합격-재방문 패턴 차트</div>
+            <div class="image-note">원본 PDF의 지원 흐름, 재방문 관계도, 유저 인용을 위한 영역입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Rocketpunch / Problem</span>
+          <span class="page-no">35</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="36">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Hypothesis</div>
+          <div class="kicker">Case 07</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">관심 있는 기업 정보를 전달하면 지원을 유도하고<br />더 빠른 매칭을 만들 수 있다</h2>
+            <p class="body compact">
+              프로필 방문자 알림 실험은 기존 푸시 대비 2.7배 이상의 오픈 성과를 보였습니다. '나에게 관심 있는 기업' 정보가 강하게 소구된다는 사실을 확인했습니다.
+            </p>
+          </div>
+          <div class="image-box large">
+            <div class="image-label">프로필 방문자 알림 / 방문자 목록 / 시나리오 플로우</div>
+            <div class="image-note">푸시 실험 결과와 랜딩 구조를 보여주는 원본 슬라이드 자리입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Rocketpunch / Hypothesis</span>
+          <span class="page-no">36</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="37">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Solution</div>
+          <div class="kicker">Case 07</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">내 프로필 성과를 보여주는 대시보드를 만들고<br />유료 상품으로 전환했습니다</h2>
+            <ul class="list">
+              <li>내 프로필 방문 기업, 산업, 직무 분석 제공</li>
+              <li>방문자 알림과 방문 경로, 검색 키워드 분석 포함</li>
+              <li>기업 담당자 전용 모니터링 기능 제공</li>
+              <li>로켓펀치 프리미엄이라는 B2C 상품으로 출시</li>
+            </ul>
+          </div>
+          <div class="image-box large">
+            <div class="image-label">프로필 인사이트 대시보드 / 방문자 분석 화면</div>
+            <div class="image-note">원본 PDF의 대시보드 UI 예시를 별도 이미지로 넣을 수 있는 자리입니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Rocketpunch / Solution</span>
+          <span class="page-no">37</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="38">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Result & Lesson</div>
+          <div class="kicker">Case 07</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-lg">월 약 2천만 원의 B2C 매출을 만들었지만,<br />기대한 핵심 임팩트는 완전히 입증하지 못했습니다</h2>
+          <div class="stats">
+            <div class="stat"><div class="stat-title">Revenue</div><strong>2천만</strong><p>월 B2C 매출</p></div>
+            <div class="stat"><div class="stat-title">Premium Users</div><strong>500명</strong><p>대략적 구매자 수</p></div>
+            <div class="stat"><div class="stat-title">Apply Count</div><strong>19 → 16</strong><p>최초 합격 평균 지원 수 개선</p></div>
+            <div class="stat"><div class="stat-title">Lesson</div><strong>Scope</strong><p>기능 스펙이 지나치게 커짐</p></div>
+          </div>
+          <div class="quote">
+            <div class="quote-title">Lesson</div>
+            <p>유저 페인포인트를 데이터로 해결하려 했지만, 유틸리티를 잘게 쪼개 검증하지 못해 프로젝트 규모를 불필요하게 키운 경험이었습니다.</p>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Rocketpunch / Result</span>
+          <span class="page-no">38</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="39">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Skills</div>
+          <div class="kicker">Hard / Soft</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-xl">단단한 하드 스킬과 유연한 소프트 스킬을 갖고 있습니다</h2>
+          <p class="body compact">AI Native 역량을 활용해 프로덕트와 비즈니스를 함께 보고, 강한 추진력으로 조직을 견인합니다.</p>
+          <div class="skill-grid">
+            <div class="card">
+              <div class="card-title">Hard Skills</div>
+              <ul>
+                <li>컨텍스트 엔지니어링</li>
+                <li>비즈니스 모델 설계</li>
+                <li>AI 및 데이터 활용</li>
+                <li>서비스 기획</li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="card-title">Soft Skills</div>
+              <ul>
+                <li>뾰족한 문제 정의와 해결책 도출</li>
+                <li>경계 없이 유연한 커뮤니케이션</li>
+                <li>부드럽고 명료한 리더십</li>
+                <li>합리적이고 촘촘한 매니징</li>
+              </ul>
+            </div>
+          </div>
+          <div class="chip-row">
+            <div class="chip">Figma</div>
+            <div class="chip">Claude Code</div>
+            <div class="chip">Cursor</div>
+            <div class="chip">Codex</div>
+            <div class="chip">Next.js</div>
+            <div class="chip">Tailwind</div>
+            <div class="chip">Web Builder</div>
+            <div class="chip">Framer / Wordpress / Webflow</div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Skills</span>
+          <span class="page-no">39</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="40">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Strong Point</div>
+          <div class="kicker">Why Me</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-xl">회사의 성공을 위해 일합니다</h2>
+          <p class="body compact">문제 해결에 필요한 경험들을 고루 해왔고, 회사와 제품이 스케일링하며 겪는 실패의 패턴을 많이 통과했습니다.</p>
+          <div class="three-col">
+            <div class="card"><div class="card-title">시장 공략</div><p>기존 점유 시장을 뾰족한 전략으로 차지하고, 낮은 비용과 제품 개선으로 새로운 고객을 만들 수 있습니다.</p></div>
+            <div class="card"><div class="card-title">콜드 스타트 해결</div><p>네트워크 효과를 활용해 초기 수요와 공급 문제를 풀 수 있습니다.</p></div>
+            <div class="card"><div class="card-title">유통 레버리지</div><p>보유 네트워크를 활용하거나 바이럴 적합 기능을 제안해 유입을 극대화할 수 있습니다.</p></div>
+            <div class="card"><div class="card-title">빠른 PMF 검증</div><p>가설과 잦은 실험으로 단위별 검증을 빠르게 수행합니다.</p></div>
+            <div class="card"><div class="card-title">운영 확장성</div><p>인적 자원과 인프라 제약을 통제해 빠르고 큰 성장의 기반을 만들 수 있습니다.</p></div>
+            <div class="card"><div class="card-title">총이익 구조 설계</div><p>원가가 차지하는 비중을 낮춰 회사 이익을 높이는 구조를 설계할 수 있습니다.</p></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Strong Point</span>
+          <span class="page-no">40</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="41">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">What I Love</div>
+          <div class="kicker">How I Work</div>
+        </div>
+        <div class="slide-content two-col">
+          <div>
+            <h2 class="title-lg">더 일을 잘하기 위해, 더 잘 살아보려 노력합니다</h2>
+            <div class="card-grid">
+              <div class="card"><div class="card-title">자연</div><p>숲 속 산책로를 즐겨 걸으며 생각을 정리합니다.</p></div>
+              <div class="card"><div class="card-title">딥다이브</div><p>깊게 몰입해 일하는 것을 즐기며, 그것이 가장 재밌는 일이라고 느낍니다.</p></div>
+              <div class="card"><div class="card-title">효율 추구</div><p>어떤 방식이든 가장 효율적인 협업 방식을 찾습니다.</p></div>
+              <div class="card"><div class="card-title">사이드 프로젝트</div><p>서비스 기획, 콘텐츠 제작, 오프라인 행사 진행 등 다양한 경험을 이어갑니다.</p></div>
+              <div class="card"><div class="card-title">성과 중심</div><p>제품과 사업은 반드시 잘되어야 한다는 원칙으로 움직입니다.</p></div>
+              <div class="card"><div class="card-title">데이터 중심</div><p>신규 서비스보다 운영과 개선을 통한 성장을 중요하게 생각합니다.</p></div>
+            </div>
+          </div>
+          <div class="card-grid">
+            <div class="card"><div class="card-title">커리어 아티클</div><p>프로덕트, HR, 사업전략 관련 콘텐츠를 매일 읽고 직접 쓰기도 합니다.</p></div>
+            <div class="card"><div class="card-title">동료와 함께</div><p>혼자보다 팀으로 일할 때 더 많은 일을 할 수 있다고 믿습니다.</p></div>
+            <div class="card"><div class="card-title">문서화</div><p>동료와 일하는 모든 과정을 문서화하거나 텍스트로 공유하는 습관이 있습니다.</p></div>
+            <div class="card"><div class="card-title">리더</div><p>적극적이고 진취적인 성격으로 어디서든 리더 역할을 맡아왔습니다.</p></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Life & Work</span>
+          <span class="page-no">41</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="42">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">Peer Testimonial</div>
+          <div class="kicker">Voices</div>
+        </div>
+        <div class="slide-content">
+          <h2 class="title-xl">동료들과 함께 일할 때 더 큰 시너지를 냅니다</h2>
+          <p class="body compact">직접 함께 일한 동료들의 평가를 기반으로, 리더십과 문제 해결 방식, 데이터 기반 사고를 정리했습니다.</p>
+          <div class="testimonial-grid">
+            <div class="quote">
+              <div class="quote-title">명료한 리더십</div>
+              <p>능력과 역량을 파악하고 잘 맞물리게 조율하며, 상황과 마음도 함께 살피는 사람.</p>
+              <div class="author">문수진 · ANTIEGG</div>
+            </div>
+            <div class="quote">
+              <div class="quote-title">커리어 성장을 위한 집착</div>
+              <p>업무 외 시간도 성장에 투자하는 모습이 매우 인상적이며, 일에 진심인 인재.</p>
+              <div class="author">이시윤 · Rocketpunch</div>
+            </div>
+            <div class="quote">
+              <div class="quote-title">조직적 시스템 구축</div>
+              <p>조직, 팀, 구성원, 본인의 성장을 모두 고민하며 이를 위한 시스템을 설계해내는 능력이 탁월함.</p>
+              <div class="author">이창석 · Rocketpunch</div>
+            </div>
+            <div class="quote">
+              <div class="quote-title">뾰족한 문제 해결</div>
+              <p>문제에 대한 자신만의 관점을 제시하고 최선의 해결책을 도출해내는 PM.</p>
+              <div class="author">최지희 · Rocketpunch</div>
+            </div>
+            <div class="quote">
+              <div class="quote-title">집요한 문제 해결</div>
+              <p>여러 어려움 속에서도 언제나 주도적으로 답을 찾아온다는 점에서 신뢰할 수 있는 동료.</p>
+              <div class="author">동료 피드백</div>
+            </div>
+            <div class="quote">
+              <div class="quote-title">데이터 기반 사고</div>
+              <p>현상을 직관적으로 해석하면서도 데이터를 통해 타인과 소통하려는 합리적 태도를 가짐.</p>
+              <div class="author">동료 피드백</div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Testimonials</span>
+          <span class="page-no">42</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dark" data-page="43">
+      <div class="slide-shell">
+        <div class="slide-header">
+          <div class="brand">LEEJUNYONG</div>
+          <div class="kicker">Thank you</div>
+        </div>
+        <div class="slide-content cover-grid">
+          <div>
+            <div class="kicker">Closing</div>
+            <h2 class="title-hero">지금까지 읽어주셔서<br /><span class="accent">대단히 감사합니다</span></h2>
+            <p class="body">진짜 문제를 찾기 위해 가끔 목숨을 겁니다. AI Native Product Manager 이준용입니다.</p>
+            <div class="contact-block">
+              <div class="contact-item">hyungwoon.kr@gmail.com</div>
+              <div class="contact-item">010 - 4810 - 9142</div>
+            </div>
+          </div>
+          <div class="image-box tall">
+            <div class="image-label">마지막 인사 비주얼 / 프로필 이미지 / 엔딩 그래픽</div>
+            <div class="image-note">원본 PDF 마지막 장의 비주얼 이미지를 넣을 수 있도록 별도 영역으로 분리했습니다.</div>
+            <div class="image-gradient"></div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="footer-text">Outro</span>
+          <span class="page-no">43</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="pager" id="pager">01 / 43</div>
+
+  <script>
+    const slides = document.querySelectorAll(".slide");
+    const pager = document.getElementById("pager");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const current = entry.target.dataset.page.padStart(2, "0");
+          pager.textContent = `${current} / 43`;
+        });
+      },
+      { threshold: 0.55 }
+    );
+
+    slides.forEach((slide) => observer.observe(slide));
+  </script>
+</body>
+</html>

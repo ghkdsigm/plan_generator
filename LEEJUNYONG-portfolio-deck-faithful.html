@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LEEJUNYONG Portfolio Deck - Faithful HTML</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --bg: #eef1f5;
+      --page: #ffffff;
+      --text: #111111;
+      --muted: #666c78;
+      --line: #e6e9ef;
+      --accent: #2d55ff;
+      --accent-soft: rgba(45, 85, 255, 0.08);
+      --gradient-a: rgba(45, 85, 255, 0.34);
+      --gradient-b: rgba(88, 210, 255, 0.24);
+      --shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
+      --w: 1920px;
+      --h: 1080px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 1540px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    main {
+      scroll-snap-type: y mandatory;
+    }
+
+    .slide {
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      scroll-snap-align: start;
+    }
+
+    .page {
+      width: var(--w);
+      height: var(--h);
+      background: var(--page);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      padding: 56px 72px 60px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid #f3f4f6;
+      pointer-events: none;
+    }
+
+    .header,
+    .footer,
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header,
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .brand,
+    .eyebrow,
+    .footer-label,
+    .footer-meta,
+    .page-number,
+    .mini-label,
+    .meta-label {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand {
+      font-weight: 800;
+    }
+
+    .eyebrow,
+    .footer-label,
+    .footer-meta,
+    .mini-label,
+    .meta-label {
+      color: var(--muted);
+    }
+
+    .page-number {
+      color: #9299a6;
+    }
+
+    .title-hero {
+      font-size: 86px;
+      line-height: 1.06;
+      letter-spacing: -0.06em;
+      font-weight: 800;
+      margin: 0;
+      max-width: 1100px;
+    }
+
+    .title-xl {
+      font-size: 64px;
+      line-height: 1.08;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+      margin: 0;
+      max-width: 1200px;
+    }
+
+    .title-lg {
+      font-size: 48px;
+      line-height: 1.14;
+      letter-spacing: -0.045em;
+      font-weight: 800;
+      margin: 0;
+      max-width: 1220px;
+    }
+
+    .body {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.72;
+      letter-spacing: -0.02em;
+      color: #333844;
+      max-width: 1120px;
+    }
+
+    .body.small {
+      font-size: 21px;
+      line-height: 1.68;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .cover-layout,
+    .split-layout,
+    .wide-layout,
+    .triple-layout,
+    .quote-layout,
+    .skill-layout {
+      display: grid;
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .cover-layout {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .split-layout {
+      grid-template-columns: 1.08fr 0.92fr;
+    }
+
+    .wide-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .triple-layout {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .quote-layout,
+    .skill-layout {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .panel,
+    .quote,
+    .metric,
+    .testimonial,
+    .placeholder,
+    .meta-card {
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .panel,
+    .quote,
+    .metric,
+    .testimonial,
+    .meta-card {
+      padding: 24px 26px;
+    }
+
+    .panel-title,
+    .quote-title,
+    .metric-title {
+      margin: 0 0 10px;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .panel p,
+    .quote p,
+    .testimonial p,
+    .meta-card p {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.68;
+      color: #2d3340;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 44px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      margin-bottom: 8px;
+    }
+
+    .metric p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .metric-grid,
+    .meta-grid,
+    .panel-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .metric-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .meta-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .panel-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 14px;
+      border: 1px solid #dbe1ec;
+      background: #fff;
+      font-size: 17px;
+      font-weight: 700;
+      color: #394152;
+    }
+
+    .placeholder {
+      min-height: 260px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .placeholder.tall {
+      min-height: 520px;
+    }
+
+    .placeholder.large {
+      min-height: 370px;
+    }
+
+    .placeholder.medium {
+      min-height: 300px;
+    }
+
+    .placeholder::before {
+      content: "이미지 영역";
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      padding: 7px 12px;
+      border: 1px solid #dbe1ec;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .placeholder::after {
+      content: "";
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: -54px;
+      height: 140px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--gradient-a), var(--gradient-b));
+      filter: blur(20px);
+      opacity: 0.95;
+    }
+
+    .placeholder-title {
+      margin: 18px 0 0;
+      font-size: 30px;
+      line-height: 1.24;
+      letter-spacing: -0.04em;
+      font-weight: 800;
+      max-width: 90%;
+    }
+
+    .placeholder-note {
+      margin: 14px 0 0;
+      font-size: 18px;
+      line-height: 1.62;
+      color: var(--muted);
+      max-width: 88%;
+    }
+
+    .contact {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .contact div {
+      font-size: 24px;
+      line-height: 1.5;
+      color: #2a303d;
+    }
+
+    .author {
+      margin-top: 14px;
+      font-size: 17px;
+      line-height: 1.5;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .spacer-xxl { height: 40px; }
+    .spacer-xl { height: 28px; }
+    .spacer-lg { height: 22px; }
+    .spacer-md { height: 16px; }
+
+    .pager {
+      position: fixed;
+      right: 26px;
+      bottom: 26px;
+      z-index: 40;
+      padding: 12px 16px;
+      background: rgba(17, 17, 17, 0.86);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+  <main id="deck"></main>
+  <div class="pager" id="pager">01 / 43</div>
+
+  <script>
+    const slides = [
+      {
+        page: 1,
+        type: "cover",
+        brand: "LEEJUNYONG",
+        eyebrow: "Preface",
+        footerLabel: "Preface",
+        footerMeta: "LEEJUNYONG Portfolio Deck",
+        title: "진짜 문제를 찾기 위해<br />가끔 목숨을 겁니다",
+        text:
+          "본 포트폴리오는 문제 정의와 해결 중심으로 쓰였습니다. 하드 스킬에 대한 검증보다는 왜 프로젝트를 하기로 결정했으며, 핵심 문제는 무엇이며 어떠한 방식으로 해결했고 결과적으로 무엇을 배우며 성장했는가를 담고 있습니다. 이와 같이 구성한 이유는 제가 일하는 방식을 잘 설명하기 위함입니다.",
+        contact: ["AI Native Product Manager", "hyungwoon.kr@gmail.com", "010 - 4810 - 9142"],
+        imageTitle: "표지 비주얼 / 인물 사진 / 첫 장 타이포",
+        imageNote: "원본 PDF 표지 레이아웃 비율에 맞춘 이미지 전용 자리입니다."
+      },
+      {
+        page: 2,
+        type: "intro",
+        brand: "LEEJUNYONG",
+        eyebrow: "Career",
+        footerLabel: "Career",
+        footerMeta: "AI Native Product Manager",
+        title: "AI Native Product Manager 이준용입니다",
+        subtitle: "Causality principles shaping my reality",
+        text:
+          "명확한 인과관계를 바탕으로, 간명하게 일하는 것을 선호합니다. Two-sided market에서 각 유저 사이드의 문제를 해결하고 가치를 만드는 데 집중해왔습니다. AI로 문제 해결 속도가 빨라진 만큼 문제 정의를 제대로 해내는 PM만이 살아남을 것이라 단언합니다. 누구보다 많은 실패를 겪으며 성장했고, 그 과정에서 진짜 문제를 찾는 일에 더욱 집착하게 되었습니다.",
+        panels: [
+          ["Kakaopay · 2025.07 - 2026.02", "마이데이터 활용 개인 PB 구축, 청소년 마이데이터 런칭, 가상자산 거래소 연동, 신용플래너 개선, 호출 최적화, 연계 BM 개발."],
+          ["Greenlabs · 2023.11 - 2025.06", "농민 데이터 기반 제품 고도화, 그로스, AI와 LLM 활용, 커뮤니티 활성화, 악성 재고 40% 이상 소진."],
+          ["elecvery · 2023.05 - 2023.09", "조직 내 유일한 PO로 제품 기획과 운영 총괄, 제품 체계와 일하는 방식 수립, 9명의 주니어 개발 조직 리드."],
+          ["Rocketpunch · 2021.06 - 2023.05", "셀 리드 PM으로 매출 180%, MAU 125%, W+1 리텐션 120% 개선."],
+        ]
+      },
+      {
+        page: 3,
+        type: "caseTitle",
+        brand: "Greenlabs",
+        eyebrow: "2024.05",
+        footerLabel: "Greenlabs",
+        footerMeta: "유저 세그먼트 구분으로 광고 구좌 개인화 및 매출 재현",
+        title: "유저 세그먼트 구분으로 광고 구좌 개인화 및 매출 재현",
+        text: "한정된 네이티브 광고 구좌의 슬롯을 구분하여 매출 감소를 최소화하며 정보 획득 넛지를 구현한 프로젝트",
+        chips: ["Data Driven", "Efficiency Optimization", "Strategic Thinking"]
+      },
+      {
+        page: 4,
+        type: "split",
+        brand: "Problem",
+        eyebrow: "Greenlabs | 2024.05",
+        footerLabel: "Problem",
+        footerMeta: "유저 세그먼트 구분으로 광고 구좌 개인화 및 매출 재현",
+        title: "한정된 네이티브 구좌 내 구매 가능성이 높은 유저 식별 필요",
+        text:
+          "팜모닝은 농민 데이터를 최대한 많이, 빠르게 확보하여 FMS의 원천 데이터로 제공하는 역할을 부여받았습니다. 재배 작물, 소속 작목반, 재배 규모 등 데이터를 획득할 수 있는 퍼널을 홈피드를 포함한 다양한 지면에 구현해야 했습니다.",
+        panels: [
+          ["핵심 고민", "매출을 보전하면서 이 구좌를 나눠 쓸 수 없을까?"],
+          ["상황", "기존 장터 구좌와 신규 데이터 획득 넛지들이 같은 홈피드 슬롯을 경쟁하고 있었습니다."]
+        ],
+        imageTitle: "홈피드 장터 구좌 / 넛지 카드 / 여러 UI 스크린샷",
+        imageNote: "PDF의 홈피드 예시, 장터 카드, 판로 확장 카드, 소속 단체 입력 넛지 배치를 그대로 대입할 위치."
+      },
+      {
+        page: 5,
+        type: "split",
+        brand: "Hypothesis",
+        eyebrow: "Greenlabs | 2024.05",
+        footerLabel: "Hypothesis",
+        footerMeta: "유저 세그먼트 구분으로 광고 구좌 개인화 및 매출 재현",
+        title: "구매할 것 같은 유저에게만 최소화해 노출하면 재현율은 유지하고 슬롯을 확보할 수 있다",
+        text:
+          "장터 구매 가능성이 높은 사용자를 사전에 식별한 뒤, 이들에게는 장터 캐러셀을, 가능성이 낮은 사용자에게는 데이터 획득용 넛지를 노출하는 전략입니다. 목표는 최종 구매자 중 장터 반응 사용자의 비율을 최대화하는 것이었습니다.",
+        panels: [
+          ["필요 데이터", "[기준 기간] 내 장터 방문 빈도, 체류시간, 장터 반응 유저 비율"],
+          ["전략", "장터 반응 유저에게는 기존 장터를, 미반응 유저에게는 신규 넛지를 노출"]
+        ],
+        imageTitle: "선택 노출 개념도 / 장터 반응 유저 vs 미반응 유저",
+        imageNote: "원본 슬라이드의 플로우와 카드 조합을 그대로 넣을 자리."
+      },
+      {
+        page: 6,
+        type: "metrics",
+        brand: "Solution",
+        eyebrow: "Greenlabs | 2024.05",
+        footerLabel: "Solution",
+        footerMeta: "유저 세그먼트 구분으로 광고 구좌 개인화 및 매출 재현",
+        title: "구매-노출 재현율을 분석해 유저를 식별하고 선택적으로 노출했습니다",
+        text:
+          "최근 30일 동안 장터에 2회 이상 방문하고 총 300초 이상 체류한 사용자가 전체 매출의 96%를 차지했습니다. 전체 홈피드 사용자 중 25% 정도에만 장터를 노출해도 매출의 96%를 유지할 수 있음을 확인했습니다.",
+        metrics: [
+          ["기준 기간", "30일", "within 30days"],
+          ["방문 횟수", "2회+", "장터 방문 2회 이상"],
+          ["체류 시간", "300초+", "총 장터 체류시간"],
+          ["재현율", "96.22%", "매출 재현율 유지"],
+        ],
+        imageTitle: "세그먼트 분석 표 / 조건별 재현율 테이블",
+        imageNote: "PDF의 분석 테이블을 동일한 비중으로 배치할 자리."
+      },
+      {
+        page: 7,
+        type: "quotePage",
+        brand: "Result & Lesson Learned",
+        eyebrow: "Greenlabs | 2024.05",
+        footerLabel: "Result & Lesson Learned",
+        footerMeta: "유저 세그먼트 구분으로 광고 구좌 개인화 및 매출 재현",
+        title: "데이터 중심으로 유저 세그먼트를 분리해 매출 손실을 최소화하고 데이터 획득을 극대화했습니다",
+        text:
+          "새로운 데이터 획득용 넛지를 배포하면서 장터 매출도 유지했습니다. 단순한 가중치 기반 랜덤 노출이 아니라 실제 데이터를 바탕으로 타깃을 정의하고 실행한 점에서 큰 의미가 있었습니다.",
+        quotes: [
+          ["조직·개인 성장", "단순히 할 수 있는 일이 아니라 왜 해야 하는지를 세워 실행한 경험이었습니다."],
+          ["핵심 키워드", "데이터 드리븐 / 매출 집착 / 뾰족한 문제 정의"]
+        ]
+      },
+      {
+        page: 8,
+        type: "caseTitle",
+        brand: "Greenlabs",
+        eyebrow: "2025.02",
+        footerLabel: "Greenlabs",
+        footerMeta: "Recency 7m+ 이탈 유저의 획득 비용 감소를 위한 수량한정판매",
+        title: "Recency 7m+ 이탈 유저의 획득 비용 감소를 위한 수량한정판매",
+        text: "한정수량된 농자재에 기존 CAC만큼 할인을 진행하여 Recency 7m+ 이탈 유저를 복귀시키는 실험",
+        chips: ["Viral Loop", "Growth Mindset", "Data Driven", "Strategic Thinking", "User Focus"]
+      },
+      {
+        page: 9,
+        type: "split",
+        brand: "Problem",
+        eyebrow: "Greenlabs | 2025.02",
+        footerLabel: "Problem",
+        footerMeta: "Recency 7m+ 이탈 유저의 획득 비용 감소를 위한 수량한정판매",
+        title: "Recency 7m+ 유저를 복귀시키려면 1,400원 이상의 비용이 필요했고, 시간이 갈수록 효율은 나빠졌습니다",
+        text:
+          "팜모닝은 한 명의 유저 활성화를 위해 평균 약 400원의 비용을 소진하지만, Recency 7m+ 유저를 활성화하는 데에는 CAC 1,400원이 필요했습니다. 2,600명을 활성화하기 위해 매월 364만 원을 쓰고 있었습니다.",
+        panels: [
+          ["문제", "기존 CRM으로는 오래 이탈한 유저를 되살리는 비용이 너무 비쌌습니다."],
+          ["현상", "CRM에 반응하는 부활 유저 비율도 시간이 갈수록 줄어들었습니다."]
+        ],
+        imageTitle: "Recency 구간별 CAC 그래프",
+        imageNote: "PDF의 비용 비교 차트를 그대로 넣을 자리."
+      },
+      {
+        page: 10,
+        type: "split",
+        brand: "Hypothesis",
+        eyebrow: "Greenlabs | 2025.02",
+        footerLabel: "Hypothesis",
+        footerMeta: "Recency 7m+ 이탈 유저의 획득 비용 감소를 위한 수량한정판매",
+        title: "파격적인 프로모션 혜택을 제공하면 CAC 1,400원 미만으로 부활시킬 수 있을 것이다",
+        text:
+          "100만 원의 마케팅 비용을 100명에게 각 1만 원씩 할인 제공하는 한정 캠페인으로 바꾸면, Organic-Viral 확산이 일어나 활성화 효율을 크게 높일 수 있다고 판단했습니다.",
+        panels: [
+          ["프로젝션", "1,000명만 활성화되어도 인당 1,000원 수준으로 기존 CAC 대비 절감 효과가 분명했습니다."],
+          ["벤치마크", "활성화 유저 수가 늘어날수록 획득 비용은 급격히 낮아질 수 있었습니다."]
+        ],
+        imageTitle: "획득 비용 개선 Projection 차트",
+        imageNote: "PDF의 표와 꺾은선형/막대 구조가 들어갈 자리."
+      },
+      {
+        page: 11,
+        type: "split",
+        brand: "Solution",
+        eyebrow: "Greenlabs | 2025.02",
+        footerLabel: "Solution",
+        footerMeta: "Recency 7m+ 이탈 유저의 획득 비용 감소를 위한 수량한정판매",
+        title: "농자재 100원 딜 콘셉트의 이벤트를 진행하고 오픈 알림 신청 플로우를 설계했습니다",
+        text:
+          "한정판매를 위해 간단한 랜딩 페이지를 만들고 오픈 알림 신청을 할 수 있도록 했습니다. 신청 유저는 매일 오전 10시에 열리는 한정판매 수량에 따라 알림을 받고 빠르게 이벤트 상품을 100원에 구매할 수 있게 했습니다.",
+        panels: [
+          ["실행 원칙", "홈화면 퀵메뉴와 푸시만을 이용해 유료 매체 비율을 최소화"],
+          ["목표", "캠페인 비용을 100만 원 미만으로 통제하고, 반응 유저 리텐션을 극대화"]
+        ],
+        imageTitle: "한정판매 랜딩 / 오픈 알림 / 플로우 차트",
+        imageNote: "원본 PDF의 이벤트 플로우와 상세 디자인 자리."
+      },
+      {
+        page: 12,
+        type: "quotePage",
+        brand: "Result & Lesson Learned",
+        eyebrow: "Greenlabs | 2025.02",
+        footerLabel: "Result & Lesson Learned",
+        footerMeta: "Recency 7m+ 이탈 유저의 획득 비용 감소를 위한 수량한정판매",
+        title: "한정된 예산 안에서 최대 효율을 내는 CRM 방법을 강구했지만, Churned 유저를 Resurrected시키는 데에는 실패했습니다",
+        text:
+          "Recency 0m 유저가 6.7만 명 참여하며 푸시 오픈율은 평균 대비 2.7배 우수했지만, 오래 이탈한 유저를 부활시키는 데에는 기대만큼의 성과를 내지 못했습니다.",
+        quotes: [
+          ["성과", "알림 신청 장치는 이벤트 기간 7일 동안 D+N 리텐션에 크게 기여했습니다."],
+          ["배운 점", "강한 혜택보다도, 어떤 유저가 왜 돌아오는지에 대한 구조적 이해가 더 중요했습니다."]
+        ]
+      },
+      {
+        page: 13,
+        type: "caseTitle",
+        brand: "Greenlabs",
+        eyebrow: "2025.04",
+        footerLabel: "Greenlabs",
+        footerMeta: "법적 규제를 우회하여 농약사-농민 온라인 매칭",
+        title: "법적 규제를 우회하여 농약사-농민 온라인 매칭",
+        text: "병해충 상담 커뮤니티 카테고리를 활용하여 온라인 판매가 불가한 농민의 농약 구매 과정 개선과 농약사의 판로 확대",
+        chips: ["Network Effect", "Cold Start Problem", "Continuous Improvement", "Growth Mindset", "Value Add", "User Focus"]
+      },
+      {
+        page: 14,
+        type: "split",
+        brand: "Problem",
+        eyebrow: "Greenlabs | 2024.04",
+        footerLabel: "Problem",
+        footerMeta: "법적 규제를 우회하여 농약사-농민 온라인 매칭",
+        title: "농약사는 법적 규제로 인해 오프라인으로만 판매했고, 농민은 비교 구매가 어려웠습니다",
+        text:
+          "일반 농자재상과 달리 농약사는 법적으로 온라인 판매가 불가합니다. 농민은 아는 농약사가 없다면 반드시 매장에 방문해야 했고, 병해충이 걸린 작물을 직접 보여줘야 하는 특성상 대면 의존도도 높았습니다.",
+        panels: [
+          ["농약사 Pain", "온라인 마케팅 전무, 지역 입소문 의존, 오프라인 판매만 가능"],
+          ["농민 Pain", "고령화로 이동 능력 감소, 합리적 비교 구매 불가, 아는 농약사에 의존"]
+        ],
+        imageTitle: "농약사 / 농민 페인 포인트 인포그래픽",
+        imageNote: "원본 슬라이드의 좌우 인물/텍스트 구조를 그대로 대체할 자리."
+      },
+      {
+        page: 15,
+        type: "split",
+        brand: "Hypothesis",
+        eyebrow: "Greenlabs | 2024.04",
+        footerLabel: "Hypothesis",
+        footerMeta: "법적 규제를 우회하여 농약사-농민 온라인 매칭",
+        title: "병해충 상담 시 지역 농약사 상담글이 등록되고 가격 비교까지 이어진다면 농민은 더 적극적으로 상담할 것이다",
+        text:
+          "농민에게 가장 큰 문제는 가격 비교하여 농약을 구매할 수 없다는 점이었습니다. 내 지역 주변 농약사들이 댓글로 병해충 상담을 해준다면 분명한 가치가 될 것이라 확신했습니다.",
+        panels: [
+          ["유저 가치", "병해충 상담 + 지역 농약사 답변 + 구매 연결"],
+          ["의미", "앱 안에서 문제 진단부터 매장 방문 의사결정까지 이어지는 구조"]
+        ],
+        imageTitle: "병해충 상담 게시글 / 농약사 댓글 UI",
+        imageNote: "원본의 앱 화면 두 개가 들어갈 자리."
+      },
+      {
+        page: 16,
+        type: "split",
+        brand: "Hypothesis",
+        eyebrow: "Greenlabs | 2024.04",
+        footerLabel: "Hypothesis",
+        footerMeta: "법적 규제를 우회하여 농약사-농민 온라인 매칭",
+        title: "지역 내 농약이 필요한 수요 농민을 모아주면, 농약사는 팜모닝을 통해 고객을 유치할 것이다",
+        text:
+          "농약사의 가장 큰 문제는 같은 지역 고객을 내 매장으로 이끌 유인이 단 하나도 없다는 것이었습니다. 병해충을 겪고 있는 지역 농민을 발견할 수 있다면 매우 강력한 마케팅 채널이 됩니다.",
+        panels: [
+          ["농약사 가치", "최초 상담과 고객 유치, 디지털 명함과 전단지 역할"],
+          ["플랫폼 가치", "지역 단위 리드와 답변 네트워크 형성"]
+        ],
+        imageTitle: "내 근처 병해충 상담 알림 / 농민 리드 확보 흐름",
+        imageNote: "원본 가설 슬라이드의 메시지 구조를 위한 자리."
+      },
+      {
+        page: 17,
+        type: "split",
+        brand: "Solution",
+        eyebrow: "Greenlabs | 2024.04",
+        footerLabel: "Solution",
+        footerMeta: "법적 규제를 우회하여 농약사-농민 온라인 매칭",
+        title: "기존 병해충 상담 기능에 지역 필터와 농약사 하이라이트를 더해 빠르게 배포했습니다",
+        text:
+          "병해충 상담 기능은 원래부터 팜모닝 유저들에게 사랑받는 기능이었습니다. 기존 질문 흐름에 병해충, 지역 필터를 추가하고 농약사 댓글 하이라이트, 답변 모아보기, 전화하기 등을 붙여 네트워크를 부스트했습니다.",
+        panels: [
+          ["핵심 실행", "지역 필터 추가 / 농약사 답변 하이라이트 / 농약사 프로필 강화"],
+          ["배포 방식", "기존 기능 활용으로 빠르고 간결한 개발"]
+        ],
+        imageTitle: "질문 피드 / 농약사 프로필 / 답변 하이라이트 UI",
+        imageNote: "원본 PDF의 앱 화면 묶음을 그대로 넣을 자리."
+      },
+      {
+        page: 18,
+        type: "quotePage",
+        brand: "Result & Lesson Learned",
+        eyebrow: "Greenlabs | 2024.04",
+        footerLabel: "Result & Lesson Learned",
+        footerMeta: "법적 규제를 우회하여 농약사-농민 온라인 매칭",
+        title: "유저 피드백으로부터 시작해 법적 규제의 빈틈을 활용해 본질적 문제를 해결했습니다",
+        text:
+          "이 프로젝트의 시작점은 데이터가 아니라 친하게 지낸 농약사의 인사이트였습니다. 농사를 짓지도 않고 농업계에 일해본 경험이 없는 PM으로서, 유저 피드백을 바탕으로 간결한 해법을 선택했습니다.",
+        quotes: [
+          ["핵심 흐름", "적극적인 유저 피드백 수취 → 규제의 빈틈 발견 → 빠른 합의 → 기존 기능 활용"],
+          ["유저 피드백", "팜모닝에는 이미 농민이 많이 있는데, 이거 만드시면 저희도 잘 쓸 것 같아요."]
+        ]
+      },
+      {
+        page: 19,
+        type: "caseTitle",
+        brand: "Greenlabs",
+        eyebrow: "2025.03",
+        footerLabel: "Greenlabs",
+        footerMeta: "공동구매를 통한 가격 파괴 및 유저 획득",
+        title: "공동구매를 통한 가격 파괴 및 유저 획득",
+        text: "공동구매를 온라인으로 모객하고 배송비 및 MOQ별 할인율을 적용한 비용으로 저렴하게 판매하여 유저 획득",
+        chips: ["Viral Loop", "Growth Mindset", "Strategic Thinking", "User Focus", "Value Add", "Network Effect"]
+      },
+      {
+        page: 20,
+        type: "split",
+        brand: "Problem",
+        eyebrow: "Greenlabs | 2025.03",
+        footerLabel: "Problem",
+        footerMeta: "공동구매를 통한 가격 파괴 및 유저 획득",
+        title: "온라인은 배송료가 포함되기 때문에 소농은 이를 절약하기 위해 오프라인에서 구매했습니다",
+        text:
+          "대한민국 농민의 약 80%는 소농입니다. 대량구매를 통한 할인은 20%만 누릴 수 있는 특혜이고, 나머지 80% 농민은 배송료까지 포함된 가격으로 온라인 경쟁력을 체감하기 어려웠습니다.",
+        panels: [
+          ["문제 정의", "온라인 농자재 구매 경쟁력 부족"],
+          ["구조", "소농은 소비자가 + 배송료, 대농은 대량구매 할인"]
+        ],
+        imageTitle: "농민 비율 / 생산 자재비 구성도",
+        imageNote: "PDF의 인포그래픽 자리를 그대로 대체."
+      },
+      {
+        page: 21,
+        type: "split",
+        brand: "Hypothesis",
+        eyebrow: "Greenlabs | 2025.03",
+        footerLabel: "Hypothesis",
+        footerMeta: "공동구매를 통한 가격 파괴 및 유저 획득",
+        title: "읍면동리 단위로 농자재를 일괄 배송하면 더 낮은 비용으로 고품질 제품을 제공할 수 있다",
+        text:
+          "소농을 통해 업체의 MOQ를 채우려면 다수의 소농 공동 구매와 지역 일괄 배송이 합의되어야 했습니다. 95만 농민이 사용하는 커뮤니티라는 네트워크는 이를 가능하게 하는 기반이었습니다.",
+        panels: [
+          ["가설", "MOQ 보장 → 마진 확보 → 배송료 할인 → 지역 유효시장 창출"],
+          ["플랫폼 역할", "소농들의 구매 수요 취합 및 지역 일괄 배송 조율"]
+        ],
+        imageTitle: "공동구매 네트워크 / 지역 일괄 배송 다이어그램",
+        imageNote: "원본 도식의 배치를 맞추기 위한 자리."
+      },
+      {
+        page: 22,
+        type: "split",
+        brand: "Solution",
+        eyebrow: "Greenlabs | 2025.03",
+        footerLabel: "Solution",
+        footerMeta: "공동구매를 통한 가격 파괴 및 유저 획득",
+        title: "공동구매 신청을 CRM과 폼 빌더로 모집해 빠르게 PoC를 검증했습니다",
+        text:
+          "각 업체 오프라인 매장이 있는 지역 40km 인근 농민 약 1만 명을 모수로 확보하고 공동구매 수요를 모집했습니다. 기능 개발 없이 폼 빌더를 이용하여 CRM으로 노출하고 신청을 받는 방식으로 진행했습니다.",
+        panels: [
+          ["타깃 지표", "Recency 2~6m, 7m+ 개선 / 기존 매출 대비 임팩트 매출 창출"],
+          ["실행 방식", "파트너 업체 협력, SKU 마련, 지역 타깃 CRM"]
+        ],
+        imageTitle: "공동구매 신청폼 / 공동구매 CRM 예시",
+        imageNote: "원본 신청 폼과 CRM 이미지 영역."
+      },
+      {
+        page: 23,
+        type: "quotePage",
+        brand: "Result & Lesson Learned",
+        eyebrow: "Greenlabs | 2025.03",
+        footerLabel: "Result & Lesson Learned",
+        footerMeta: "공동구매를 통한 가격 파괴 및 유저 획득",
+        title: "Retain 유저에게는 크게 소구되었지만 Churned 유저를 Resurrected시키지는 못했습니다",
+        text:
+          "공동구매를 통해 충성 고객을 더 잔존시키는 데에는 효과가 있었지만, 복귀 캠페인으로서의 역할은 제한적이었습니다. 다만 단 하루 만에 약 530만 원의 거래액이 발생했습니다.",
+        quotes: [
+          ["성과", "기존 일매출 700만 원 대비 약 530만 원의 임팩트 매출 추가 발생"],
+          ["레슨런", "빠르게 실험했지만 유저 입장을 간과하지 않는 것이 중요했습니다."]
+        ]
+      },
+      {
+        page: 24,
+        type: "caseTitle",
+        brand: "Greenlabs",
+        eyebrow: "2024.07",
+        footerLabel: "Greenlabs",
+        footerMeta: "구매 포텐셜 상품의 노출 늘리기를 통한 매출 증대",
+        title: "구매 포텐셜 상품의 노출 늘리기를 통한 매출 증대",
+        text: "노출 대비 조회, 조회 대비 구매 전환율 기준으로 낮은 노출·우수 전환 상품의 노출을 늘려 전체 구매 전환율 개선",
+        chips: ["Data Driven", "Strategic Thinking", "Continuous Improvement", "Growth Mindset", "Value Add"]
+      },
+      {
+        page: 25,
+        type: "split",
+        brand: "Problem",
+        eyebrow: "Greenlabs | 2024.07",
+        footerLabel: "Problem",
+        footerMeta: "구매 포텐셜 상품의 노출 늘리기를 통한 매출 증대",
+        title: "첫 노출과 구매 세션이 동일한 유저 특성을 고려해 노출 대비 구매 전환율 개선이 필요했습니다",
+        text:
+          "팜모닝의 주요 사용자는 시니어 농민으로 전체 구매 중 약 80%가 첫 노출 세션 안에서 발생했습니다. 검색과 탐색보다 보여서 바로 사는 패턴이 강하게 나타났습니다.",
+        panels: [
+          ["핵심 패턴", "first_view_session = purchase_session 80%"],
+          ["의미", "무엇을 보여주느냐에 따라 매출이 결정됩니다."]
+        ],
+        imageTitle: "시니어 구매 패턴 / 유저 발화 / first_view_session 도식",
+        imageNote: "원본 슬라이드의 인터뷰 인용과 패턴 시각화 자리."
+      },
+      {
+        page: 26,
+        type: "split",
+        brand: "Hypothesis",
+        eyebrow: "Greenlabs | 2024.07",
+        footerLabel: "Hypothesis",
+        footerMeta: "구매 포텐셜 상품의 노출 늘리기를 통한 매출 증대",
+        title: "노출 대비 조회가 높고, 조회 대비 구매 전환율도 높은 상품의 노출을 늘리면 전체 전환율이 개선될 것이다",
+        text:
+          "팜모닝 사용자들의 구매 패턴에 맞추어 포텐셜 상품을 조작적으로 정의했습니다. 잘 클릭되는 것과 잘 구매되는 것, 두 조건을 동시에 만족하는 상품의 노출을 강제로 늘리는 방식입니다.",
+        panels: [
+          ["조건 1", "노출 대비 조회율이 높다"],
+          ["조건 2", "조회 대비 구매율이 높다"]
+        ],
+        imageTitle: "AS IS / TO BE 퍼널 도식",
+        imageNote: "원본 슬라이드의 노출→조회→구매 구조 자리."
+      },
+      {
+        page: 27,
+        type: "split",
+        brand: "Solution",
+        eyebrow: "Greenlabs | 2024.07",
+        footerLabel: "Solution",
+        footerMeta: "구매 포텐셜 상품의 노출 늘리기를 통한 매출 증대",
+        title: "구매 포텐셜 상품을 정의하고 핵심 지면에 상단 고정해 노출을 늘렸습니다",
+        text:
+          "노출 수가 아직 미비한 수준이지만 구매 포텐셜이 확인되는 상품을 골라 장터 관련 지면의 상단 고정 방식을 활용했습니다. 추가 필터로 노출 수 3천~1만, 주문 수 3건 이상을 적용했습니다.",
+        panels: [
+          ["조건 3", "노출 수 3천~1만, 주문 수 3건 이상"],
+          ["실행", "핵심 지면 상단 고정 및 인기 캐러셀 내 고정"]
+        ],
+        imageTitle: "상품 카드 / 상단 고정 / 홈 지면 UI",
+        imageNote: "원본 모바일 UI 묶음 자리를 동일하게 유지."
+      },
+      {
+        page: 28,
+        type: "quotePage",
+        brand: "Result & Lesson Learned",
+        eyebrow: "Greenlabs | 2024.07",
+        footerLabel: "Result & Lesson Learned",
+        footerMeta: "구매 포텐셜 상품의 노출 늘리기를 통한 매출 증대",
+        title: "구매 포텐셜 상품이 전체 매출의 약 60%를 차지하며 매출을 견인했습니다",
+        text:
+          "노출이 1만 이상이 되면 상단 고정에서는 제외되지만 인기 상품 로직에 포함되어 구매가 이어졌고, 일정 수준 이상의 노출 이후 전환율이 낮아지면 자연스럽게 추천 로직에서 제외되었습니다.",
+        quotes: [
+          ["성과", "구매 포텐셜 상품 60% / 일반 상품 40%"],
+          ["레슨런", "데이터 중심 문제 정의와 간결한 운영 프로토콜의 힘을 확인했습니다."]
+        ]
+      },
+      {
+        page: 29,
+        type: "caseTitle",
+        brand: "Greenlabs",
+        eyebrow: "2023.11 - 2023.12",
+        footerLabel: "Greenlabs",
+        footerMeta: "농민 소싱 데이터 프로덕트 FMS 출시",
+        title: "농민 소싱 데이터 프로덕트 FMS 출시",
+        text: "팜모닝 농민 직소싱을 위한 회원 DB 기반 인터널 프로덕트 개발로 소싱 비용을 혁신적으로 감축",
+        chips: ["Data Driven", "Strategic Thinking", "Continuous Improvement", "User Focus", "Value Add", "End to End"]
+      },
+      {
+        page: 30,
+        type: "split",
+        brand: "Problem",
+        eyebrow: "Greenlabs | 2023.11 - 2023.12",
+        footerLabel: "Problem",
+        footerMeta: "농민 소싱 데이터 프로덕트 FMS 출시",
+        title: "농민 직소싱을 통한 사업 개발이 필요했고, 팜모닝 내 농민 데이터 정제와 활용이 필요했습니다",
+        text:
+          "그린랩스는 팜모닝 기반 95만 명 규모의 농민 DB를 보유하고 있었습니다. 유통 단계를 줄여 농민에게 직접 매입하려면 파편화된 데이터를 정제하고 활용할 수 있는 인터널 제품이 필요했습니다.",
+        panels: [
+          ["사업 문제", "불필요한 중간 유통 단계로 가격 거품 형성"],
+          ["제품 문제", "농민 데이터가 있어도 소싱 담당자가 바로 활용할 수 없었습니다."]
+        ],
+        imageTitle: "농민 → Greenlabs → 소비자 유통 구조도",
+        imageNote: "원본 공급망 도식 자리를 동일한 비중으로 유지."
+      },
+      {
+        page: 31,
+        type: "meta",
+        brand: "Hypothesis",
+        eyebrow: "Greenlabs | 2023.11 - 2023.12",
+        footerLabel: "Hypothesis",
+        footerMeta: "농민 소싱 데이터 프로덕트 FMS 출시",
+        title: "팜모닝 커뮤니티 활동을 통해 농민과 작물 정보를 스코어링하면 직소싱 비용을 극단적으로 줄일 수 있다",
+        text:
+          "우리가 농민에게 바로 원물을 매입할 수 있다면 소싱 비용과 속도를 모두 낮춰 경쟁력을 확보할 수 있습니다. 바이어의 요구사항을 조건화하고 농민 데이터를 스코어링해 후보를 추리는 접근이 필요했습니다.",
+        meta: [
+          ["바이어 요구사항", "12월부터 3월까지 설향 딸기 상등급 1톤씩 매주 납품, Loss율 3% 미만, 경북 지역"],
+          ["활용 데이터", "지역, 재배 여부, 재배 규모, 주거래처, 농사 실력, 프로필 주소, 영농일지, 장터 구매 이력"],
+          ["데이터 소스", "팜모닝 커뮤니티 활동, 공판장 경락정보, 농장 주소, 보조금 신청 정보, 농업경영체 인증"],
+          ["기대 산출물", "소싱 적합 생산자 후보 리스트 및 상세 프로파일"]
+        ],
+        imageTitle: "요구사항 → 스코어링 → 농민 프로파일링 도식",
+        imageNote: "원본 하단 도식과 후보 리스트 흐름 자리."
+      },
+      {
+        page: 32,
+        type: "split",
+        brand: "Solution",
+        eyebrow: "Greenlabs | 2023.11 - 2023.12",
+        footerLabel: "Solution",
+        footerMeta: "농민 소싱 데이터 프로덕트 FMS 출시",
+        title: "팜모닝 데이터와 외부 데이터를 결합해 소싱용 FMS를 제공했습니다",
+        text:
+          "프로필 정보를 입력하도록 제품을 고도화하고 영농일지를 통해 최신 재배 중인 작물과 농작업 정보를 확인했습니다. 동시에 FMS라는 어드민을 개발하여 사업부 직소싱 담당자에게 농민 데이터를 조회할 수 있도록 제공했습니다.",
+        panels: [
+          ["핵심 기능", "자연어 조건 입력 → LLM 기반 후보 자동 리스트업"],
+          ["정렬 기준", "팜모닝 활동 내역을 바탕으로 조건 적합 추정 스코어 제공"]
+        ],
+        imageTitle: "FMS 후보 리스트 / 후보 상세 정보 화면",
+        imageNote: "PDF의 목업 이미지 두 장 자리를 그대로 유지."
+      },
+      {
+        page: 33,
+        type: "metrics",
+        brand: "Result & Lesson Learned",
+        eyebrow: "Greenlabs | 2023.11 - 2023.12",
+        footerLabel: "Result & Lesson Learned",
+        footerMeta: "농민 소싱 데이터 프로덕트 FMS 출시",
+        title: "그린랩스 창립 이래 최초로 농민 직소싱 매출 17%를 달성했습니다",
+        text:
+          "해당 분기 그린랩스는 전례 없던 농민 직소싱 성과를 일궜습니다. 낮은 제품 완성도의 MVP였지만, 유통 단계 축소라는 방향에 의미 있는 첫 시도였습니다.",
+        metrics: [
+          ["직소싱 비중", "17%", "팜모닝 직소싱 매출"],
+          ["중도매인 소싱", "83%", "기존 소싱 구조"],
+          ["기업 가치", "가격 경쟁력", "유통 마진 삭제"],
+          ["운영 가치", "빠른 대응", "긴급 소싱 대응력 확보"],
+        ],
+        imageTitle: "매입 비중 도식 / 사업부 보이스 / 가치 요약",
+        imageNote: "원본 하단 그래픽 자리를 유지."
+      },
+      {
+        page: 34,
+        type: "caseTitle",
+        brand: "Rocketpunch",
+        eyebrow: "2022.09 - 2023.05",
+        footerLabel: "Rocketpunch",
+        footerMeta: "B2C 로켓펀치 프리미엄 출시",
+        title: "B2C 로켓펀치 프리미엄 출시",
+        text: "로켓펀치의 프로필 데이터 조회 기능을 유료 전환하고 집무실 서비스와 결합 상품을 출시해 수익 극대화",
+        chips: ["Data Driven", "User Focus", "Value Add", "End to End", "Network Effect", "Strategic Thinking"]
+      },
+      {
+        page: 35,
+        type: "split",
+        brand: "Problem",
+        eyebrow: "Rocketpunch | 2022.09 - 2023.05",
+        footerLabel: "Problem",
+        footerMeta: "B2C 로켓펀치 프리미엄 출시",
+        title: "구직자의 구직 속도가 리텐션과 상관관계가 있었고, 현재 유저들의 구직 속도는 느렸습니다",
+        text:
+          "지난 유저 설문에서 로켓펀치에서 채용을 경험했기 때문에 다음 이직 시기에도 다시 이용하게 되었다는 피드백이 있었습니다. 최초 1회 서류 합격까지의 평균 지원수를 줄이는 것이 중요한 목표였습니다.",
+        panels: [
+          ["평균 지표", "최초 1회 합격까지 평균 19회 지원, 최소 7회, 최대 98회"],
+          ["리텐션 패턴", "최초 합격이 빠를수록 다음 이직 시 재방문율이 높았습니다."]
+        ],
+        imageTitle: "지원-합격-재방문 흐름 / 유저 인용",
+        imageNote: "원본 슬라이드의 상관관계 시각화 자리."
+      },
+      {
+        page: 36,
+        type: "split",
+        brand: "Hypothesis",
+        eyebrow: "Rocketpunch | 2022.09 - 2023.05",
+        footerLabel: "Hypothesis",
+        footerMeta: "B2C 로켓펀치 프리미엄 출시",
+        title: "구직자에게 관심 있는 기업 정보를 전달하면 더 빠르게 매칭할 수 있다",
+        text:
+          "\"내 프로필에 방문자가 발생했어요\" 알림 실험은 기존 다른 기능 푸시 대비 2.7배 이상의 오픈 성과를 보였습니다. 나에게 관심 있는 기업 정보를 전달하는 것이 강하게 소구된다는 점을 확인했습니다.",
+        panels: [
+          ["가설", "관심 기업 정보를 통해 지원 행동을 유도하고 매칭 속도를 높인다"],
+          ["실험", "프로필 방문자 알림 푸시와 방문자 목록 랜딩"]
+        ],
+        imageTitle: "방문자 알림 푸시 / 방문자 목록 / 시나리오",
+        imageNote: "원본 푸시 카드와 플로우 자리를 위한 영역."
+      },
+      {
+        page: 37,
+        type: "split",
+        brand: "Solution",
+        eyebrow: "Rocketpunch | 2022.09 - 2023.05",
+        footerLabel: "Solution",
+        footerMeta: "B2C 로켓펀치 프리미엄 출시",
+        title: "내 프로필 성과를 확인할 수 있는 대시보드를 만들고 유료화했습니다",
+        text:
+          "로켓펀치 프리미엄은 내 프로필을 조회한 기업의 산업 분야, 직무 등 방문 데이터를 분석해 보여주는 대시보드였습니다. 방문자 알림, 방문 경로 분석, 방문 검색 키워드 분석을 함께 제공했습니다.",
+        panels: [
+          ["구직자용", "프로필 인사이트 대시보드와 방문자 정보 제공"],
+          ["기업 담당자용", "관심 구직자 모니터링을 위한 전용 대시보드"]
+        ],
+        imageTitle: "프로필 인사이트 대시보드 / 방문자 분석 화면",
+        imageNote: "원본 UI 시안이 들어갈 자리."
+      },
+      {
+        page: 38,
+        type: "quotePage",
+        brand: "Result & Lesson Learned",
+        eyebrow: "Rocketpunch | 2022.09 - 2023.05",
+        footerLabel: "Result & Lesson Learned",
+        footerMeta: "B2C 로켓펀치 프리미엄 출시",
+        title: "월 약 2천만 원의 B2C 매출을 만들었지만, 기대 임팩트를 완전히 입증하지는 못했습니다",
+        text:
+          "해당 기능을 통해 약 2천만 원의 B2C 매출을 일으켰고 프리미엄 사용자의 최초 합격까지 평균 지원수를 19회에서 16회 정도로 줄였습니다. 다만 여러 상관관계가 존재해 기능 효과를 확언하기는 어려웠습니다.",
+        quotes: [
+          ["성과", "월 2천만 원의 B2C 매출 / 약 500명 수준의 사용자"],
+          ["배운 점", "유저 니즈를 잘게 쪼개 검증하지 못해 프로젝트 규모를 불필요하게 키웠습니다."]
+        ]
+      },
+      {
+        page: 39,
+        type: "skills",
+        brand: "Skills",
+        eyebrow: "Hard / Soft",
+        footerLabel: "Skills",
+        footerMeta: "Hard Skills / Soft Skills / Tools",
+        title: "단단한 하드 스킬과 유연한 소프트 스킬을 갖고 있습니다",
+        text:
+          "AI Native 역량을 활용하여 프로덕트와 비즈니스를 아우르고 강한 추진력으로 조직을 견인하는 능력이 있습니다.",
+        leftList: ["컨텍스트 엔지니어링", "비즈니스 모델 설계", "AI 및 데이터 활용", "서비스 기획"],
+        rightList: ["뾰족한 문제 정의와 해결책 도출", "경계 없이 유연한 커뮤니케이션", "부드럽고 명료한 리더십", "합리적이고 촘촘한 매니징"],
+        chips: ["Figma", "Claude Code", "Cursor", "Codex", "Next.js", "Tailwind", "Web Builder", "Framer", "Wordpress", "Webflow"]
+      },
+      {
+        page: 40,
+        type: "triple",
+        brand: "Strong Point",
+        eyebrow: "Why Me",
+        footerLabel: "Strong Point",
+        footerMeta: "회사의 성공을 위해 일합니다",
+        title: "문제 해결에 필요한 경험들을 고루 해왔습니다",
+        text:
+          "회사와 제품이 스케일링하기 위해 겪어야 할 실패의 경험을 많이 통과했습니다. 이를 통해 본질의 중요성을 아는 사람으로 압축 성장하고 있습니다.",
+        items: [
+          "빠르게 성장하는 시장에 적합한 인재입니다.",
+          "네트워크 효과를 활용해 콜드 스타트 문제를 해결할 수 있습니다.",
+          "자사 제품을 최대로 유통하는 능력이 있습니다.",
+          "PMF를 가설과 빈번한 실험을 통해 빠르게 검증할 수 있습니다.",
+          "사업의 운영 확장성 제약을 통제할 수 있습니다.",
+          "효율적으로 매출총이익을 높이는 구조를 설계할 수 있습니다."
+        ]
+      },
+      {
+        page: 41,
+        type: "skills",
+        brand: "What I love",
+        eyebrow: "How I work",
+        footerLabel: "What I love / How I work",
+        footerMeta: "더 일을 잘하기 위해 더 잘 살아보려 노력합니다",
+        title: "일과 삶 모두를 더 잘 해내기 위한 태도를 가꿉니다",
+        text:
+          "'일'만큼이나 쉬는 시간을 잘 활용하고자 노력합니다. 나를 단단하게 만드는 것들로 삶을 채우고 있으며, 동시에 일에서는 성과 중심과 데이터 중심 사고를 제1원칙으로 두고 있습니다.",
+        leftList: ["자연", "딥다이브", "효율 추구", "사이드 프로젝트", "성과 중심"],
+        rightList: ["데이터 중심", "커리어 아티클", "동료와 함께", "문서화", "리더"],
+        chips: ["숲 속 산책", "깊은 몰입", "협업 효율", "서비스 기획", "콘텐츠 제작", "오프라인 행사", "문서화 습관", "주도적 추진력"]
+      },
+      {
+        page: 42,
+        type: "testimonials",
+        brand: "Peer Testimonial",
+        eyebrow: "Feedback",
+        footerLabel: "Peer Testimonial",
+        footerMeta: "그들에게 필요한 사람이 되고 싶습니다",
+        title: "함께 일한 동료들의 평가입니다",
+        text:
+          "직접 경험한 사람의 말이 가장 강력한 증거라고 믿습니다. 리더십, 성장 집착, 시스템 구축, 문제 해결, 데이터 기반 사고 측면의 피드백을 정리했습니다.",
+        testimonials: [
+          ["명료한 리더십", "능력과 역량을 파악하고 잘 맞물릴 수 있도록 조율하며, 상황과 마음을 살펴주는 사람입니다.", "문수진 · ANTIEGG"],
+          ["커리어 성장에 대한 집착", "업무 외 시간도 성장을 위해 투자하는 모습이 매우 인상적이며 일에 진심인 인재입니다.", "이시윤 · Rocketpunch"],
+          ["조직적 시스템을 구축하는 능력", "조직, 팀, 구성원, 본인의 성장을 모두 고민하며 시스템을 구성해내는 능력이 탁월합니다.", "이창석 · Rocketpunch"],
+          ["뾰족한 문제 해결", "다양한 프로젝트를 리더십 있게 이끌고 문제에 대한 자신만의 관점을 제시하며 최선의 해결책을 도출해냅니다.", "최지희 · Rocketpunch"],
+          ["집요한 문제 해결", "여러 어려움 속에서도 언제나 주도적으로 답을 찾아왔다는 점에서 신뢰가 갑니다.", "동료 피드백"],
+          ["사업과 기술을 아우르는 지식", "개발팀이나 UX팀과 원활히 협업할 수 있고 사업적 관점을 잃지 않는 PM입니다.", "동료 피드백"]
+        ]
+      },
+      {
+        page: 43,
+        type: "cover",
+        brand: "LEEJUNYONG",
+        eyebrow: "Closing",
+        footerLabel: "Closing",
+        footerMeta: "LEEJUNYONG Portfolio Deck",
+        title: "지금까지 읽어주셔서<br />대단히 감사드립니다",
+        text:
+          "진짜 문제를 찾기 위해 가끔 목숨을 겁니다. AI Native Product Manager 이준용입니다.",
+        contact: ["hyungwoon.kr@gmail.com", "010 - 4810 - 9142"],
+        imageTitle: "엔딩 비주얼 / 프로필 이미지 / 마지막 장 그래픽",
+        imageNote: "마지막 페이지 비주얼을 넣을 수 있도록 별도 분리한 자리."
+      }
+    ];
+
+    const deck = document.getElementById("deck");
+
+    const renderPlaceholder = (title, note, size = "large") => `
+      <div class="placeholder ${size}">
+        <div>
+          <p class="placeholder-title">${title}</p>
+          <p class="placeholder-note">${note}</p>
+        </div>
+      </div>
+    `;
+
+    const renderPanels = (panels = []) =>
+      `<div class="panel-grid">${panels
+        .map(
+          ([title, text]) => `
+            <div class="panel">
+              <p class="panel-title">${title}</p>
+              <p>${text}</p>
+            </div>`
+        )
+        .join("")}</div>`;
+
+    const renderMetrics = (metrics = []) =>
+      `<div class="metric-grid">${metrics
+        .map(
+          ([title, value, desc]) => `
+            <div class="metric">
+              <p class="metric-title">${title}</p>
+              <strong>${value}</strong>
+              <p>${desc}</p>
+            </div>`
+        )
+        .join("")}</div>`;
+
+    const renderChips = (chips = []) =>
+      `<div class="chips">${chips.map((chip) => `<span class="chip">${chip}</span>`).join("")}</div>`;
+
+    const renderMeta = (meta = []) =>
+      `<div class="meta-grid">${meta
+        .map(
+          ([title, text]) => `
+            <div class="meta-card">
+              <p class="panel-title">${title}</p>
+              <p>${text}</p>
+            </div>`
+        )
+        .join("")}</div>`;
+
+    const renderListPanel = (title, items = []) => `
+      <div class="panel">
+        <p class="panel-title">${title}</p>
+        <div class="stack">
+          ${items.map((item) => `<p>${item}</p>`).join("")}
+        </div>
+      </div>
+    `;
+
+    const renderSlide = (slide) => {
+      let body = "";
+
+      if (slide.type === "cover") {
+        body = `
+          <div class="content cover-layout">
+            <div class="stack">
+              <p class="eyebrow">${slide.eyebrow}</p>
+              <h1 class="title-hero">${slide.title}</h1>
+              <p class="body">${slide.text}</p>
+              <div class="contact">
+                ${(slide.contact || []).map((item) => `<div>${item}</div>`).join("")}
+              </div>
+            </div>
+            ${renderPlaceholder(slide.imageTitle, slide.imageNote, "tall")}
+          </div>
+        `;
+      }
+
+      if (slide.type === "intro") {
+        body = `
+          <div class="content stack">
+            <p class="mini-label">${slide.subtitle}</p>
+            <h2 class="title-xl">${slide.title}</h2>
+            <p class="body">${slide.text}</p>
+            ${renderPanels(slide.panels)}
+          </div>
+        `;
+      }
+
+      if (slide.type === "caseTitle") {
+        body = `
+          <div class="content stack">
+            <p class="eyebrow">${slide.brand}</p>
+            <h2 class="title-xl">${slide.title}</h2>
+            <p class="body">${slide.text}</p>
+            ${renderChips(slide.chips)}
+          </div>
+        `;
+      }
+
+      if (slide.type === "split") {
+        body = `
+          <div class="content split-layout">
+            <div class="stack">
+              <h2 class="title-lg">${slide.title}</h2>
+              <p class="body small">${slide.text}</p>
+              ${renderPanels(slide.panels)}
+            </div>
+            ${renderPlaceholder(slide.imageTitle, slide.imageNote, "tall")}
+          </div>
+        `;
+      }
+
+      if (slide.type === "metrics") {
+        body = `
+          <div class="content stack">
+            <h2 class="title-lg">${slide.title}</h2>
+            <p class="body small">${slide.text}</p>
+            ${renderMetrics(slide.metrics)}
+            ${renderPlaceholder(slide.imageTitle, slide.imageNote, "large")}
+          </div>
+        `;
+      }
+
+      if (slide.type === "quotePage") {
+        body = `
+          <div class="content stack">
+            <h2 class="title-lg">${slide.title}</h2>
+            <p class="body small">${slide.text}</p>
+            <div class="quote-layout">
+              ${(slide.quotes || [])
+                .map(
+                  ([title, text]) => `
+                    <div class="quote">
+                      <p class="quote-title">${title}</p>
+                      <p>${text}</p>
+                    </div>`
+                )
+                .join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      if (slide.type === "meta") {
+        body = `
+          <div class="content stack">
+            <h2 class="title-lg">${slide.title}</h2>
+            <p class="body small">${slide.text}</p>
+            ${renderMeta(slide.meta)}
+            ${renderPlaceholder(slide.imageTitle, slide.imageNote, "large")}
+          </div>
+        `;
+      }
+
+      if (slide.type === "skills") {
+        body = `
+          <div class="content stack">
+            <h2 class="title-xl">${slide.title}</h2>
+            <p class="body small">${slide.text}</p>
+            <div class="skill-layout">
+              ${renderListPanel("Left", slide.leftList)}
+              ${renderListPanel("Right", slide.rightList)}
+            </div>
+            ${renderChips(slide.chips)}
+          </div>
+        `;
+      }
+
+      if (slide.type === "triple") {
+        body = `
+          <div class="content stack">
+            <h2 class="title-xl">${slide.title}</h2>
+            <p class="body small">${slide.text}</p>
+            <div class="triple-layout">
+              ${(slide.items || [])
+                .map(
+                  (item) => `
+                    <div class="panel">
+                      <p>${item}</p>
+                    </div>`
+                )
+                .join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      if (slide.type === "testimonials") {
+        body = `
+          <div class="content stack">
+            <h2 class="title-xl">${slide.title}</h2>
+            <p class="body small">${slide.text}</p>
+            <div class="triple-layout">
+              ${(slide.testimonials || [])
+                .map(
+                  ([title, text, author]) => `
+                    <div class="testimonial">
+                      <p class="panel-title">${title}</p>
+                      <p>${text}</p>
+                      <div class="author">${author}</div>
+                    </div>`
+                )
+                .join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <section class="slide" data-page="${slide.page}">
+          <div class="page">
+            <div class="header">
+              <div class="brand">${slide.brand}</div>
+              <div class="eyebrow">${slide.eyebrow}</div>
+            </div>
+            ${body}
+            <div class="footer">
+              <div class="footer-label">${slide.footerLabel}</div>
+              <div class="footer-meta">${slide.footerMeta}</div>
+              <div class="page-number">${String(slide.page).padStart(2, "0")}</div>
+            </div>
+          </div>
+        </section>
+      `;
+    };
+
+    deck.innerHTML = slides.map(renderSlide).join("");
+
+    const pager = document.getElementById("pager");
+    const sections = document.querySelectorAll(".slide");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const current = String(entry.target.dataset.page).padStart(2, "0");
+          pager.textContent = `${current} / 43`;
+        });
+      },
+      { threshold: 0.58 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>

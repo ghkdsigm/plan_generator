@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MomosDog 비교 테이블</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --bg-1: #eef4ff;
+      --bg-2: #f8fbff;
+      --panel: rgba(255, 255, 255, 0.88);
+      --line: rgba(46, 74, 125, 0.12);
+      --text: #1b2430;
+      --muted: #6e7b91;
+      --legacy: #9097a6;
+      --brand: #2b63ff;
+      --brand-soft: rgba(43, 99, 255, 0.08);
+      --accent: #18a86b;
+      --shadow: 0 24px 60px rgba(38, 71, 145, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at top left, rgba(43, 99, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", sans-serif;
+      padding: 28px;
+    }
+
+    .frame {
+      width: min(1320px, 100%);
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 36px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+    }
+
+    .hero {
+      padding: 40px 44px 24px;
+      background:
+        linear-gradient(135deg, rgba(43, 99, 255, 0.12), rgba(24, 168, 107, 0.05)),
+        #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(43, 99, 255, 0.08);
+      color: var(--brand);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hero h1 {
+      margin: 16px 0 10px;
+      font-size: 40px;
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .table-wrap {
+      padding: 28px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(242, 247, 255, 0.96));
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+
+    thead th {
+      padding: 22px 20px;
+      font-size: 18px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    thead th:nth-child(1) {
+      width: 17%;
+      background: #f7f9fd;
+    }
+
+    thead th:nth-child(2) {
+      width: 25%;
+      background: linear-gradient(180deg, #fafbfc, #f3f5f8);
+      color: #5f6878;
+    }
+
+    thead th:nth-child(3) {
+      width: 28%;
+      background: linear-gradient(180deg, #eef4ff, #e5eeff);
+      color: #123ca8;
+    }
+
+    thead th:nth-child(4) {
+      width: 30%;
+      background: linear-gradient(180deg, #eefcf6, #e4f8ee);
+      color: #15754b;
+    }
+
+    .th-title {
+      display: block;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+    }
+
+    .th-sub {
+      display: block;
+      margin-top: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0.86;
+    }
+
+    tbody td {
+      padding: 22px 20px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: middle;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    tbody td:first-child {
+      background: #fbfcfe;
+      font-weight: 800;
+      color: #2b3444;
+    }
+
+    tbody td:nth-child(2) {
+      color: #646f80;
+      background: #ffffff;
+    }
+
+    tbody td:nth-child(3) {
+      color: #193f96;
+      background: rgba(43, 99, 255, 0.04);
+      font-weight: 700;
+    }
+
+    tbody td:nth-child(4) {
+      background: rgba(24, 168, 107, 0.04);
+    }
+
+    .advantage {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      background: rgba(24, 168, 107, 0.1);
+      color: #116640;
+      font-weight: 800;
+    }
+
+    .advantage::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(24, 168, 107, 0.12);
+      flex: none;
+    }
+
+    .footnote {
+      padding: 0 34px 30px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1100px) {
+      body {
+        padding: 16px;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero p,
+      tbody td,
+      thead th {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .frame {
+        border-radius: 24px;
+      }
+
+      .hero {
+        padding: 28px 22px 18px;
+      }
+
+      .table-wrap {
+        padding: 14px;
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 920px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <section class="hero">
+      <div class="eyebrow">Smart Pet Care Comparison</div>
+      <h1>기존 자동 배변판 대비<br />MomosDog의 차별화 포인트</h1>
+      <p>
+        단순 자동화 장비를 넘어, AI 비전 인식과 IoT 기반 데이터 관리로
+        배변 패턴 분석, 유지비 절감, 원격 관리까지 확장할 수 있는 구조를
+        한눈에 보이도록 정리한 비교표입니다.
+      </p>
+    </section>
+
+    <section class="table-wrap">
+      <table aria-label="기존 자동 배변판과 MomosDog 비교표">
+        <thead>
+          <tr>
+            <th>
+              <span class="th-title">구분</span>
+            </th>
+            <th>
+              <span class="th-title">기존 자동 배변판<br />(국내)</span>
+              <span class="th-sub">기본 자동화 중심</span>
+            </th>
+            <th>
+              <span class="th-title">MomosDog<br />(신규)</span>
+              <span class="th-sub">AI + IoT 기반 스마트 관리</span>
+            </th>
+            <th>
+              <span class="th-title">우위 요소</span>
+              <span class="th-sub">도입 효과와 확장 가치</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>브랜드명</td>
+            <td>왈츠 펫토일렛, 아이독포티, 퓨어맥스 멍멍쉬, 해피루 자동배변판</td>
+            <td>국내 최초 AI 비전 인식 자동 배변판 MomosDog</td>
+            <td>제품 디자인(인테리어 요소)</span></td>
+          </tr>
+          <tr>
+            <td>인식 방식</td>
+            <td>단순 적외선 / 무게 센서</td>
+            <td>온디바이스 AI 비전 인식</td>
+            <td>오탐지 방지, 패드 절약</span></td>
+          </tr>
+          <tr>
+            <td>데이터 관리</td>
+            <td>없음 (단순 동작)</td>
+            <td>배변 로그 및 건강 리포트</td>
+            <td>펫 헬스케어 확장성</span></td>
+          </tr>
+          <tr>
+            <td>운영 비용</td>
+            <td>패드 오소모 많음</td>
+            <td>최적 타이밍 청소</td>
+            <td>유지비 절감</span></td>
+          </tr>
+          <tr>
+            <td>네트워크</td>
+            <td>오프라인 위주</td>
+            <td>오프라인 사용 및 IoT 앱 연동</td>
+            <td>원격 관리 및 구독</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="footnote">
+      비교표는 제품 설명, 제안서, 투자 발표 자료에서 바로 활용할 수 있도록
+      가독성과 차별점 강조에 맞춰 구성했습니다.
+    </div>
+  </main>
+</body>
+</html>

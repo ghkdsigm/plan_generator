@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MomosDog 경쟁 비교 매트릭스</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --bg: #eff4ff;
+      --panel: #ffffff;
+      --line: rgba(33, 52, 96, 0.12);
+      --text: #172033;
+      --muted: #67748b;
+      --legacy-bg: #f7f8fb;
+      --legacy-text: #5f697d;
+      --brand-bg: #edf3ff;
+      --brand-text: #1948c9;
+      --adv-bg: #eefaf4;
+      --adv-text: #13704a;
+      --shadow: 0 28px 80px rgba(33, 61, 121, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at top left, rgba(32, 93, 255, 0.12), transparent 30%),
+        linear-gradient(180deg, #f7faff 0%, var(--bg) 100%);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", sans-serif;
+    }
+
+    .board {
+      width: min(1400px, 100%);
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 36px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .hero {
+      padding: 40px 42px 26px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(25, 72, 201, 0.12), rgba(27, 188, 122, 0.06)),
+        #ffffff;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(25, 72, 201, 0.08);
+      color: var(--brand-text);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .hero h1 {
+      margin: 16px 0 10px;
+      font-size: 42px;
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 800px;
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .matrix-wrap {
+      padding: 26px;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: 1.05fr 1.7fr 1.7fr 1.45fr;
+      gap: 14px;
+    }
+
+    .cell {
+      min-height: 132px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      padding: 20px 20px 18px;
+      background: var(--panel);
+      box-shadow: 0 10px 28px rgba(36, 58, 110, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .head {
+      min-height: 112px;
+      font-weight: 800;
+      font-size: 22px;
+      line-height: 1.3;
+      letter-spacing: -0.03em;
+    }
+
+    .head.label {
+      background: #f9fbff;
+      color: #273247;
+    }
+
+    .head.legacy {
+      background: linear-gradient(180deg, #fbfbfd 0%, #f3f5f8 100%);
+      color: var(--legacy-text);
+    }
+
+    .head.brand {
+      background: linear-gradient(180deg, #eff4ff 0%, #e7eeff 100%);
+      color: var(--brand-text);
+    }
+
+    .head.adv {
+      background: linear-gradient(180deg, #eefaf4 0%, #e6f7ef 100%);
+      color: var(--adv-text);
+    }
+
+    .label-cell {
+      background: #fbfcff;
+    }
+
+    .label-title {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.3;
+      letter-spacing: -0.03em;
+    }
+
+    .legacy-cell {
+      background: var(--legacy-bg);
+      color: var(--legacy-text);
+    }
+
+    .brand-cell {
+      background: var(--brand-bg);
+      color: #22429a;
+    }
+
+    .adv-cell {
+      background: var(--adv-bg);
+      color: var(--adv-text);
+    }
+
+    .kicker {
+      margin-bottom: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.72;
+    }
+
+    .content {
+      font-size: 21px;
+      line-height: 1.45;
+      letter-spacing: -0.025em;
+      word-break: keep-all;
+    }
+
+    .content.small {
+      font-size: 19px;
+    }
+
+    .adv-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: rgba(19, 112, 74, 0.09);
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .adv-chip::before {
+      content: "";
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #16a56a;
+      flex: none;
+      box-shadow: 0 0 0 6px rgba(22, 165, 106, 0.14);
+    }
+
+    .footnote {
+      padding: 0 32px 30px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1120px) {
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .matrix-wrap {
+        overflow-x: auto;
+      }
+
+      .matrix {
+        min-width: 1100px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 14px;
+      }
+
+      .hero {
+        padding: 28px 22px 22px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .cell {
+        min-height: 118px;
+      }
+
+      .content,
+      .label-title {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <section class="hero">
+      <div class="badge">Competitive Matrix</div>
+      <h1>기존 자동 배변판과 MomosDog의<br />차별점을 매트릭스로 시각화</h1>
+      <p>
+        비교 항목별로 기존 제품군과 MomosDog의 차이를 사각형 카드 매트릭스로 정리해,
+        제품 차별성, 운영 효율, 데이터 확장성을 한눈에 전달할 수 있도록 구성했습니다.
+      </p>
+    </section>
+
+    <section class="matrix-wrap">
+      <div class="matrix" aria-label="기존 자동 배변판과 MomosDog 비교 매트릭스">
+        <div class="cell head label">구분</div>
+        <div class="cell head legacy">기존 자동 배변판</div>
+        <div class="cell head brand">MomosDog<br />(신규)</div>
+        <div class="cell head adv">우위 요소</div>
+
+        <div class="cell label-cell">
+          <div class="label-title">브랜드명</div>
+        </div>
+        <div class="cell legacy-cell">
+          <div class="kicker">Legacy Products</div>
+          <div class="content small">왈츠 펫토일렛, 아이독포티, 퓨어맥스 멍멍쉬, 해피루 자동배변판</div>
+        </div>
+        <div class="cell brand-cell">
+          <div class="kicker">New Product</div>
+          <div class="content">국내 최초 AI 비전 인식 자동 배변판 MomosDog</div>
+        </div>
+        <div class="cell adv-cell">
+          <div class="adv-chip">제품 디자인(인테리어 요소)</div>
+        </div>
+
+        <div class="cell label-cell">
+          <div class="label-title">인식방식</div>
+        </div>
+        <div class="cell legacy-cell">
+          <div class="content">단순 적외선 / 무게 센서</div>
+        </div>
+        <div class="cell brand-cell">
+          <div class="content">온디바이스 AI 비전 학습 모델 인식</div>
+        </div>
+        <div class="cell adv-cell">
+          <div class="adv-chip">오탐률 최소화, 패드 절약</div>
+        </div>
+
+        <div class="cell label-cell">
+          <div class="label-title">데이터 관리</div>
+        </div>
+        <div class="cell legacy-cell">
+          <div class="content">없음 (단순 동작)</div>
+        </div>
+        <div class="cell brand-cell">
+          <div class="content">배변 로그 및 건강 리포트</div>
+        </div>
+        <div class="cell adv-cell">
+          <div class="adv-chip">펫 헬스케어 및 AI IoT 디바이스 확장성</div>
+        </div>
+
+        <div class="cell label-cell">
+          <div class="label-title">운영 비용</div>
+        </div>
+        <div class="cell legacy-cell">
+          <div class="content">패드 오소모 많음</div>
+        </div>
+        <div class="cell brand-cell">
+          <div class="content">최적 타이밍 청소</div>
+        </div>
+        <div class="cell adv-cell">
+          <div class="adv-chip">유지비 절감</div>
+        </div>
+
+        <div class="cell label-cell">
+          <div class="label-title">네트워크</div>
+        </div>
+        <div class="cell legacy-cell">
+          <div class="content">오프라인 위주</div>
+        </div>
+        <div class="cell brand-cell">
+          <div class="content">오프라인 사용 및 IoT 앱 연동</div>
+        </div>
+        <div class="cell adv-cell">
+          <div class="adv-chip">원격 관리 및 구독</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footnote">
+      제안서, IR 자료, 제품 비교 페이지에서 바로 사용할 수 있는 형태로 구성한 비교 매트릭스입니다.
+    </div>
+  </main>
+</body>
+</html>

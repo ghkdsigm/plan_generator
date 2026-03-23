@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML Deck To Figma</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #111318;
+        --panel: #1b1f27;
+        --panel-2: #242a34;
+        --text: #f4f7fb;
+        --muted: #a7b0be;
+        --line: rgba(255, 255, 255, 0.08);
+        --accent: #00ad50;
+        --accent-soft: rgba(0, 173, 80, 0.18);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 13px/1.5 Pretendard, "Noto Sans KR", Arial, sans-serif;
+      }
+
+      .app {
+        display: grid;
+        gap: 14px;
+        padding: 16px;
+      }
+
+      .panel {
+        display: grid;
+        gap: 10px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel);
+      }
+
+      h1,
+      h2,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 18px;
+      }
+
+      h2 {
+        font-size: 13px;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .controls {
+        display: grid;
+        gap: 10px;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 150px;
+        resize: vertical;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--panel-2);
+        color: var(--text);
+        padding: 12px;
+        font: 12px/1.5 Consolas, "Courier New", monospace;
+      }
+
+      input[type="file"] {
+        width: 100%;
+        color: var(--muted);
+      }
+
+      button {
+        appearance: none;
+        border: 0;
+        border-radius: 10px;
+        padding: 11px 14px;
+        background: var(--accent);
+        color: white;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      button.secondary {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--text);
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+
+      .button-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .status {
+        min-height: 44px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: var(--accent-soft);
+        color: #d9ffe7;
+        white-space: pre-wrap;
+      }
+
+      .tips {
+        display: grid;
+        gap: 6px;
+        color: var(--muted);
+      }
+
+      .chip {
+        display: inline-flex;
+        width: fit-content;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        font-size: 12px;
+      }
+
+      #render-frame {
+        position: fixed;
+        left: -99999px;
+        top: 0;
+        width: 2048px;
+        height: 1200px;
+        border: 0;
+        opacity: 0;
+        pointer-events: none;
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="panel">
+        <h1>HTML Deck To Figma</h1>
+        <p class="muted">
+          HTML 파일을 업로드하거나 소스를 붙여 넣으면 슬라이드를 렌더링해 Figma 프레임으로 가져옵니다.
+        </p>
+        <span class="chip">하이브리드 변환: 배경은 이미지, 텍스트는 편집 가능</span>
+      </div>
+
+      <div class="panel controls">
+        <h2>1. HTML 파일 선택</h2>
+        <input id="file-input" type="file" accept=".html,text/html" />
+        <h2>2. 또는 HTML 소스 붙여넣기</h2>
+        <textarea id="html-input" spellcheck="false" placeholder="<!DOCTYPE html> ..."></textarea>
+        <div class="button-row">
+          <button id="import-button">Figma로 가져오기</button>
+          <button id="close-button" class="secondary">닫기</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>상태</h2>
+        <div class="status" id="status">대기 중</div>
+      </div>
+
+      <div class="panel tips">
+        <h2>안내</h2>
+        <p>슬라이드 전체 배경은 이미지로 가져오고, 보이는 텍스트는 개별 Text 레이어로 다시 생성합니다.</p>
+        <p>복잡한 CSS 효과나 가상 요소는 배경 이미지에 포함됩니다.</p>
+        <p>폰트가 Figma에 없으면 Inter로 대체될 수 있습니다.</p>
+      </div>
+    </div>
+
+    <iframe id="render-frame"></iframe>
+
+    <script>
+      const fileInput = document.getElementById("file-input");
+      const htmlInput = document.getElementById("html-input");
+      const importButton = document.getElementById("import-button");
+      const closeButton = document.getElementById("close-button");
+      const statusNode = document.getElementById("status");
+      const renderFrame = document.getElementById("render-frame");
+
+      let lastFileName = "";
+
+      function setStatus(message) {
+        statusNode.textContent = message;
+      }
+
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      function normalizeHtmlSource(html) {
+        return String(html || "").trim();
+      }
+
+      function colorStringToRgba(input) {
+        if (!input || input === "transparent" || input === "initial" || input === "inherit") {
+          return null;
+        }
+
+        const match = input.match(/rgba?\(([^)]+)\)/i);
+        if (!match) return null;
+
+        const parts = match[1].split(",").map((part) => part.trim());
+        if (parts.length < 3) return null;
+
+        return {
+          r: Number(parts[0]) || 0,
+          g: Number(parts[1]) || 0,
+          b: Number(parts[2]) || 0,
+          a: parts[3] == null ? 1 : Number(parts[3]),
+        };
+      }
+
+      function getPageLabel(page, index) {
+        const slide = page.closest(".slide");
+        const pageNumber = slide && slide.dataset ? slide.dataset.page : "";
+        const safePageNumber = pageNumber ? String(pageNumber).padStart(2, "0") : String(index + 1).padStart(2, "0");
+        return `Slide ${safePageNumber}`;
+      }
+
+      function isVisibleElement(element, computedStyle) {
+        if (!element || !computedStyle) return false;
+        if (computedStyle.display === "none") return false;
+        if (computedStyle.visibility === "hidden") return false;
+        if (Number(computedStyle.opacity) === 0) return false;
+        return true;
+      }
+
+      function normalizeText(text) {
+        return String(text || "")
+          .replace(/\u00a0/g, " ")
+          .replace(/[ \t]+\n/g, "\n")
+          .replace(/\n[ \t]+/g, "\n")
+          .trim();
+      }
+
+      function extractTextItems(page) {
+        const doc = page.ownerDocument;
+        const pageRect = page.getBoundingClientRect();
+        const walker = doc.createTreeWalker(page, NodeFilter.SHOW_TEXT, {
+          acceptNode(node) {
+            if (!node.parentElement) return NodeFilter.FILTER_REJECT;
+            if (!normalizeText(node.textContent)) return NodeFilter.FILTER_REJECT;
+
+            const style = getComputedStyle(node.parentElement);
+            if (!isVisibleElement(node.parentElement, style)) return NodeFilter.FILTER_REJECT;
+            if (["SCRIPT", "STYLE", "NOSCRIPT"].includes(node.parentElement.tagName)) {
+              return NodeFilter.FILTER_REJECT;
+            }
+
+            const range = doc.createRange();
+            range.selectNodeContents(node);
+            const rect = range.getBoundingClientRect();
+            if (!rect.width || !rect.height) return NodeFilter.FILTER_REJECT;
+
+            return NodeFilter.FILTER_ACCEPT;
+          },
+        });
+
+        const textItems = [];
+        let currentNode = walker.nextNode();
+
+        while (currentNode) {
+          const parent = currentNode.parentElement;
+          const style = getComputedStyle(parent);
+          const range = doc.createRange();
+          range.selectNodeContents(currentNode);
+          const rect = range.getBoundingClientRect();
+
+          textItems.push({
+            characters: normalizeText(currentNode.textContent),
+            x: Math.max(0, rect.left - pageRect.left),
+            y: Math.max(0, rect.top - pageRect.top),
+            width: Math.max(1, rect.width),
+            height: Math.max(1, rect.height),
+            style: {
+              color: colorStringToRgba(style.color) || { r: 242, g: 242, b: 244, a: 1 },
+              opacity: Number(style.opacity) || 1,
+              fontFamily: style.fontFamily
+                .split(",")[0]
+                .replace(/["']/g, "")
+                .trim(),
+              fontSize: Number.parseFloat(style.fontSize) || 16,
+              fontWeight: Number.parseInt(style.fontWeight, 10) || 400,
+              lineHeightPx: Number.isNaN(Number.parseFloat(style.lineHeight))
+                ? null
+                : Number.parseFloat(style.lineHeight),
+              letterSpacingPx: Number.isNaN(Number.parseFloat(style.letterSpacing))
+                ? 0
+                : Number.parseFloat(style.letterSpacing),
+              textAlign: style.textAlign || "left",
+            },
+          });
+
+          currentNode = walker.nextNode();
+        }
+
+        return textItems;
+      }
+
+      function collectStyleText(doc) {
+        return Array.from(doc.querySelectorAll("style"))
+          .map((node) => node.textContent || "")
+          .join("\n");
+      }
+
+      async function svgToJpegBase64(svgText, width, height) {
+        const blob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+
+        try {
+          const image = new Image();
+          image.decoding = "sync";
+          image.src = url;
+
+          await new Promise((resolve, reject) => {
+            image.onload = resolve;
+            image.onerror = reject;
+          });
+
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const context = canvas.getContext("2d");
+          context.drawImage(image, 0, 0, width, height);
+
+          return canvas
+            .toDataURL("image/jpeg", 0.92)
+            .replace(/^data:image\/jpeg;base64,/, "");
+        } finally {
+          URL.revokeObjectURL(url);
+        }
+      }
+
+      async function createBackgroundImageBase64(page, styleText) {
+        const clone = page.cloneNode(true);
+        const width = Math.round(page.getBoundingClientRect().width) || 1920;
+        const height = Math.round(page.getBoundingClientRect().height) || 1080;
+        const serialized = new XMLSerializer().serializeToString(clone);
+        const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden;">
+      <style>
+        html, body { margin: 0; padding: 0; background: transparent; }
+        * {
+          color: transparent !important;
+          -webkit-text-fill-color: transparent !important;
+          text-shadow: none !important;
+          caret-color: transparent !important;
+        }
+        ${styleText}
+      </style>
+      ${serialized}
+    </div>
+  </foreignObject>
+</svg>`;
+
+        return svgToJpegBase64(svg, width, height);
+      }
+
+      async function waitForSlides(doc) {
+        let previousCount = -1;
+        let stableCount = 0;
+
+        for (let attempt = 0; attempt < 30; attempt += 1) {
+          const currentCount = doc.querySelectorAll(".slide > .page").length;
+          if (currentCount > 0 && currentCount === previousCount) {
+            stableCount += 1;
+            if (stableCount >= 2) return currentCount;
+          } else {
+            stableCount = 0;
+            previousCount = currentCount;
+          }
+          await sleep(250);
+        }
+
+        return doc.querySelectorAll(".slide > .page").length;
+      }
+
+      async function loadHtmlIntoFrame(html) {
+        return new Promise((resolve, reject) => {
+          renderFrame.onload = () => resolve();
+          renderFrame.onerror = () => reject(new Error("iframe에 HTML을 로드하지 못했습니다."));
+          renderFrame.srcdoc = html;
+        });
+      }
+
+      async function extractSlidesFromHtml(html, sourceName) {
+        await loadHtmlIntoFrame(html);
+        const doc = renderFrame.contentDocument;
+        const totalSlides = await waitForSlides(doc);
+
+        if (!totalSlides) {
+          throw new Error("`.slide > .page` 구조를 찾지 못했습니다.");
+        }
+
+        const styleText = collectStyleText(doc);
+        const pages = Array.from(doc.querySelectorAll(".slide > .page"));
+        const slides = [];
+
+        for (let index = 0; index < pages.length; index += 1) {
+          const page = pages[index];
+          const rect = page.getBoundingClientRect();
+          const computedStyle = getComputedStyle(page);
+
+          setStatus(`슬라이드 추출 중 ${index + 1} / ${pages.length}`);
+
+          let backgroundImageBase64 = null;
+          try {
+            backgroundImageBase64 = await createBackgroundImageBase64(page, styleText);
+          } catch (error) {
+            backgroundImageBase64 = null;
+          }
+
+          slides.push({
+            name: getPageLabel(page, index),
+            width: Math.round(rect.width) || 1920,
+            height: Math.round(rect.height) || 1080,
+            backgroundColor: colorStringToRgba(computedStyle.backgroundColor) || { r: 31, g: 31, b: 31, a: 1 },
+            backgroundImageBase64,
+            texts: extractTextItems(page),
+          });
+        }
+
+        return {
+          sourceName,
+          slides,
+        };
+      }
+
+      async function readHtmlFromSelection() {
+        if (fileInput.files && fileInput.files[0]) {
+          const file = fileInput.files[0];
+          lastFileName = file.name;
+          return file.text();
+        }
+
+        const inputValue = normalizeHtmlSource(htmlInput.value);
+        if (inputValue) {
+          if (!lastFileName) lastFileName = "pasted-html.html";
+          return inputValue;
+        }
+
+        throw new Error("HTML 파일을 선택하거나 소스를 붙여 넣어 주세요.");
+      }
+
+      async function handleImport() {
+        try {
+          importButton.disabled = true;
+          setStatus("HTML을 읽는 중...");
+
+          const html = await readHtmlFromSelection();
+          const payload = await extractSlidesFromHtml(html, lastFileName || "deck.html");
+
+          setStatus(`Figma로 전송 중... 총 ${payload.slides.length}개 슬라이드`);
+          parent.postMessage(
+            {
+              pluginMessage: {
+                type: "IMPORT_DECK",
+                payload,
+              },
+            },
+            "*"
+          );
+        } catch (error) {
+          setStatus(error instanceof Error ? error.message : String(error));
+        } finally {
+          importButton.disabled = false;
+        }
+      }
+
+      fileInput.addEventListener("change", async () => {
+        if (!fileInput.files || !fileInput.files[0]) return;
+        const file = fileInput.files[0];
+        lastFileName = file.name;
+        htmlInput.value = await file.text();
+        setStatus(`${file.name} 파일을 불러왔습니다.`);
+      });
+
+      importButton.addEventListener("click", handleImport);
+      closeButton.addEventListener("click", () => {
+        parent.postMessage({ pluginMessage: { type: "CLOSE_PLUGIN" } }, "*");
+      });
+
+      window.onmessage = (event) => {
+        const message = event.data && event.data.pluginMessage;
+        if (!message) return;
+
+        if (message.type === "IMPORT_ERROR") {
+          setStatus(`오류: ${message.message}`);
+        }
+      };
+    </script>
+  </body>
+</html>

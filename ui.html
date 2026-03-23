@@ -65,6 +65,43 @@
         gap: 10px;
       }
 
+      .mode-select {
+        display: grid;
+        gap: 8px;
+      }
+
+      .mode-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .mode-option {
+        display: grid;
+        gap: 6px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--panel-2);
+        cursor: pointer;
+      }
+
+      .mode-option input {
+        margin: 0;
+      }
+
+      .mode-option-head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+      }
+
+      .mode-option-copy {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
       textarea {
         width: 100%;
         min-height: 150px;
@@ -154,15 +191,34 @@
       <div class="panel">
         <h1>HTML Deck To Figma</h1>
         <p class="muted">
-          HTML 파일을 업로드하거나 소스를 붙여 넣으면 슬라이드를 렌더링해 Figma 프레임으로 가져옵니다.
+          HTML 파일을 업로드하거나 소스를 붙여 넣으면 선택한 모드에 맞춰 Figma 프레임으로 가져옵니다.
         </p>
         <span class="chip">하이브리드 변환: 배경은 이미지, 텍스트는 편집 가능</span>
       </div>
 
       <div class="panel controls">
-        <h2>1. HTML 파일 선택</h2>
+        <h2>1. 가져오기 모드 선택</h2>
+        <div class="mode-select">
+          <div class="mode-options">
+            <label class="mode-option" for="mode-slides">
+              <div class="mode-option-head">
+                <input id="mode-slides" type="radio" name="import-mode" value="slides" checked />
+                <span>슬라이드형</span>
+              </div>
+              <div class="mode-option-copy">기존 방식 그대로 `.slide > .page` 구조를 여러 프레임으로 가져옵니다.</div>
+            </label>
+            <label class="mode-option" for="mode-webpage">
+              <div class="mode-option-head">
+                <input id="mode-webpage" type="radio" name="import-mode" value="webpage" />
+                <span>웹페이지형</span>
+              </div>
+              <div class="mode-option-copy">HTML 전체를 분석해서 하나의 긴 Figma 프레임으로 가져옵니다.</div>
+            </label>
+          </div>
+        </div>
+        <h2>2. HTML 파일 선택</h2>
         <input id="file-input" type="file" accept=".html,text/html" />
-        <h2>2. 또는 HTML 소스 붙여넣기</h2>
+        <h2>3. 또는 HTML 소스 붙여넣기</h2>
         <textarea id="html-input" spellcheck="false" placeholder="<!DOCTYPE html> ..."></textarea>
         <div class="button-row">
           <button id="import-button">Figma로 가져오기</button>
@@ -188,6 +244,7 @@
     <script>
       const fileInput = document.getElementById("file-input");
       const htmlInput = document.getElementById("html-input");
+      const modeInputs = document.querySelectorAll('input[name="import-mode"]');
       const importButton = document.getElementById("import-button");
       const closeButton = document.getElementById("close-button");
       const statusNode = document.getElementById("status");
@@ -205,6 +262,11 @@
 
       function normalizeHtmlSource(html) {
         return String(html || "").trim();
+      }
+
+      function getImportMode() {
+        const selected = Array.from(modeInputs).find((input) => input.checked);
+        return selected ? selected.value : "slides";
       }
 
       function colorStringToRgba(input) {
@@ -417,6 +479,41 @@
           .join("\n");
       }
 
+      function getDocumentCanvasSize(doc) {
+        const body = doc.body;
+        const html = doc.documentElement;
+
+        return {
+          width: Math.max(
+            1,
+            html ? html.scrollWidth : 0,
+            html ? html.clientWidth : 0,
+            html ? html.offsetWidth : 0,
+            body ? body.scrollWidth : 0,
+            body ? body.clientWidth : 0,
+            body ? body.offsetWidth : 0
+          ),
+          height: Math.max(
+            1,
+            html ? html.scrollHeight : 0,
+            html ? html.clientHeight : 0,
+            html ? html.offsetHeight : 0,
+            body ? body.scrollHeight : 0,
+            body ? body.clientHeight : 0,
+            body ? body.offsetHeight : 0
+          ),
+        };
+      }
+
+      function getDocumentBackgroundColor(doc) {
+        const bodyStyle = doc.body ? getComputedStyle(doc.body) : null;
+        const htmlStyle = doc.documentElement ? getComputedStyle(doc.documentElement) : null;
+        return (
+          colorStringToRgba(bodyStyle && bodyStyle.backgroundColor) ||
+          colorStringToRgba(htmlStyle && htmlStyle.backgroundColor) || { r: 255, g: 255, b: 255, a: 1 }
+        );
+      }
+
       function serializeCustomProperties(element) {
         if (!element) return "";
 
@@ -462,11 +559,13 @@
         }
       }
 
-      async function createBackgroundImageBase64(page, styleText) {
+      async function createBackgroundImageBase64(page, styleText, sizeOverride) {
         const clone = page.cloneNode(true);
         const rootCustomProperties = serializeCustomProperties(page.ownerDocument.documentElement);
-        const width = Math.round(page.getBoundingClientRect().width) || 1920;
-        const height = Math.round(page.getBoundingClientRect().height) || 1080;
+        const width =
+          Math.round(sizeOverride && sizeOverride.width ? sizeOverride.width : page.getBoundingClientRect().width) || 1920;
+        const height =
+          Math.round(sizeOverride && sizeOverride.height ? sizeOverride.height : page.getBoundingClientRect().height) || 1080;
         const serialized = new XMLSerializer().serializeToString(clone);
         const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
@@ -507,6 +606,26 @@
         }
 
         return doc.querySelectorAll(".slide > .page").length;
+      }
+
+      async function waitForWebpage(doc) {
+        let previousSize = "";
+        let stableCount = 0;
+
+        for (let attempt = 0; attempt < 30; attempt += 1) {
+          const size = getDocumentCanvasSize(doc);
+          const currentSize = `${size.width}x${size.height}`;
+          if (size.width > 0 && size.height > 0 && currentSize === previousSize) {
+            stableCount += 1;
+            if (stableCount >= 2) return size;
+          } else {
+            stableCount = 0;
+            previousSize = currentSize;
+          }
+          await sleep(250);
+        }
+
+        return getDocumentCanvasSize(doc);
       }
 
       async function loadHtmlIntoFrame(html) {
@@ -561,6 +680,45 @@
         };
       }
 
+      async function extractWebpageFromHtml(html, sourceName) {
+        await loadHtmlIntoFrame(html);
+        const doc = renderFrame.contentDocument;
+        const root = doc.body || doc.documentElement;
+        if (!root) {
+          throw new Error("웹페이지 본문을 찾지 못했습니다.");
+        }
+
+        const size = await waitForWebpage(doc);
+        if (!size.width || !size.height) {
+          throw new Error("웹페이지 크기를 계산하지 못했습니다.");
+        }
+
+        const styleText = collectStyleText(doc);
+        setStatus("웹페이지 전체를 추출하는 중...");
+
+        let backgroundImageBase64 = null;
+        try {
+          backgroundImageBase64 = await createBackgroundImageBase64(root, styleText, size);
+        } catch (error) {
+          backgroundImageBase64 = null;
+        }
+
+        return {
+          sourceName,
+          slides: [
+            {
+              name: "Web Page 01",
+              width: Math.round(size.width) || 1440,
+              height: Math.round(size.height) || 1024,
+              backgroundColor: getDocumentBackgroundColor(doc),
+              backgroundImageBase64,
+              shapes: extractShapeItems(root),
+              texts: extractTextItems(root),
+            },
+          ],
+        };
+      }
+
       async function readHtmlFromSelection() {
         if (fileInput.files && fileInput.files[0]) {
           const file = fileInput.files[0];
@@ -583,7 +741,11 @@
           setStatus("HTML을 읽는 중...");
 
           const html = await readHtmlFromSelection();
-          const payload = await extractSlidesFromHtml(html, lastFileName || "deck.html");
+          const importMode = getImportMode();
+          const payload =
+            importMode === "webpage"
+              ? await extractWebpageFromHtml(html, lastFileName || "page.html")
+              : await extractSlidesFromHtml(html, lastFileName || "deck.html");
 
           setStatus(`Figma로 전송 중... 총 ${payload.slides.length}개 슬라이드`);
           parent.postMessage(

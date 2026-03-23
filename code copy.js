@@ -93,10 +93,6 @@ function createImageFill(base64) {
   };
 }
 
-function hasVisiblePaint(shapeItem) {
-  return Boolean(shapeItem && (shapeItem.fill || shapeItem.stroke));
-}
-
 function isMeaningfulText(text) {
   return typeof text === "string" && text.replace(/\s+/g, "").length > 0;
 }
@@ -170,44 +166,6 @@ async function createTextLayer(frame, textItem) {
   return textNode;
 }
 
-function createShapeLayer(frame, shapeItem, index) {
-  if (!hasVisiblePaint(shapeItem)) return null;
-
-  const shapeNode = figma.createRectangle();
-  shapeNode.name = `Shape ${String(index + 1).padStart(2, "0")}`;
-  shapeNode.resize(Math.max(1, shapeItem.width || 1), Math.max(1, shapeItem.height || 1));
-  shapeNode.x = shapeItem.x || 0;
-  shapeNode.y = shapeItem.y || 0;
-  shapeNode.opacity = shapeItem.opacity == null ? 1 : clamp(shapeItem.opacity, 0, 1);
-
-  const borderRadius = shapeItem.borderRadius || {};
-  shapeNode.topLeftRadius = Math.max(0, borderRadius.topLeft || 0);
-  shapeNode.topRightRadius = Math.max(0, borderRadius.topRight || 0);
-  shapeNode.bottomRightRadius = Math.max(0, borderRadius.bottomRight || 0);
-  shapeNode.bottomLeftRadius = Math.max(0, borderRadius.bottomLeft || 0);
-
-  const fills = [];
-  if (shapeItem.fill) {
-    const fill = toSolidPaint(shapeItem.fill, shapeItem.fill.a);
-    if (fill) fills.push(fill);
-  }
-  shapeNode.fills = fills;
-
-  if (shapeItem.stroke && (shapeItem.strokeWidth || 0) > 0) {
-    const stroke = toSolidPaint(shapeItem.stroke, shapeItem.stroke.a);
-    shapeNode.strokes = stroke ? [stroke] : [];
-    shapeNode.strokeWeight = Math.max(1, shapeItem.strokeWidth || 1);
-    if (shapeItem.strokeStyle === "dashed") {
-      shapeNode.dashPattern = [8, 6];
-    }
-  } else {
-    shapeNode.strokes = [];
-  }
-
-  frame.appendChild(shapeNode);
-  return shapeNode;
-}
-
 function createBackgroundNode(frame, slide) {
   const backgroundNode = figma.createRectangle();
   backgroundNode.name = "Background";
@@ -254,11 +212,6 @@ async function importSlides(payload) {
     frame.y = cursorY;
 
     createBackgroundNode(frame, slide);
-
-    const shapeItems = Array.isArray(slide.shapes) ? slide.shapes : [];
-    for (let shapeIndex = 0; shapeIndex < shapeItems.length; shapeIndex += 1) {
-      createShapeLayer(frame, shapeItems[shapeIndex], shapeIndex);
-    }
 
     const textItems = Array.isArray(slide.texts) ? slide.texts : [];
     for (const textItem of textItems) {

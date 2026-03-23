@@ -249,6 +249,103 @@
           .trim();
       }
 
+      function parsePx(value) {
+        const parsed = Number.parseFloat(value);
+        return Number.isFinite(parsed) ? parsed : 0;
+      }
+
+      function parseCornerRadii(borderRadius) {
+        if (!borderRadius || borderRadius === "0px") {
+          return { topLeft: 0, topRight: 0, bottomRight: 0, bottomLeft: 0 };
+        }
+
+        const values = String(borderRadius)
+          .split("/")
+          .map((part) => part.trim())[0]
+          .split(/\s+/)
+          .map((part) => parsePx(part));
+
+        if (values.length === 1) {
+          return {
+            topLeft: values[0],
+            topRight: values[0],
+            bottomRight: values[0],
+            bottomLeft: values[0],
+          };
+        }
+
+        if (values.length === 2) {
+          return {
+            topLeft: values[0],
+            topRight: values[1],
+            bottomRight: values[0],
+            bottomLeft: values[1],
+          };
+        }
+
+        if (values.length === 3) {
+          return {
+            topLeft: values[0],
+            topRight: values[1],
+            bottomRight: values[2],
+            bottomLeft: values[1],
+          };
+        }
+
+        return {
+          topLeft: values[0] || 0,
+          topRight: values[1] || 0,
+          bottomRight: values[2] || 0,
+          bottomLeft: values[3] || 0,
+        };
+      }
+
+      function extractShapeItems(page) {
+        const pageRect = page.getBoundingClientRect();
+        const elements = Array.from(page.querySelectorAll("*"));
+
+        return elements
+          .filter((element) => element !== page)
+          .map((element) => {
+            const style = getComputedStyle(element);
+            if (!isVisibleElement(element, style)) return null;
+            if (["SCRIPT", "STYLE", "NOSCRIPT"].includes(element.tagName)) return null;
+
+            const rect = element.getBoundingClientRect();
+            if (!rect.width || !rect.height) return null;
+
+            const fill = colorStringToRgba(style.backgroundColor);
+            const borderTopWidth = parsePx(style.borderTopWidth);
+            const borderRightWidth = parsePx(style.borderRightWidth);
+            const borderBottomWidth = parsePx(style.borderBottomWidth);
+            const borderLeftWidth = parsePx(style.borderLeftWidth);
+            const hasBorder =
+              style.borderStyle !== "none" &&
+              (borderTopWidth > 0 || borderRightWidth > 0 || borderBottomWidth > 0 || borderLeftWidth > 0);
+            const stroke = hasBorder ? colorStringToRgba(style.borderTopColor) : null;
+            const hasRenderableShape = Boolean(fill) || Boolean(stroke);
+
+            if (!hasRenderableShape) return null;
+
+            const radii = parseCornerRadii(style.borderRadius);
+            const strokeWidth = Math.max(borderTopWidth, borderRightWidth, borderBottomWidth, borderLeftWidth);
+
+            return {
+              x: Math.max(0, rect.left - pageRect.left),
+              y: Math.max(0, rect.top - pageRect.top),
+              width: Math.max(1, rect.width),
+              height: Math.max(1, rect.height),
+              opacity: Number(style.opacity) || 1,
+              fill,
+              stroke,
+              strokeWidth,
+              strokeStyle: style.borderStyle || "solid",
+              borderRadius: radii,
+            };
+          })
+          .filter(Boolean);
+      }
+
       function extractTextItems(page) {
         const doc = page.ownerDocument;
         const pageRect = page.getBoundingClientRect();
@@ -316,7 +413,25 @@
       function collectStyleText(doc) {
         return Array.from(doc.querySelectorAll("style"))
           .map((node) => node.textContent || "")
+          .map((cssText) => cssText.replace(/@import\s+url\([^)]+\)\s*;?/gi, ""))
           .join("\n");
+      }
+
+      function serializeCustomProperties(element) {
+        if (!element) return "";
+
+        const computedStyle = getComputedStyle(element);
+        const customProperties = [];
+        for (let index = 0; index < computedStyle.length; index += 1) {
+          const propertyName = computedStyle[index];
+          if (!propertyName || !propertyName.startsWith("--")) continue;
+
+          const propertyValue = computedStyle.getPropertyValue(propertyName).trim();
+          if (!propertyValue) continue;
+          customProperties.push(`${propertyName}: ${propertyValue};`);
+        }
+
+        return customProperties.join(" ");
       }
 
       async function svgToJpegBase64(svgText, width, height) {
@@ -349,13 +464,14 @@
 
       async function createBackgroundImageBase64(page, styleText) {
         const clone = page.cloneNode(true);
+        const rootCustomProperties = serializeCustomProperties(page.ownerDocument.documentElement);
         const width = Math.round(page.getBoundingClientRect().width) || 1920;
         const height = Math.round(page.getBoundingClientRect().height) || 1080;
         const serialized = new XMLSerializer().serializeToString(clone);
         const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
   <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden;${rootCustomProperties}">
       <style>
         html, body { margin: 0; padding: 0; background: transparent; }
         * {
@@ -434,6 +550,7 @@
             height: Math.round(rect.height) || 1080,
             backgroundColor: colorStringToRgba(computedStyle.backgroundColor) || { r: 31, g: 31, b: 31, a: 1 },
             backgroundImageBase64,
+            shapes: extractShapeItems(page),
             texts: extractTextItems(page),
           });
         }

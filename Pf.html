@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HWANGSEUNGHYUN | AI/AX SERVICE PLANNER</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --viewport-bg: #121212;
+      --page: #1f1f1f;
+      --panel: #2a2a2d;
+      --panel-soft: #313136;
+      --text: #f2f2f4;
+      --muted: #b3b7c0;
+      --line: rgba(255, 255, 255, 0.08);
+      --line-strong: rgba(255, 255, 255, 0.12);
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.3);
+      --greenlabs: #21d126;
+      --rocket: #5b7cff;
+      --white-soft: rgba(255, 255, 255, 0.06);
+      --w: 1920px;
+      --h: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 1540px;
+      background: var(--viewport-bg);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    main { scroll-snap-type: y mandatory; }
+
+    .slide {
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      scroll-snap-align: start;
+    }
+
+    .page {
+      width: var(--w);
+      height: var(--h);
+      background: var(--page);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      padding: 60px 80px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      pointer-events: none;
+    }
+
+    .cover-page {
+      background:
+        radial-gradient(circle at 66% 6%, rgba(255,255,255,0.08), transparent 18%),
+        radial-gradient(circle at 47% 73%, rgba(115,88,88,0.18), transparent 24%),
+        linear-gradient(180deg, #090909 0%, #060606 100%);
+    }
+
+    .cover-page::after,
+    .cover-page::before {
+      border: none;
+    }
+
+    .cover-blob,
+    .cover-blob-2 {
+      position: absolute;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 28%, rgba(255,255,255,0.16), rgba(255,255,255,0.02) 32%, rgba(0,0,0,0.35) 75%);
+      filter: blur(1px);
+      opacity: 0.96;
+      pointer-events: none;
+    }
+
+    .cover-blob {
+      width: 1060px;
+      height: 1060px;
+      right: -56px;
+      top: -134px;
+    }
+
+    .cover-blob-2 {
+      width: 1040px;
+      height: 1040px;
+      right: 170px;
+      bottom: -430px;
+      background:
+        radial-gradient(circle at 44% 26%, rgba(255,255,255,0.24), rgba(134,101,101,0.12) 34%, rgba(0,0,0,0.45) 76%);
+    }
+
+    .header-row,
+    .footer-row,
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .footer-row {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .footer-right {
+      display: inline-flex;
+      gap: 8px;
+      white-space: nowrap;
+      font-weight: 200;
+    }
+
+    .section-label {
+      color: #9ea4af;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+    }
+
+    .title-xxl,
+    .title-xl,
+    .title-lg,
+    .title-md {
+      margin: 0;
+      font-weight: 100;
+      letter-spacing: -0.055em;
+      line-height: 1.16;
+      color: var(--text);
+    }
+
+    .title-xxl { font-size: 62px; }
+    .title-xl { font-size: 52px; }
+    .title-lg { font-size: 36px; }
+    .title-md { font-size: 28px; }
+
+    .body,
+    .body-small {
+      margin: 0;
+      color: var(--muted);
+      letter-spacing: -0.02em;
+      line-height: 1.72;
+    }
+
+    .body { font-size: 24px; }
+    .body-small { font-size: 18px; font-weight: 200; }
+
+    .cover-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+    }
+
+    .cover-name {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .cover-name strong {
+      font-size: 58px;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .cover-tag {
+      font-size: 20px;
+      color: #ececef;
+      letter-spacing: -0.03em;
+    }
+
+    .cover-contact {
+      display: grid;
+      gap: 10px;
+      text-align: right;
+      margin-top: 10px;
+      color: #ececef;
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    .cover-bottom {
+      margin-top: auto;
+      width: 820px;
+      display: grid;
+      gap: 14px;
+      padding-bottom: 12px;
+    }
+
+    .cover-bottom .body-small {
+      color: rgba(255,255,255,0.72);
+    }
+
+    .avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      margin-top: 4px;
+    }
+
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #fafafa 0%, #dadde3 100%);
+      position: relative;
+      flex: 0 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+    }
+
+    .avatar::before {
+      content: "이미지 영역";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #6d7481;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 6px;
+    }
+
+    .hero-copy .title-lg {
+      font-size: 58px;
+      line-height: 1.18;
+    }
+
+    .page-section {
+      margin-top: 42px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .career-grid {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .career-card {
+      display: grid;
+      gap: 12px;
+    }
+
+    .career-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .career-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--panel-soft);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .career-card .body-small {
+      line-height: 1.65;
+    }
+
+    .bullet-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.9;
+    }
+
+    .case-title-page .content {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 18px;
+      padding-top: 34px;
+    }
+
+    .brand-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #d3d7df;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .brand-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--greenlabs);
+      box-shadow: 0 0 14px rgba(33, 209, 38, 0.35);
+      flex: 0 0 auto;
+    }
+
+    .brand-dot.rocket {
+      background: var(--rocket);
+      box-shadow: 0 0 14px rgba(91, 124, 255, 0.35);
+    }
+
+    .brand-dot.dwbrain {
+      background: #7c3aed;
+      box-shadow: 0 0 14px rgba(124, 58, 237, 0.35);
+    }
+
+    .center-copy {
+      display: grid;
+      gap: 14px;
+      justify-items: center;
+      max-width: 980px;
+    }
+
+    .center-copy .body {
+      max-width: 720px;
+      line-height: 1.6;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e1e4ea;
+      font-size: 15px;
+      line-height: 1;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .feature-media {
+      width: 100%;
+      margin-top: 34px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.42));
+      position: relative;
+      min-height: 420px;
+    }
+
+    .feature-media.greenlabs {
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0) 76%, rgba(0,0,0,0.62) 100%),
+        linear-gradient(180deg, #1cff00 0%, #1cff00 100%);
+    }
+
+    .feature-media::before {
+      content: "이미지 영역";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .feature-media-label {
+      position: absolute;
+      left: 28px;
+      bottom: 24px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .article-top {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 34px;
+      align-items: start;
+      margin-top: 6px;
+    }
+
+    .article-main {
+      display: grid;
+      gap: 10px;
+    }
+
+    .article-side {
+      padding-top: 35px;
+    }
+
+    .article-card {
+      background: var(--panel);
+      /* border: 1px solid var(--line); */
+      border-radius: 16px;
+      padding: 34px 38px;
+      position: relative;
+      overflow: hidden;
+      min-height: 610px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .article-card.compact {
+      min-height: 560px;
+    }
+
+    .article-page .content,
+    .statement-page .content {
+      gap: 24px;
+      padding-bottom: 16px;
+    }
+
+    .article-page .article-card,
+    .statement-page .article-card {
+      flex: 1 1 auto;
+      min-height: 0;
+      margin-top: 0;
+    }
+
+    .article-page .article-top,
+    .statement-page .article-top {
+      flex: 0 0 auto;
+      margin-top: 2px;
+    }
+
+    .article-page .media-placeholder,
+    .statement-page .statement-layout {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .article-page .media-placeholder.wide {
+      min-height: 0;
+    }
+
+    .article-page .media-placeholder.split-visual {
+      min-height: 0;
+      grid-auto-rows: 1fr;
+    }
+
+    .card-heading {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .media-placeholder {
+      min-height: 420px;
+      border-radius: 6px;
+      border: 1px dashed rgba(255,255,255,0.12);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 48%, rgba(0,0,0,0.36) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .media-placeholder::before {
+      content: "이미지 영역";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255,255,255,0.7);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .media-placeholder::after {
+      content: "";
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      bottom: -48px;
+      height: 120px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      filter: blur(16px);
+    }
+
+    .media-placeholder.green {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02) 50%, rgba(0,0,0,0.44) 100%),
+        radial-gradient(circle at 50% 20%, rgba(32, 255, 38, 0.22), transparent 32%);
+    }
+
+    .media-placeholder.wide {
+      min-height: 470px;
+    }
+
+    .media-placeholder.split-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      padding: 18px;
+      align-items: stretch;
+    }
+
+    .media-box {
+      border-radius: 6px;
+      border: 1px dashed rgba(255,255,255,0.12);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.3));
+      position: relative;
+      min-height: 100%;
+      overflow: hidden;
+    }
+
+    .media-box::before {
+      content: "이미지 영역";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255,255,255,0.68);
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .statement-layout {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 32px;
+      min-height: 360px;
+      padding: 0 140px;
+    }
+
+    .statement-big {
+      font-size: 82px;
+      line-height: 1;
+      letter-spacing: -0.07em;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text);
+    }
+
+    .statement-line {
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.16);
+      position: relative;
+    }
+
+    .statement-tags {
+      position: absolute;
+      left: 50%;
+      top: -18px;
+      transform: translateX(-50%);
+      display: inline-flex;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .tag {
+      padding: 7px 10px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      color: #d8dbe2;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .skills-cols,
+    .testimonial-cols {
+      margin-top: 20px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .skills-cols {
+      grid-template-columns: 1.4fr 0.8fr 0.8fr;
+    }
+
+    .skills-block {
+      display: grid;
+      gap: 18px;
+    }
+
+    .skill-item {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .icon-badge {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      place-items: center;
+      color: #f4f4f6;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .skill-title {
+      margin: 0 0 6px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .pill-title {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      color: #d0d5de;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .tools-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px 18px;
+      margin-top: 10px;
+    }
+
+    .tool-chip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #e8ebf0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .tool-dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      flex: 0 0 auto;
+    }
+
+    .strength-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 30px 44px;
+    }
+
+    .strength-item {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .shape-placeholder {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255,255,255,0.12);
+      background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.12), rgba(255,255,255,0.02) 40%, rgba(0,0,0,0.44) 75%);
+      position: relative;
+    }
+
+    .shape-placeholder::before {
+      content: "이미지";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,0.62);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+    }
+
+    .strength-item .body-small {
+      margin-top: 6px;
+    }
+
+    .testimonial-cols {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .testimonial-card {
+      background: #2b2b2f;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      min-height: 270px;
+      padding: 18px 18px 16px;
+      display: grid;
+      align-content: space-between;
+      gap: 16px;
+    }
+
+    .testimonial-card p {
+      margin: 0;
+      color: #c6cbd4;
+      font-size: 17px;
+      line-height: 1.7;
+      letter-spacing: -0.02em;
+    }
+
+    .testimonial-foot {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mini-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #fbfbfb 0%, #dadde3 100%);
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .mini-avatar::before {
+      content: "이미지";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #6d7481;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .name {
+      color: #f1f3f6;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .company {
+      color: #9ea4af;
+      font-size: 14px;
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+
+    .pager {
+      position: fixed;
+      right: 26px;
+      bottom: 26px;
+      z-index: 20;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.78);
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+  <main id="deck"></main>
+  <div class="pager" id="pager">01 / 47</div>
+
+  <script>
+    const slides = [
+      { page: 1, kind: "cover", footerLabel: "HOME",  footerMeta: "", title: "AI/AX SERVICE PLANNER", subtitle: "사용자가 끝까지\n지속할 수 있는 경험을\n설계하는 AI 전략 기획자 황승현입니다.", contactTop: ["HOME", "ABOUT", "SKILLS", "RESEARCH", "REFERENCES", "CAREER", "ARCHIVE", "CONTACT"], bodyTitle: "Intro", bodyText: "문제를 구조화해 실행 가능한 AI 경험으로 전환하는 서비스 전략 기획자입니다. 정성/정량 리서치 기반으로 사용자 행동을 해석하고, AI 기능을 제품 맥락에 맞게 통합해 실질적인 전환을 만드는 전략 기획을 수행합니다. 기획에 그치지 않고 개발 경험을 바탕으로 직접 PoC와 MVP를 빠르게 구현·검증해, 아이디어를 실행 가능한 서비스로 연결하는 빌더형 AI 기획 역량을 강점으로 갖추고 있습니다." },
+      { page: 2, kind: "intro", footerLabel: "ABOUT", footerMeta: "", careerText:"문제 해결 중심으로 쌓아온 커리어", hero1: "전략적 사고와 서비스 감각을 연결해", hero2: "AX를 현실로 만듭니다", section: "ABOUT ME", body: "께 분석해 단순한 기능 요청이 아니라 사용자의 행동 변화와 목표 달성 관점에서 문제를 구조화하고 우선순위를 설계합니다. AI를 단순한 기능으로 붙이는 방식보다는 사용자의 실제 업무 흐름과 서비스 문맥 속에 자연스럽게 녹여내는 설계를 지향합니다. 사용자가 AI 기능을 사용한다는 느낌보다 업무와 행동 패턴 속에서 자연스럽게 성과를 경험하도록 만드는 것을 목표로 합니다. 그래서 기획 문서에는 기능 정의뿐 아니라 사용 시나리오, 실험 설계, 측정 지표, 운영 정책까지 포함한 실행 중심의 구조를 함께 설계합니다. 또한 시장 규모, 경쟁사 포지셔닝, AI 운영 비용, 도입 효과를 함께 검토하여 기술 관점이 아닌 비즈니스 관점에서의 AI 활용 전략을 수립합니다. 개선이 필요한 pain point를 발견하고 이를 명확히 정의한 뒤, 복잡한 문제를 단순하고 실행 가능한 구조로 재설계하는 과정을 중요하게 생각합니다. PRD 작성부터 프로토타이핑 협업, 개발 명세 정리까지 실무 단위를 끝까지 연결하며 다양한 이해관계자의 목표를 하나의 실행 구조로 통합합니다. 개발자와 기획자로 커리어의 대부분을 수행하며 서비스 구조, 시스템 아키텍처, 사용자 경험, 운영 과정까지 다양한 역할을 경험해 왔습니다. 이러한 경험은 AI 시대에서 더욱 큰 강점이 됩니다. 단순히 AI 기능을 기획하는 수준을 넘어 데이터 흐름, 시스템 구조, 서비스 UX, 운영 비용까지 고려한 현실적인 AI 서비스 설계가 가능하기 때문입니다. 이러한 경험과 역량을 기반으로 AI를 단순한 기술 도입이 아니라 업무 구조를 개선하고 조직의 생산성을 높이는 실질적인 도구로 설계하고자 합니다. 궁극적으로는 조직의 비용 구조를 효율화하고, 업무 생산성을 높이며, 데이터 기반의 새로운 수익 기회를 만들어내는 AI 서비스 기획자로 기여하겠습니다."},
+      { page: 3, kind: "caseTitle", brand: "greenlabs", company: "SKILLS", title: "기획-분석-실행을 연결하는 핵심 역량", desc: "AI 전략 기획, 데이터 기반 서비스 설계, 기술 이해, 빠른 프로토타이핑까지\n하나의 흐름으로 연결해 제품을 실현합니다.", date: "Core Capability", chips: ["Problem Framing 95%", "AI Feature Planning 92%", "Delivery Management 93%", "UX Writing & Flow 90%", "Technical Architecture 91%", "Rapid Prototyping 94%"], media: "clarity / cursor / DBeaver / docker / Figma / GA / Excel / PowerPoint / Notion / Photoshop / Supabase / Swagger" },
+      { page: 4, kind: "article", section: "FIELD RESEARCH", title: "Survey & In-depth Interview", side: "2025년 11월 전사 설문(168명)을 통해 AI 도입기에서 확산기로 전환되는 인식 변화를 확인하고, 2026년 자동화 중심 전략 수립을 위한 핵심 요구를 정리했습니다. 도입장벽과 운영지표에 대한 정성/정량 응답을 함께 분석해 실무 반영이 가능한 기준을 도출했습니다.", cardTitle: "AI 도입장벽과 운영지표 핵심 인사이트", cardType: "splitMedia", mediaLeft: "Q1. AI 결과를 바로 반영하지 못하는 이유 / 근거·출처 검증 46.9%", mediaRight: "Q2. AI 기능 성과 측정 기준 / 업무시간 단축 42.1%" , footerLabel: "Survey & In-depth Interview", footerMeta: "RESEARCH | 2025.11" },
+      { page: 5, kind: "article", section: "RESEARCH DETAIL", title: "도입장벽은 신뢰와 맥락 부족, 운영기준은 KPI 합의 부재로 수렴", side: "인터뷰에서는 '답변은 빠르지만 왜 이런 결과가 나왔는지 설명이 없다', '우리 팀 용어와 포맷을 반영하지 않으면 재작업 비용이 크다', '보안 정책상 어떤 데이터가 쓰였는지 추적 가능해야 한다'는 의견이 공통적으로 나타났습니다. 또한 팀마다 성공 기준이 달라 기능 개선 우선순위를 정할 때 지속적인 논쟁이 발생한다는 점도 확인했습니다.", cardTitle: "Interview Voice & Barrier Summary", cardType: "single", media: "출처 링크 / 신뢰도 점수 / 팀별 KPI 합의 / 대시보드 요구", footerLabel: "Survey & In-depth Interview", footerMeta: "RESEARCH | 2025.11" },
+      { page: 6, kind: "article", section: "RESEARCH REPORT", title: "AI 도입기에서 확산기로 넘어가며 핵심은 툴 제공보다 자동화와 업무 생태계 구축", side: "조사 목적은 3월 1차 조사 이후 AI 교육과 과제 수행에 따른 구성원 인식 변화를 확인하고, 2026년 AI 추진 전략 수립의 기초 데이터를 확보하는 것이었습니다. 기간은 2025.11.11 ~ 11.21, 대상은 국내 전 사업장 임직원, 응답은 168명으로 현업 중심 의견이 충분히 반영되었습니다.", cardTitle: "Executive Summary", cardType: "single", media: "AI 활용률 85.7% / 긍정 인식 83% / IT·R&D 100% / 외부 AI 도구 사용 급증", footerLabel: "AI 활용 설문 결과 핵심 요약", footerMeta: "RESEARCH | 2025.11" },
+      { page: 7, kind: "articleStatement", section: "2026 DIRECTION", title: "도입 단계는 끝났고, 이제는 내부 데이터와 연결된 자동화 중심의 AI 업무 생태계를 구축해야 합니다", side: "2026년 방향은 System, Education, Infrastructure, Field 네 축으로 정리했습니다. 데이터 연동, Agent 도입, 문서/분석 자동화, 직무별 심화 교육, AI Playground와 Sandbox, 보안정책, 현장 AI와 모바일 AI까지 포함해 조직 전체의 확산 구조를 설계해야 한다는 결론에 도달했습니다.", cardTitle: "2026 Strategic Direction", leftBig: "도입기", rightBig: "확산기", tags: ["System", "Education", "Infrastructure", "Field"], footerLabel: "2026 방향", footerMeta: "RESEARCH | Strategic Summary" },
+      { page: 8, kind: "caseTitle", brand: "dwbrain", company: "DW-BRAIN", title: "AI 개입형 브레인스토밍 협업 채팅 데스크톱앱 & WEB", desc: "대화 중 AI가 개입해 아이디어를 실행 스펙으로 정리하는\n브레인스토밍 특화 협업 채팅 시스템", date: "PROJECT 01 · 2026", chips: ["AI Idea Pulse", "Spec Packet", "Brainstorming", "Desktop", "Web", "Collaboration"], media: "DW-Brain 대표 비주얼 / AI 개입형 협업 채팅" },
+      { page: 9, kind: "article", section: "Problem", title: "아이디어 논의는 많지만 실행 가능한 스펙으로 이어지기까지 추가 회의가 반복되었습니다", side: "전사 계열사 현업들과 기획자가 특정 시스템과 관련한 아이디어를 논의할 때 대화는 많지만 정작 정리가 되지 않아, 실행 가능한 스펙으로 이어지기까지 평균 3~4회의 추가 회의가 필요했습니다.", cardTitle: "아이디어 논의와 실행 스펙 사이의 간극", cardType: "single", media: "아이디어 논의 / 추가 회의 / 스펙 전환 병목", footerLabel: "DW-Brain", footerMeta: "REFERENCES | PROJECT 01" },
+      { page: 10, kind: "article", section: "Solution", title: "AI가 채팅 중간에 개입해 아이디어 정리와 실행 스펙 초안을 자동 생성하도록 설계", side: "AI Idea Pulse 생성, 토론 내용 기반 Spec Packet 자동 생성, 기술 아키텍처/기능 목록/실행 단계 자동 정리를 핵심 기능으로 설계했습니다. 채팅의 흐름을 깨지 않으면서도 실행 문서로 바로 전환되는 구조를 목표로 했습니다.", cardTitle: "브레인스토밍 특화 AI 협업 흐름", cardType: "splitMedia", mediaLeft: "AI Idea Pulse / Spec Packet / 토론 정리", mediaRight: "기술 구조 제안 / 기능 목록 / 실행 단계 자동화", footerLabel: "DW-Brain", footerMeta: "REFERENCES | PROJECT 01" },
+      { page: 11, kind: "article", section: "Outcome", title: "아이디어에서 실행 스펙으로 이어지는 시간을 크게 단축했습니다", side: "브레인스토밍 세션당 실행 가능한 아이디어 생성량이 증가했고, 회의 후 추가 논의 횟수는 눈에 띄게 줄었습니다. 협업 대화가 문서화와 실행 설계로 자연스럽게 이어지는 흐름을 검증했습니다.", cardTitle: "Result Metrics", cardType: "single", media: "정리 시간 약 65% 단축 / 추가 논의 2.4회 -> 1.1회 / 실행 가능한 아이디어 2.7배 증가", footerLabel: "DW-Brain", footerMeta: "REFERENCES | PROJECT 01" },
+      { page: 12, kind: "article", section: "IA Structure", title: "Desktop / Web / Server / Worker / Shared로 역할을 분리한 IA와 시스템 구조", side: "인증, 채팅, AI(Jarvis), 주변정보/위치, 실시간 이벤트(WebSocket) 구조를 분리하고, 화면/컴포넌트별 사용자 액션, 연관 API, Worker 스트리밍 응답 흐름까지 정리한 상세 IA를 설계했습니다.", cardTitle: "DW-BRAIN IA Structure Example", cardType: "single", media: "전체 시스템 프로세스 / IA 메뉴 트리 / 이벤트 규격 / 화면 노드 정의", footerLabel: "DW-Brain IA Structure", footerMeta: "REFERENCES | PROJECT 01" },
+      { page: 13, kind: "article", section: "Worker & Tooling", title: "AI Worker 작업과 도구를 분리해 확장 가능한 협업 자동화 구조를 설계", side: "BullMQ 기반 작업으로 message-embedding, jarvis, meeting-summary를 운영하고, search_documents, summarize_thread, extract_action_items, generate_pulse_report 등 12개 에이전트 도구를 설계했습니다. 주변 장소 검색은 Worker가 아닌 클라이언트 직접 호출 구조로 구분했습니다.", cardTitle: "Worker Job & Agent Tool Spec", cardType: "splitMedia", mediaLeft: "BullMQ Jobs / Streaming / Summary", mediaRight: "12개 Agent Tool / Calendar / News / Follow-up", footerLabel: "DW-Brain Worker", footerMeta: "REFERENCES | PROJECT 01" },
+      { page: 14, kind: "articleStatement", section: "User Scenario", title: "로그인부터 자비스 질문, 일정 등록, 인사이트 생성까지 주요 사용자 플로우를 하나의 시스템으로 연결", side: "기본 채팅, 공유 질문, 일정 등록, 주변 장소 검색, 인사이트/Brain Pulse, 회의록 불러오기까지를 주요 시나리오로 정의했습니다. AI 기능은 별도 실험 기능이 아니라 협업 흐름 안에 녹아드는 기능으로 위치시켰습니다.", cardTitle: "End-to-End Scenario", leftBig: "대화", rightBig: "실행", tags: ["Chat", "Jarvis", "Calendar", "Pulse"], footerLabel: "DW-Brain Scenario", footerMeta: "REFERENCES | PROJECT 01" },
+      { page: 15, kind: "caseTitle", brand: "greenlabs", company: "AI 360", title: "AI 360 파노라마 인테리어 제너레이터", desc: "360도 촬영 이미지를 기반으로 공간을 분석하고\n벽지와 마루를 AI로 합성하는 B2B 제안 콘텐츠 생성 시스템", date: "PROJECT 02 · 2025", chips: ["Panorama", "Interior AI", "B2B Content", "Texture Mapping"], media: "AI 360 파노라마 인테리어 제너레이터" },
+      { page: 16, kind: "article", section: "Problem", title: "제품 적용 이미지를 제작하려면 촬영부터 시안 제작까지 2~3일이 필요했습니다", side: "건자재 B2B 영업에서 촬영 -> 편집 -> 합성 -> 시안 제작까지의 리드타임이 길었고, 고객사 제안용 콘텐츠 제작 비용도 지속적으로 발생했습니다.", cardTitle: "콘텐츠 제작 리드타임과 비용 문제", cardType: "single", media: "촬영 / 편집 / 합성 / 시안 제작 병목", footerLabel: "AI 360 Panorama Generator", footerMeta: "REFERENCES | PROJECT 02" },
+      { page: 17, kind: "article", section: "Solution", title: "360 촬영 이미지 자동 전송과 AI 기반 벽/바닥 분리, 제품 텍스처 자동 합성 구조 설계", side: "Insta360 기반 촬영, 서버 전송 파이프라인, AI 기반 벽/바닥 영역 마스킹, 동화자연마루 제품 텍스처 자동 합성, 360 파노라마 뷰어 기반 제안 콘텐츠 생성을 핵심 기능으로 설계했습니다.", cardTitle: "Panorama AI Pipeline", cardType: "splitMedia", mediaLeft: "360 촬영 / 자동 업로드 / 영역 분석", mediaRight: "텍스처 합성 / 파노라마 뷰어 / 제안 콘텐츠 생성", footerLabel: "AI 360 Panorama Generator", footerMeta: "REFERENCES | PROJECT 02" },
+      { page: 18, kind: "articleStatement", section: "Outcome", title: "제작 시간과 비용을 크게 줄이면서 제안 콘텐츠 생산량을 확대했습니다", side: "인테리어 적용 이미지 제작 시간이 2~3일에서 30분 이내로 줄었고, 콘텐츠 제작 비용은 약 80% 절감되었습니다. 제안 시 제품 이해도와 체험도 향상이라는 부가 효과도 확인했습니다.", cardTitle: "Result Metrics", leftBig: "2~3일", rightBig: "30분", tags: ["80% 비용절감", "생성량 5배", "B2B 제안 고도화"], footerLabel: "AI 360 Panorama Generator", footerMeta: "REFERENCES | PROJECT 02" },
+      { page: 19, kind: "caseTitle", brand: "rocket", company: "M-PARK", title: "엠파크 AI스마트 에이전트 카메이트", desc: "중고차 매매 딜러의 상담 준비와 차량 정보 설명을 돕는\nAI 기반 상담 지원 시스템", date: "PROJECT 03 · 2025", chips: ["AI Agent", "Dealer Support", "Vehicle Data", "Finance Simulation"], media: "엠파크 AI스마트 에이전트 카메이트" },
+      { page: 20, kind: "article", section: "Problem", title: "딜러들은 차량 옵션, 시세, 상태, 금융 정보를 매번 직접 확인해야 했습니다", side: "차량 정보 설명과 견적 제시 과정에서 많은 시간이 소요되었고, 특히 초보 딜러의 경우 경험 의존도가 높아 상담 품질 편차가 크게 발생했습니다.", cardTitle: "상담 준비와 설명 과정의 비효율", cardType: "single", media: "차량 정보 조회 / 시세 확인 / 금융 정보 탐색", footerLabel: "CarMate", footerMeta: "REFERENCES | PROJECT 03" },
+      { page: 21, kind: "article", section: "Solution", title: "AI가 차량 정보 요약, 옵션 설명, 금융 시뮬레이션을 생성하는 상담 지원 흐름 설계", side: "차량 정보 기반 상담 스크립트 자동 생성, 옵션/특징 AI 요약, 고객 조건 기반 금융/할부 시뮬레이션 안내, 차량 정보 DB 연동 AI Q&A 구조를 통해 딜러가 상담에 집중할 수 있도록 설계했습니다.", cardTitle: "AI Dealer Assistant Flow", cardType: "splitMedia", mediaLeft: "상담 스크립트 / 옵션 요약 / Q&A", mediaRight: "시세 / 금융 시뮬레이션 / DB 연동", footerLabel: "CarMate", footerMeta: "REFERENCES | PROJECT 03" },
+      { page: 22, kind: "articleStatement", section: "Outcome", title: "상담 준비 시간과 조회 시간을 줄여 현장 상담 효율을 높였습니다", side: "차량 상담 준비 시간은 약 40~60% 단축되었고, 상담 중 차량 정보 조회 시간은 약 70% 감소했습니다. 초보 딜러의 상담 품질 편차 완화에도 기여하는 구조로 정리했습니다.", cardTitle: "Result Metrics", leftBig: "40~60%", rightBig: "70%", tags: ["준비 시간 단축", "정보 조회 감소", "품질 편차 완화"], footerLabel: "CarMate", footerMeta: "REFERENCES | PROJECT 03" },
+      { page: 23, kind: "caseTitle", brand: "dwbrain", company: "DAOP", title: "Dongwha AI Orchestration Platform", desc: "비개발자도 데이터 리소스, 정책, 행동 양식을 조립해\n스스로 에이전트를 만들고 자동화 프로그램을 운영하는 구조", date: "PROJECT 04 · 2026", chips: ["Orchestration", "Self-service", "Agent Builder", "Automation"], media: "Dongwha AI Orchestration Platform (DAOP)" },
+      { page: 24, kind: "article", section: "Problem", title: "자동화가 필요한 업무를 인지해도 실행 가능한 에이전트로 전환하기까지 장벽이 높았습니다", side: "구성원들은 데이터 리소스와 정책을 결합해 자동화를 만들고 싶어 했지만, 기술 장벽과 긴 리드타임 때문에 아이디어가 실제 워크플로우로 전환되지 못하고 있었습니다.", cardTitle: "Automation Gap", cardType: "single", media: "데이터 리소스 / 정책 / 행동양식 / 긴 리드타임", footerLabel: "DAOP", footerMeta: "REFERENCES | PROJECT 04" },
+      { page: 25, kind: "article", section: "Solution", title: "리소스, 정책, 행동양식, 승인절차, 실행 로그를 조립하는 셀프서비스 오케스트레이션 구조 설계", side: "DAOP을 통해 구성원이 스스로 에이전트를 만들고 자유롭게 자동화 프로그램을 생성·운영할 수 있도록 설계했습니다. 다양한 업무에 맞춤형 최적화를 위해 범용화를 중심에 두고 지원 구조를 기획했습니다.", cardTitle: "Self-service Agent Orchestration", cardType: "splitMedia", mediaLeft: "리소스 / 정책 / 행동양식 조립", mediaRight: "승인 절차 / 실행 로그 / 모니터링", footerLabel: "DAOP", footerMeta: "REFERENCES | PROJECT 04" },
+      { page: 26, kind: "articleStatement", section: "Outcome", title: "비개발자 중심의 자동화 제작/운영 흐름과 조직 내 실행 일관성을 강화했습니다", side: "업무 프로세스 자동화와 협업 생산성을 동시에 개선하는 방향으로 구조를 정리했습니다. 실행 로그 기반 운영 모니터링과 정책 결합 자동화라는 측면에서 확장 가능성을 확보했습니다.", cardTitle: "Result Direction", leftBig: "Self", rightBig: "Service", tags: ["비개발자 중심", "실행 일관성", "협업 생산성"], footerLabel: "DAOP", footerMeta: "REFERENCES | PROJECT 04" },
+      { page: 27, kind: "article", section: "OTHER PROJECTS", title: "AI 외 DT 전환 프로젝트도 지속적으로 수행하며 서비스 구조와 운영 문제를 해결해왔습니다", side: "동화자연마루 건장재 홈페이지, MPARK 중고차매매단지 단지운영시스템, 동화베트남 글로벌 홈페이지 UX 서비스 기획 및 협업 프로젝트 등을 수행하며 AI뿐 아니라 서비스 구조 전반의 전환 경험을 쌓아왔습니다.", cardTitle: "Other Projects · AI 외 DT 전환 프로젝트", cardType: "splitMedia", mediaLeft: "UMS 원장 매핑 / 기능 탐색 화면", mediaRight: "사용자 플로우 화면 / 고객 키오스크 화면", footerLabel: "Other Projects", footerMeta: "REFERENCES | ~2024" },
+      { page: 28, kind: "article", section: "WORKING PROCESS", title: "문제 정의부터 운영 고도화까지 AI 전략/서비스 기획 업무 프로세스를 일관되게 수행합니다", side: "저는 문제 정의 -> 데이터/가치 설계 -> 프로토타입 -> MVP 검증 -> 출시/도입 -> 운영 고도화 순서로 AI 서비스 기획을 진행합니다. 기술 중심이 아닌 사용자 가치 중심으로 문제를 정의하고, 지표와 로그를 먼저 설계해 학습 루프를 보장합니다.", cardTitle: "STEP 01~06 Workflow", cardType: "single", media: "문제 프레이밍 / 가치·데이터 전략 / 프로토타입 / MVP 실험 / 출시·도입 / 운영 최적화", footerLabel: "Working Process", footerMeta: "PROCESS" },
+      { page: 29, kind: "article", section: "STEP 01-03", title: "Problem Statement부터 Service Blueprint와 Prototype까지 빠르게 구체화합니다", side: "Step 01에서는 사업 KPI와 사용자 과업을 연결해 핵심 문제를 재정의하고, Step 02에서는 데이터 요구사항과 품질/리스크 기준을 설계합니다. Step 03에서는 사용자 플로우, 에러 핸들링, Prompt UX, 가이드 문구까지 정의해 프로토타입으로 검증합니다.", cardTitle: "Step 01~03 Deliverables", cardType: "splitMedia", mediaLeft: "Problem Statement / Opportunity Map / AI PRD / Dataset Spec", mediaRight: "Service Blueprint / Prototype / 핵심 태스크 성공률 검증", footerLabel: "Working Process", footerMeta: "STEP 01~03" },
+      { page: 30, kind: "article", section: "STEP 04-06", title: "실험과 릴리즈, 운영 대시보드까지 연결해 학습 가능한 시스템으로 만듭니다", side: "Step 04에서는 실험 설계와 이벤트 트래킹, 출력 품질 평가, CS/리서치 피드백 연결을 수행합니다. Step 05에서는 릴리즈 계획, 롤백 기준, 온보딩과 가이드를 설계하고, Step 06에서는 Ops Dashboard와 Scale Roadmap 기반으로 지속적으로 최적화합니다.", cardTitle: "Experiment to Scale", cardType: "splitMedia", mediaLeft: "Experiment Report / Prioritized Backlog / Release Playbook", mediaRight: "Adoption Guide / Ops Dashboard / Scale Roadmap", footerLabel: "Working Process", footerMeta: "STEP 04~06" },
+      { page: 31, kind: "caseTitle", brand: "greenlabs", company: "CAREER", title: "문제 해결 중심으로 쌓아온 커리어", desc: "AI 서비스 기획, 빌더형 개발, 프론트엔드, 비즈니스 리딩까지\n실행 중심의 커리어를 축적해왔습니다.", date: "CAREER HISTORY", chips: ["AI Planner", "Builder", "Frontend", "Business Leading", "Collaboration"], media: "Career History Visual" },
+      { page: 32, kind: "article", section: "M-PARK", title: "국내 최대 규모 엠파크 단지내 AX 전환 프로젝트 기획 및 개발 담당", side: "RAG 기반 내부고객 업무 도우미와 AI IoT 360 차량 내/외부 파노라마 생성기 기능을 기획해 자체 콘텐츠 생산력을 높였습니다. UMS, Megam, Bizm, 성능관리 앱, 고객 홈페이지 등 엠파크 전사 시스템 기획 및 운영 개선도 함께 담당했습니다.", cardTitle: "2026.04 - Present", cardType: "single", media: "내부 고객 업무 효율성 31% 개선 / 문의 처리 42% 단축 / 파노라마 생성기 기획·개발", footerLabel: "Career History", footerMeta: "M-PARK | AI Service Planner" },
+      { page: 33, kind: "article", section: "DONGWHA", title: "신규 AI 서비스 기획 및 PoC 개발과 건장재 프론트/백오피스 운영 개선", side: "리서치-설계-실행 사이클을 빠르게 반복하며 PoC 5건을 진행했고, 이 중 2건을 상용화했습니다. 내부 운영툴 개선과 현업 협업 효과성 향상에 기여했습니다.", cardTitle: "2023.10 - 2026.04", cardType: "single", media: "PoC 5건 / 2건 상용화 / 협업 효과성 42% 단축 / 리드타임 28% 절감", footerLabel: "Career History", footerMeta: "동화기업 | AI Service Planner & Builder Developer" },
+      { page: 34, kind: "article", section: "ITEMBAY / HYPERNEST / UNBIZ", title: "프론트엔드 개발과 서비스 기획, 비즈니스 리딩을 오가며 실행 경험을 확장", side: "아이템베이에서는 이벤트 페이지 기획 리드와 프론트 운영 개선을, HYPERNEST에서는 NFT 거래소 고도화와 플랫폼 UX 기획을, 유엔비즈에서는 공공기관·협회·기업 프로젝트 총괄과 비즈니스 리딩을 담당했습니다.", cardTitle: "Multi-domain Execution Experience", cardType: "splitMedia", mediaLeft: "아이템베이 / HYPERNEST / GXG / NFT 거래소", mediaRight: "유엔비즈 / 공공기관 프로젝트 / LMS / DATA PORTAL / ERP", footerLabel: "Career History", footerMeta: "Execution Across Domains" },
+      { page: 35, kind: "articleStatement", section: "With colleagues", title: "유관 부서의 고충을 이해하고 실무자의 언어로 소통하는 실전형 AI 서비스 기획자", side: "프론트엔드 개발 및 디자인 실무 경험을 바탕으로 유관 부서의 고충을 깊이 이해합니다. 세밀한 디테일까지 실무자의 언어로 명확히 소통해 커뮤니케이션 비용을 최소화하고 최상의 팀워크를 이끌어냅니다.", cardTitle: "Collaboration Mindset", leftBig: "실무\n이해", rightBig: "정확한\n소통", tags: ["Frontend", "Design", "AI Planning"], footerLabel: "Career History", footerMeta: "With Colleagues" },
+      { page: 36, kind: "skills", hero1: "단순한 아이디어가 아니라 실제로 런칭되고 운영되는 결과물을 만들었습니다", hero2: "프로젝트와 콘텐츠 아카이브를 통해 실행 기반 역량을 증명합니다", sectionTitle: "PROJECT ARCHIVE", sectionBody: "전광판/플랫폼/운영/사이드 프로젝트까지 실제 수행 이력을 카테고리별로 정리했습니다. 비즈니스 기획과 서비스 구조 설계, 개발과 디자인 역량을 바탕으로 실제 서비스 형태로 구현하고 런칭까지 연결한 프로젝트들입니다.", footerLabel: "", footerMeta: "" },
+      { page: 37, kind: "article", section: "Portfolios", title: "기업/플랫폼/운영 시스템 구축 프로젝트 아카이브", side: "인터배터리 박람회 키오스크, 동화기업 보드 수요 예측 시스템, 동화베트남 글로벌 홈페이지, 엠파크 UMS 통합관리시스템, 동화자연마루 홈페이지 운영, 엠파크 플랫폼 운영 등 기업 현업과 연결된 프로젝트를 수행했습니다.", cardTitle: "Portfolio Archive 01", cardType: "splitMedia", mediaLeft: "전시장 키오스크 / 수요예측 / 글로벌 홈페이지", mediaRight: "UMS / 건장재 홈페이지 / 자동차 매매 플랫폼", footerLabel: "Project Archive", footerMeta: "Portfolios" },
+      { page: 38, kind: "article", section: "Platform & Event", title: "아이템베이, NFT, 게임, 프로모션 플랫폼 구축과 운영 경험", side: "아이템베이 Reborn 관리자, 게임 거래 플랫폼 운영, 정기 이벤트 프로모션 구축, GxG.Style NFT 거래소 고도화, GotG World 홈페이지 개편 등을 통해 플랫폼 고도화와 운영 개선을 병행했습니다.", cardTitle: "Portfolio Archive 02", cardType: "splitMedia", mediaLeft: "아이템베이 관리자 / 거래 플랫폼 / 프로모션 이벤트", mediaRight: "NFT 거래소 고도화 / 글로벌 웹 개편 / 프록시 서버 구축", footerLabel: "Project Archive", footerMeta: "Platform & Event" },
+      { page: 39, kind: "article", section: "Public / Sports", title: "공공기관·스포츠·교육 시스템 구축 프로젝트 수행", side: "제주유나이티드, 한국프로스포츠협회, KADA, KLEAGUE, 국가대표선수촌, 대한체육회, 경찰청 등 다양한 공공 및 스포츠 영역 프로젝트를 수행하며 서비스 기획과 비즈니스 리딩 경험을 축적했습니다.", cardTitle: "Portfolio Archive 03", cardType: "splitMedia", mediaLeft: "스마트 스타디움 / 포털 / LMS / 교육 시스템", mediaRight: "암표 신고 / 아카이브 / 예약 시스템 / 국민 지지도 조사", footerLabel: "Project Archive", footerMeta: "Public & Sports" },
+      { page: 40, kind: "article", section: "Operation", title: "운영과 유지보수, 고객 요청 반영을 통해 서비스의 지속성을 책임졌습니다", side: "아이템베이 기업 홈페이지, 대한탁구협회, 한국도핑방지위원회 ADTIS 및 홈페이지, 대한펜싱협회 대회운영시스템 유지보수 등을 통해 운영 관점의 서비스 개선 경험도 쌓아왔습니다.", cardTitle: "Operation Archive", cardType: "single", media: "홈페이지 운영 / 민원 대응 / 데이터 관리 / 유지보수 반영", footerLabel: "Project Archive", footerMeta: "Operation" },
+      { page: 41, kind: "article", section: "Personal Development", title: "사이드 프로젝트를 통해 기획-디자인-개발의 전 과정을 반복적으로 학습했습니다", side: "승현이의 Blind, DOKI, Twitter Clone, MOVIEZONE 등 개인 프로젝트를 통해 커뮤니티 플랫폼, 견적 플랫폼, SNS, 영화 정보 서비스까지 다양한 유형의 서비스를 직접 구현했습니다.", cardTitle: "Personal Project Archive", cardType: "splitMedia", mediaLeft: "Blind Clone / DOKI / Twitter Clone", mediaRight: "MOVIEZONE / 프론트·백엔드 통합 개발", footerLabel: "Project Archive", footerMeta: "Personal Development" },
+      { page: 42, kind: "article", section: "Design Content", title: "콘텐츠와 시각 커뮤니케이션 작업도 직접 수행해왔습니다", side: "전광판 송출 디자인, 스포츠영웅 조사 사이트 디자인, 슬로건 공모 시스템 포스터, 소상공인 대상 리플릿, 내손안의전광판 콘텐츠 제작 등 다양한 시각 콘텐츠 프로젝트를 수행했습니다.", cardTitle: "Design Content Archive", cardType: "splitMedia", mediaLeft: "전광판 / 팝업 / 배너 / 포스터", mediaRight: "리플릿 / 전광판 콘텐츠 / 홍보 디자인", footerLabel: "Project Archive", footerMeta: "Design Content" },
+      { page: 43, kind: "strengths", hero1: "숫자와 구조, 실행 속도를 함께 다루는 기획자입니다", hero2: "문제 정의부터 운영 최적화까지 전체 흐름을 설계합니다", sectionTitle: "Why Me", sectionBody: "리서치 기반 문제 정의, AI 전략 설계, PoC·MVP 구현, 운영 확산까지 하나의 체계로 이어갈 수 있는 것이 저의 강점입니다.", footerLabel: "", footerMeta: "" },
+      { page: 44, kind: "skillsLife", hero1: "기술은 수단이고, 중요한 것은 사용자가 끝까지 지속할 수 있는 경험입니다", hero2: "좋은 AI 서비스는 기술이 아니라 경험의 설계에서 시작됩니다", sectionTitle: "AI/AX Perspective", sectionBody: "자동화와 증강의 균형을 설계하고, 비즈니스 성과로 연결되는 사용자 경험을 만드는 것이 AI 서비스 전략 기획자의 역할이라고 생각합니다.", footerLabel: "", footerMeta: "" },
+      { page: 45, kind: "testimonials", hero1: "리서치와 기획, 개발과 운영을 함께 이해하는 사람으로 일합니다", hero2: "실무 언어로 팀을 연결하고 실행 속도를 높입니다", sectionTitle: "Execution Footprint", sectionBody: "수많은 프로젝트를 통해 쌓아온 경험은 단순한 포트폴리오가 아니라 실제로 협업하고 런칭한 결과물의 기록입니다.", footerLabel: "", footerMeta: "" },
+      { page: 46, kind: "articleStatement", section: "LET'S BUILD TOGETHER", title: "지속 가능한 사용자 행동을 만들고 비즈니스 성과로 연결되는 AX 프로젝트를 함께 만들고 싶습니다", side: "좋은 AI 서비스는 기술이 아니라 경험의 설계에서 시작됩니다. 저는 사용자 가치와 비즈니스 목표가 동시에 작동하는 구조를 만드는 일에 집중합니다.", cardTitle: "Contact Message", leftBig: "Build", rightBig: "Together", tags: ["AI Strategy", "Service Planning", "AX"], footerLabel: "CONTACT", footerMeta: "Let's Build Together" },
+      { page: 47, kind: "closing", footerLabel: "", footerMeta: "", title: "좋은 AI 서비스는 기술이 아니라 경험의 설계에서 시작됩니다", subtitle: "황승현 | AI Service Strategy Planner", text: "지속 가능한 사용자 행동을 만들고,\n비즈니스 성과로 연결되는 AX 프로젝트를 함께 만들고 싶습니다.", contacts: ["ghkdsigm3@naver.com", "+82 10-9406-3935", "2026. 03. AI 서비스 전략 기획 황승현."] }
+    ];
+
+    const deck = document.getElementById("deck");
+
+    function renderFooter(slide) {
+      return `
+        <div class="footer-row">
+          <div>${slide.footerLabel || ""}</div>
+          <div class="footer-right">
+            <span>${slide.footerMeta || ""}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFeatureMedia(slide) {
+      const klass = slide.brand === "greenlabs" ? "feature-media greenlabs" : "feature-media";
+      return `<div class="${klass}"><div class="feature-media-label">${slide.media}</div></div>`;
+    }
+
+    function renderArticleCard(slide) {
+      if (slide.cardType === "splitMedia") {
+        return `
+          <div class="article-card compact">
+            <p class="card-heading">${slide.cardTitle}</p>
+            <div class="media-placeholder split-visual">
+              <div class="media-box"></div>
+              <div class="media-box"></div>
+            </div>
+            <div class="body-small">${slide.mediaLeft} / ${slide.mediaRight}</div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="article-card">
+          <p class="card-heading">${slide.cardTitle}</p>
+          <div class="media-placeholder wide ${slide.footerMeta.includes("Greenlabs") ? "green" : ""}"></div>
+          <div class="body-small">${slide.media}</div>
+        </div>
+      `;
+    }
+
+    function renderPage(slide) {
+      if (slide.kind === "cover") {
+        return `
+          <section class="slide" data-page="${slide.page}">
+            <div class="page cover-page">
+              <div class="cover-blob"></div>
+              <div class="cover-blob-2"></div>
+              <div class="content">
+                <div class="cover-top">
+                  <div class="cover-name">
+                    <strong>${slide.title}</strong>
+                    <div class="cover-tag">${slide.subtitle}</div>
+                  </div>                  
+                </div>
+                <div class="cover-bottom">
+                  <div class="section-label">${slide.bodyTitle}</div>
+                  <p class="body-small">${slide.bodyText}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      if (slide.kind === "intro") {
+        return `
+          <section class="slide" data-page="${slide.page}">
+            <div class="page">
+              <div class="content">
+                <div class="avatar-row">
+                  <div class="avatar"></div>
+                  <div class="hero-copy">
+                    <h1 class="title-lg">${slide.hero1}</h1>
+                    <h2 class="title-lg">${slide.hero2}</h2>
+                  </div>
+                </div>
+                <div class="page-section">
+                  <div class="section-label">${slide.section}</div>
+                  <p class="body-small">${slide.body}</p>
+                </div>
+                <div class="page-section">
+                  <h3 class="title-md">Career</h3>
+                  <p class="body">${slide.careerText}</p>
+                  <div class="career-grid">
+                    <div class="career-card">
+                      <div class="career-brand"><span class="career-logo">K</span><span>Kakaopay<br /><span class="body-small">2025.07 - 2026.02</span></span></div>
+                      <ul class="bullet-list"><li>마이데이터 활용한 개인 PB 구축</li><li>청소년 마이데이터 런칭</li><li>가상자산 거래소 연동</li><li>개인 신용 보호를 위한 신용플래너 개선</li><li>마이데이터 호출 최적화를 통한 비용 절감</li></ul>
+                    </div>
+                    <div class="career-card">
+                      <div class="career-brand"><span class="career-logo" style="background:#23d429;color:#111;">g</span><span>Greenlabs<br /><span class="body-small">2023.11 - 2025.06</span></span></div>
+                      <ul class="bullet-list"><li>농민 데이터 활용한 팜모닝, FMS 고도화</li><li>큰 규모의 자원과 제품팀 활용한 그로스</li><li>AI와 LLM의 적극적 활용 경험</li><li>커뮤니티 활성화 집중</li><li>악성 재고 40% 이상 소진</li></ul>
+                    </div>
+                    <div class="career-card">
+                      <div class="career-brand"><span class="career-logo">e</span><span>elecvery<br /><span class="body-small">2023.05 - 2023.09</span></span></div>
+                      <ul class="bullet-list"><li>조직 내 유일한 PO로 프로젝트 기획, 운영 총괄</li><li>제품 센스, 컬처를 기르는 제품 체계와 일하는 방식 수립</li><li>9명의 주니어 개발 조직 리드</li><li>압축적인 기술집약적 성장을 해냄</li></ul>
+                    </div>
+                    <div class="career-card">
+                      <div class="career-brand"><span class="career-logo" style="background:#4d66ff;">R</span><span>Rocketpunch<br /><span class="body-small">2021.06 - 2023.05</span></span></div>
+                      <ul class="bullet-list"><li>제품 책임지는 PM (셀 리드)</li><li>매출 180%, MAU 125%, W+1 리텐션 120%</li><li>한정된 자원으로 집요한 매출 발생</li><li>수단과 방법을 가리지 않는 간절함 경험</li></ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      if (slide.kind === "caseTitle") {
+        return `
+          <section class="slide" data-page="${slide.page}">
+            <div class="page case-title-page">
+              <div class="content">
+                <div class="brand-chip">
+                  <span class="brand-dot ${slide.brand === "rocket" ? "rocket" : slide.brand === "dwbrain" ? "dwbrain" : ""}"></span>
+                  <span>${slide.company}</span>
+                </div>
+                <div class="center-copy">
+                  <h1 class="title-xl">${slide.title}</h1>
+                  <p class="body">${slide.desc.replace(/\n/g, "<br />")}</p>
+                  <div class="body">${slide.date}</div>
+                  <div class="chip-row">${slide.chips.map((c) => `<span class="chip">${c}</span>`).join("")}</div>
+                </div>
+                ${renderFeatureMedia(slide)}
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      if (slide.kind === "article") {
+        return `
+          <section class="slide" data-page="${slide.page}">
+            <div class="page article-page">
+              <div class="content">
+                <div class="article-top">
+                  <div class="article-main">
+                    <div class="section-label">${slide.section}</div>
+                    <h1 class="title-lg">${slide.title}</h1>
+                  </div>
+                  <div class="article-side">
+                    <p class="body-small">${slide.side}</p>
+                  </div>
+                </div>
+                ${renderArticleCard(slide)}
+              </div>
+              ${renderFooter(slide)}
+            </div>
+          </section>
+        `;
+      }
+
+      if (slide.kind === "articleStatement") {
+        return `
+          <section class="slide" data-page="${slide.page}">
+            <div class="page statement-page">
+              <div class="content">
+                <div class="article-top">
+                  <div class="article-main">
+                    <div class="section-label">${slide.section}</div>
+                    <h1 class="title-lg">${slide.title}</h1>
+                  </div>
+                  <div class="article-side">
+                    <p class="body-small">${slide.side}</p>
+                  </div>
+                </div>
+                <div class="article-card compact">
+                  <p class="card-heading">${slide.cardTitle}</p>
+                  <div class="statement-layout">
+                    <div class="statement-big">${slide.leftBig.replace(/\n/g, "<br />")}</div>
+                    <div class="statement-line">
+                      <div class="statement-tags">${slide.tags.map((t) => `<span class="tag">${t}</span>`).join("")}</div>
+                    </div>
+                    <div class="statement-big">${slide.rightBig.replace(/\n/g, "<br />")}</div>
+                  </div>
+                </div>
+              </div>
+              ${renderFooter(slide)}
+            </div>
+          </section>
+        `;
+      }
+
+      if (slide.kind === "skills") {
+        return `
+          <section class="slide" data-page="${slide.page}">
+            <div class="page">
+              <div class="content">
+                <div class="avatar-row">
+                  <div class="avatar"></div>
+                  <div class="hero-copy">
+                    <h1 class="title-lg">${slide.hero1}</h1>
+                    <h2 class="title-lg">${slide.hero2}</h2>
+                  </div>
+                </div>
+                <div class="page-section">
+                  <h3 class="title-md">${slide.sectionTitle}</h3>
+                  <p class="body">${slide.sectionBody}</p>
+                </div>
+                <div class="skills-cols">
+                  <div class="skills-block">
+                    <div class="pill-title">Hard Skills</div>
+                    <div class="skill-item"><div class="icon-badge">∞</div><div><p class="skill-title">컨텍스트 엔지니어링</p><p class="body-small">바이브 코딩툴을 활용하여 컨텍스트를 엔지니어링하고 제품을 풀스택 개발할 수 있습니다.</p></div></div>
+                    <div class="skill-item"><div class="icon-badge">✦</div><div><p class="skill-title">비즈니스 모델 설계</p><p class="body-small">시장과 고객의 니즈를 이해한 상품을 개발/프라이싱하고 매출을 일으킬 수 있습니다.</p></div></div>
+                    <div class="skill-item"><div class="icon-badge">⌁</div><div><p class="skill-title">AI 및 데이터 활용</p><p class="body-small">필요한 데이터를 발굴하고 인사이트를 도출하거나 AI에 연계하여 가치로 환원할 수 있습니다.</p></div></div>
+                    <div class="skill-item"><div class="icon-badge">♟</div><div><p class="skill-title">서비스 기획</p><p class="body-small">신규 서비스를 기획하고 운영/개선하기 위한 필수 역량을 보유했습니다.</p></div></div>
+                  </div>
+                  <div class="skills-block">
+                    <div class="pill-title">Soft Skills</div>
+                    <div class="tool-chip"><span class="tool-dot"></span><span>뾰족한 문제 정의/해결책 도출</span></div>
+                    <div class="tool-chip"><span class="tool-dot"></span><span>경계없이 유연한 커뮤니케이션</span></div>
+                    <div class="tool-chip"><span class="tool-dot"></span><span>부드럽고 명료한 리더십</span></div>
+                    <div class="tool-chip"><span class="tool-dot"></span><span>합리적이고 촘촘한 매니징</span></div>
+                  </div>
+                  <div class="skills-block">
+                    <div class="pill-title">Tools</div>
+                    <div class="tools-list">
+                      ${["Figma","Next.js","Claude Code","Tailwind","Cursor","Web Builder","Codex","Framer/Wordpress/Webflow"].map((t) => `<div class="tool-chip"><span class="tool-dot"></span><span>${t}</span></div>`).join("")}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      if (slide.kind === "strengths") {
+        const items = [
+          "빠르게 성장하는 시장에 적합한 인재입니다",
+          "네트워크 효과를 활용하여 콜드스타트 문제를 해결할 수 있습니다",
+          "자사 제품을 최대로 유통하는 능력이 있습니다",
+          "PMF를 가설과 빈번한 실험을 통해 빠르게 검증할 수 있습니다",
+          "사업의 운영 확장성 제약을 통제할 수 있습니다",
+          "효율적으로 매출총이익을 높이는 구조를 설계할 수 있습니다"
+        ];
+        const descs = [
+          "기존 점유 시장을 뾰족한 전략으로 차지하고 낮은 비용과 제품 개선을 통해 새로운 고객을 창출하여 시장을 넓힐 수 있습니다.",
+          "기존 점유 시장을 뾰족한 전략으로 차지하고 낮은 비용과 제품 개선을 통해 새로운 고객을 창출하여 시장을 넓힐 수 있습니다.",
+          "기존에 보유하고 있는 네트워크를 활용하여 레버리지 하거나 바이럴에 적합한 기능을 제안하여 유입을 극대화할 수 있습니다.",
+          "제품은 수많은 실험과 레슨런을 통해 만들가야 한다 생각하며 단위마다 최대 효율의 검증을 해낼 수 있습니다.",
+          "빠르고 큰 성장의 기반이 될 운영 확장성을 확보하기 위해 인적 지원, 인프라 제약을 최소화하여 제품을 만들 수 있습니다.",
+          "매출을 극단적으로 높이는 시도의 한계를 경험하고 원가가 차지하는 비중을 낮춰 회사의 이익을 높이는 방법을 알고 있습니다."
+        ];
+        return `
+          <section class="slide" data-page="${slide.page}">
+            <div class="page">
+              <div class="content">
+                <div class="avatar-row">
+                  <div class="avatar"></div>
+                  <div class="hero-copy">
+                    <h1 class="title-lg">${slide.hero1}</h1>
+                    <h2 class="title-lg">${slide.hero2}</h2>
+                  </div>
+                </div>
+                <div class="page-section">
+                  <h3 class="title-md">${slide.sectionTitle}</h3>
+                  <p class="body">${slide.sectionBody}</p>
+                </div>
+                <div class="strength-grid">
+                  ${items.map((item, idx) => `<div class="strength-item"><div class="shape-placeholder"></div><div><h4 class="title-md" style="font-size:22px;line-height:1.35;">${item}</h4><p class="body-small">${descs[idx]}</p></div></div>`).join("")}
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      if (slide.kind === "skillsLife") {
+        const left = [
+          ["자연", "자연을 좋아해서 숲 속 산책로를 즐겨 걸어다녀요. 생각을 정리하는데 도움이 되더라고요."],
+          ["딥다이브", "딥다이브하여 일하는 것을 즐깁니다. 일하는 것이 괴롭지 않고 저에겐 오히려 가장 재밌는 일입니다."],
+          ["효율 추구", "커뮤니케이션 방식을 가리지 않고 고루 사용합니다. 어떤 방식이든 가장 효율적인 협업 방식을 찾습니다."],
+          ["사이드 프로젝트", "사이드프로젝트를 통해 서비스 기획, 콘텐츠 제작, 오프라인 행사 진행 등 다양한 경험을 하였어요."],
+        ];
+        const right = [
+          ["성과 중심", "성과 중심으로 사고하는 것을 제1원칙으로 삼고 있습니다. 제품과 사업은 반드시 잘되어야 합니다."],
+          ["데이터 중심", "신규 서비스를 만드는 일도 즐겁지만, 데이터 중심으로 개선하며 고도화하는 것을 중요하게 생각합니다."],
+          ["동료와 함께", "동료들과 함께 일하는 것을 선호합니다. 혼자보다 팀으로 할 때 더 많은 일을 할 수 있다고 믿습니다."],
+          ["문서화", "동료와 일하는 모든 과정을 문서화 혹은 간단한 텍스트로 공유하는 것이 체화되어 있습니다."],
+        ];
+        return `
+          <section class="slide" data-page="${slide.page}">
+            <div class="page">
+              <div class="content">
+                <div class="page-section" style="margin-top:0;">
+                  <h1 class="title-lg">${slide.hero1}</h1>
+                  <h2 class="title-lg">${slide.hero2}</h2>
+                </div>
+                <div class="page-section">
+                  <h3 class="title-md">${slide.sectionTitle}</h3>
+                  <p class="body">${slide.sectionBody}</p>
+                </div>
+                <div class="skills-cols" style="grid-template-columns:1fr 1fr;">
+                  <div class="skills-block">
+                    ${left.map(([t,d]) => `<div><h4 class="title-md" style="font-size:22px;">${t}</h4><p class="body-small">${d}</p></div>`).join("")}
+                  </div>
+                  <div class="skills-block">
+                    ${right.map(([t,d]) => `<div><h4 class="title-md" style="font-size:22px;">${t}</h4><p class="body-small">${d}</p></div>`).join("")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      if (slide.kind === "testimonials") {
+        const cards = [
+          ["명료한 리더십", "능력과 역량을 파악하는 데에 뛰어난 사람, 능력들을 잘 맞물릴 수 있도록 조율하여 실행하는 사람.", "남건우", "카카오 DKTECHIN 백엔드 엔지니어"],
+          ["커리어 성장을 위한 집착", "커리어 성장에 대한 욕심이 승현님 만큼 알찬 동료는 보기 힘들만큼 일에 진심인 인재입니다.", "박성열", "롯데렌탈 서비스 기획자"],
+          ["조직적 시스템을 구축하는 능력", "조직, 팀, 구성원, 본인의 성장을 모두 고민하며 이와 같은 일들을 도모할 수 있는 시스템을 구성해내는 능력이 탁월한 분입니다.", "최기영", "CESCO 프론트엔드 엔지니어"],
+          ["뾰족한 문제 해결", "승현 님은 하나의 브랜드 및 플랫폼을 만들고 운영해 나가는 능력이 탁월합니다.", "김정민", "잡코리아 Product 디자이너"],
+          ["집요한 문제 해결", "함께 일하는 동안 봉착했던 여러 어려움들 속에서 언제나 주도적으로 답을 찾아왔다는 점이 인상 깊습니다.", "윤종태", "동화기업 풀스택 엔지니어"],
+          ["데이터 기반 아이디어 사고", "아이디어 생산력이 타의추종을 불허합니다. 데이터를 통해 아이디어를 검증하고 실행하는 능력이 탁월한 사람 중 으뜸이었습니다.", "인병준", "유엔비즈 서비스 기획자"],
+          ["사업과 기술을 아우르는 지식", "기본적으로 개발팀이나 UX팀과의 협업이 매우 원활할 수 있는 정도의 지식과 커뮤니케이션 스킬을 가졌습니다.", "김대호", "최신물산 DBA 관리자"],
+          ["동료를 이끄는 리더십", "승현 님은 리더의 역할이 무척 적극적으로 보이고 디테일한 플랜을 앞장서며 추진하는 사람입니다.", "손정완", "아이템베이 백엔드 엔지니어"]
+        ];
+        return `
+          <section class="slide" data-page="${slide.page}">
+            <div class="page">
+              <div class="content">
+                <div class="avatar-row">
+                  <div class="avatar"></div>
+                  <div class="hero-copy">
+                    <h1 class="title-lg">${slide.hero1}</h1>
+                    <h2 class="title-lg">${slide.hero2}</h2>
+                  </div>
+                </div>
+                <div class="page-section">
+                  <h3 class="title-md">${slide.sectionTitle}</h3>
+                  <p class="body">${slide.sectionBody}</p>
+                </div>
+                <div class="testimonial-cols">
+                  ${cards.map(([title, text, name, company]) => `<div class="testimonial-card"><div><div class="section-label" style="margin:0 0 10px;color:#eceff4;">${title}</div><p>${text}</p></div><div class="testimonial-foot"><div class="mini-avatar"></div><div><div class="name">${name}</div><div class="company">${company}</div></div></div></div>`).join("")}
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      if (slide.kind === "closing") {
+        return `
+          <section class="slide" data-page="${slide.page}">
+            <div class="page">
+              <div class="content" style="justify-content:center;">
+                <div class="page-section" style="gap:10px;">
+                  <div class="section-label">${slide.subtitle}</div>
+                  <h1 class="title-xl">${slide.title}</h1>
+                  <p class="body">${slide.text.replace(/\n/g, "<br />")}</p>
+                  <div class="body" style="margin-top:18px;">${slide.contacts.join("<br />")}</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+    }
+
+    deck.innerHTML = slides.map(renderPage).join("");
+
+    const pager = document.getElementById("pager");
+    const sections = document.querySelectorAll(".slide");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        pager.textContent = `${String(entry.target.dataset.page).padStart(2, "0")} / 47`;
+      });
+    }, { threshold: 0.58 });
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>

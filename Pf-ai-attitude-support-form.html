@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Attitude & Support Survey</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --viewport-bg: #121212;
+      --page: #0f1621;
+      --line: rgba(255, 255, 255, 0.08);
+      --text: #f2f5f8;
+      --muted: #b0b8c4;
+      --accent: #3ef0c0;
+      --accent-blue: #4da3ff;
+      --accent-purple: #8d83ff;
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
+      --w: 1920px;
+      --h: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 1540px;
+      background: var(--viewport-bg);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    main { scroll-snap-type: y mandatory; }
+
+    .slide {
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      scroll-snap-align: start;
+    }
+
+    .page {
+      width: var(--w);
+      height: var(--h);
+      position: relative;
+      overflow: hidden;
+      padding: 46px 52px 34px;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 78% 8%, rgba(255,255,255,0.06), transparent 18%),
+        radial-gradient(circle at 10% 92%, rgba(62,240,192,0.08), transparent 22%),
+        linear-gradient(180deg, #0d1520 0%, #09111a 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255,255,255,0.02);
+      pointer-events: none;
+    }
+
+    .content,
+    .footer-row {
+      position: relative;
+      z-index: 1;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: #9aa6b4;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.06em;
+    }
+
+    .desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.72;
+      letter-spacing: -0.02em;
+    }
+
+    .grid {
+      flex: 1;
+      display: grid;
+      gap: 20px;
+      min-height: 0;
+    }
+
+    .grid.cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .panel {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 24px 24px 22px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid var(--line);
+    }
+
+    .question-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .question-label {
+      display: grid;
+      gap: 10px;
+    }
+
+    .qno {
+      color: #d8e0ea;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .question-title {
+      margin: 0;
+      font-size: 27px;
+      font-weight: 700;
+      line-height: 1.32;
+      letter-spacing: -0.04em;
+    }
+
+    .badge {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .badge.blue {
+      background: rgba(77,163,255,0.14);
+      color: var(--accent-blue);
+      border: 1px solid rgba(77,163,255,0.24);
+    }
+
+    .badge.teal {
+      background: rgba(62,240,192,0.14);
+      color: var(--accent);
+      border: 1px solid rgba(62,240,192,0.24);
+    }
+
+    .badge.purple {
+      background: rgba(141,131,255,0.14);
+      color: #c7c1ff;
+      border: 1px solid rgba(141,131,255,0.24);
+    }
+
+    .option-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.55;
+      letter-spacing: -0.02em;
+    }
+
+    .option-item {
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .check {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      border: 1.5px solid rgba(255,255,255,0.34);
+      margin-top: 8px;
+    }
+
+    .help {
+      margin-top: auto;
+      color: #8fa0b1;
+      font-size: 15px;
+      line-height: 1.55;
+      letter-spacing: -0.02em;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .textarea {
+      min-height: 220px;
+      padding: 22px 24px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px dashed rgba(255,255,255,0.14);
+      color: #dbe4ed;
+      font-size: 22px;
+      line-height: 1.6;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .footer-row {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      color: #9da7b4;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .pager {
+      position: fixed;
+      right: 26px;
+      bottom: 26px;
+      z-index: 20;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.78);
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="slide" data-page="1">
+      <div class="page">
+        <div class="content">
+          <div class="hero">
+            <div>
+              <p class="eyebrow">AI 활용 태도 및 기대 효과</p>
+              <h1 class="title">AI가 생산성, 직무 역량,<br />혁신에 미칠 기대 효과를 묻는 문항</h1>
+            </div>
+            <p class="desc">
+              조직 구성원이 AI를 어떤 태도로 바라보는지, 그리고 실제 업무 생산성 향상이나
+              창의적 문제 해결에 얼마나 기여할 것으로 기대하는지 확인하는 설문 섹션입니다.
+            </p>
+          </div>
+
+          <div class="grid cols-3">
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q1</span>
+                  <h2 class="question-title">AI 도입이 업무 생산성을 높이는 데 도움이 될 것이라고 생각하십니까?</h2>
+                </div>
+                <span class="badge blue">단일 선택</span>
+              </div>
+              <ul class="option-list">
+                <li class="option-item"><span class="check"></span><span>매우 그렇다</span></li>
+                <li class="option-item"><span class="check"></span><span>그렇다</span></li>
+                <li class="option-item"><span class="check"></span><span>보통이다</span></li>
+                <li class="option-item"><span class="check"></span><span>그렇지 않다</span></li>
+                <li class="option-item"><span class="check"></span><span>전혀 그렇지 않다</span></li>
+              </ul>
+            </article>
+
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q2</span>
+                  <h2 class="question-title">AI 활용이 귀하의 직무 역량 향상에 기여할 것이라고 기대하십니까?</h2>
+                </div>
+                <span class="badge blue">단일 선택</span>
+              </div>
+              <ul class="option-list">
+                <li class="option-item"><span class="check"></span><span>매우 그렇다</span></li>
+                <li class="option-item"><span class="check"></span><span>그렇다</span></li>
+                <li class="option-item"><span class="check"></span><span>보통이다</span></li>
+                <li class="option-item"><span class="check"></span><span>그렇지 않다</span></li>
+                <li class="option-item"><span class="check"></span><span>전혀 그렇지 않다</span></li>
+              </ul>
+            </article>
+
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q3</span>
+                  <h2 class="question-title">AI 도입이 창의적 사고와 혁신을 촉진할 것이라고 기대하십니까?</h2>
+                </div>
+                <span class="badge blue">단일 선택</span>
+              </div>
+              <ul class="option-list">
+                <li class="option-item"><span class="check"></span><span>매우 그렇다</span></li>
+                <li class="option-item"><span class="check"></span><span>그렇다</span></li>
+                <li class="option-item"><span class="check"></span><span>보통이다</span></li>
+                <li class="option-item"><span class="check"></span><span>그렇지 않다</span></li>
+                <li class="option-item"><span class="check"></span><span>전혀 그렇지 않다</span></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+
+        <div class="footer-row">
+          <div>AI Attitude Survey</div>
+          <div>AI 활용 태도 및 기대 효과</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="2">
+      <div class="page">
+        <div class="content">
+          <div class="hero">
+            <div>
+              <p class="eyebrow">4. AI 도입 업무 및 지원 필요 사항</p>
+              <h1 class="title">AI 도입 시 실제로 도움이 될 업무와<br />필요한 지원 조건을 함께 수집합니다</h1>
+            </div>
+            <p class="desc">
+              단순한 인식 조사에 그치지 않고, 현업이 어떤 영역에서 AI의 도움을 기대하는지,
+              그리고 조직 차원에서 어떤 지원이 있어야 실제 도입이 가능할지 확인하는 문항입니다.
+            </p>
+          </div>
+
+          <div class="grid cols-2">
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q4-1</span>
+                  <h2 class="question-title">귀하의 업무에서 AI가 도입된다면 어떤 부분에서 가장 도움이 될 것 같습니까?</h2>
+                </div>
+                <span class="badge teal">복수 선택</span>
+              </div>
+              <ul class="option-list">
+                <li class="option-item"><span class="check"></span><span>반복적인 단순 작업 자동화</span></li>
+                <li class="option-item"><span class="check"></span><span>데이터 분석 및 의사결정 지원</span></li>
+                <li class="option-item"><span class="check"></span><span>대고객 응대 및 서비스 개선</span></li>
+                <li class="option-item"><span class="check"></span><span>내부 직원 응대 및 내부 서비스 개선</span></li>
+                <li class="option-item"><span class="check"></span><span>창의적 아이디어 생성</span></li>
+                <li class="option-item"><span class="check"></span><span>개인 업무 생산성 향상</span></li>
+                <li class="option-item"><span class="check"></span><span>업무 스트레스 감소 및 워라밸 개선</span></li>
+                <li class="option-item"><span class="check"></span><span>직무 역량 강화 및 기술 습득</span></li>
+                <li class="option-item"><span class="check"></span><span>팀 간 협업 효율성 증대</span></li>
+                <li class="option-item"><span class="check"></span><span>기타: ____________</span></li>
+              </ul>
+            </article>
+
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q4-2</span>
+                  <h2 class="question-title">회사에서 AI를 도입한다면 어떤 지원이 필요하다고 생각하십니까?</h2>
+                </div>
+                <span class="badge teal">복수 선택</span>
+              </div>
+              <ul class="option-list">
+                <li class="option-item"><span class="check"></span><span>AI 사용법 교육 및 훈련</span></li>
+                <li class="option-item"><span class="check"></span><span>AI 도구 사용을 위한 장비/소프트웨어 지원</span></li>
+                <li class="option-item"><span class="check"></span><span>AI 전문가와의 협업 기회</span></li>
+                <li class="option-item"><span class="check"></span><span>명확한 AI 활용 가이드라인 제공</span></li>
+                <li class="option-item"><span class="check"></span><span>기타: ____________</span></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+
+        <div class="footer-row">
+          <div>AI Attitude Survey</div>
+          <div>지원 필요 사항</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="3">
+      <div class="page">
+        <div class="content">
+          <div class="hero">
+            <div>
+              <p class="eyebrow">5. AI 도입의 장애 요인 / 6. 향후 방향성 제안</p>
+              <h1 class="title">도입 시 우려되는 장애 요인과<br />향후 개선 아이디어를 자유롭게 수집합니다</h1>
+            </div>
+            <p class="desc">
+              보안, 신뢰성, 조직 문화, 비용 부담 등 도입 장벽을 확인하고,
+              마지막 문항에서는 실제 현업 관점에서 개선이 필요한 업무 영역을 자유롭게 제안받는 구성입니다.
+            </p>
+          </div>
+
+          <div class="grid cols-2">
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q5</span>
+                  <h2 class="question-title">AI 도입 시 가장 우려되는 점은 무엇입니까?</h2>
+                </div>
+                <span class="badge teal">복수 선택</span>
+              </div>
+              <ul class="option-list">
+                <li class="option-item"><span class="check"></span><span>데이터 보안 및 개인정보 보호</span></li>
+                <li class="option-item"><span class="check"></span><span>AI 결과의 신뢰성 부족</span></li>
+                <li class="option-item"><span class="check"></span><span>AI 관련 교육/지원 부족</span></li>
+                <li class="option-item"><span class="check"></span><span>조직 내 AI 도입 문화 미비</span></li>
+                <li class="option-item"><span class="check"></span><span>AI 도입에 따른 비용 증가 부담</span></li>
+                <li class="option-item"><span class="check"></span><span>회사 업무에 적합한 AI 기술의 한계</span></li>
+                <li class="option-item"><span class="check"></span><span>일자리 감소 우려</span></li>
+                <li class="option-item"><span class="check"></span><span>기타: ____________</span></li>
+              </ul>
+            </article>
+
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q6</span>
+                  <h2 class="question-title">회사에서 AI를 활용해 개선했으면 하는 업무 영역이 있다면 자유롭게 작성해 주세요.</h2>
+                </div>
+                <span class="badge purple">서술형</span>
+              </div>
+              <div class="textarea">답변: ____________________________</div>
+              <p class="help">현업에서 실제로 불편하거나 반복되는 업무, 자동화가 필요하다고 느끼는 프로세스를 자유롭게 작성하도록 유도하는 마지막 문항입니다.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="footer-row">
+          <div>AI Attitude Survey</div>
+          <div>장애 요인 및 향후 방향성 제안</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="pager" id="pager">01 / 03</div>
+
+  <script>
+    const sections = document.querySelectorAll(".slide");
+    const pager = document.getElementById("pager");
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        pager.textContent = `${String(entry.target.dataset.page).padStart(2, "0")} / 03`;
+      });
+    }, { threshold: 0.58 });
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>

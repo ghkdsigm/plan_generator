@@ -76,31 +76,12 @@ function toSolidPaint(color, opacity = 1) {
 }
 
 function base64ToBytes(base64) {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-  const sanitized = String(base64 || "").replace(/[^A-Za-z0-9+/=]/g, "");
-  if (!sanitized) return new Uint8Array(0);
-
-  let buffer = 0;
-  let bitsCollected = 0;
-  const output = [];
-
-  for (let index = 0; index < sanitized.length; index += 1) {
-    const char = sanitized[index];
-    if (char === "=") break;
-
-    const value = chars.indexOf(char);
-    if (value < 0) continue;
-
-    buffer = (buffer << 6) | value;
-    bitsCollected += 6;
-
-    if (bitsCollected >= 8) {
-      bitsCollected -= 8;
-      output.push((buffer >> bitsCollected) & 255);
-    }
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) {
+    bytes[i] = binary.charCodeAt(i);
   }
-
-  return new Uint8Array(output);
+  return bytes;
 }
 
 function createImageFill(base64) {
@@ -113,7 +94,7 @@ function createImageFill(base64) {
 }
 
 function hasVisiblePaint(shapeItem) {
-  return Boolean(shapeItem && (shapeItem.fill || shapeItem.stroke || shapeItem.imageBase64));
+  return Boolean(shapeItem && (shapeItem.fill || shapeItem.stroke));
 }
 
 function isMeaningfulText(text) {
@@ -206,9 +187,7 @@ function createShapeLayer(frame, shapeItem, index) {
   shapeNode.bottomLeftRadius = Math.max(0, borderRadius.bottomLeft || 0);
 
   const fills = [];
-  if (shapeItem.imageBase64) {
-    fills.push(createImageFill(shapeItem.imageBase64));
-  } else if (shapeItem.fill) {
+  if (shapeItem.fill) {
     const fill = toSolidPaint(shapeItem.fill, shapeItem.fill.a);
     if (fill) fills.push(fill);
   }
@@ -278,13 +257,7 @@ async function importSlides(payload) {
 
     const shapeItems = Array.isArray(slide.shapes) ? slide.shapes : [];
     for (let shapeIndex = 0; shapeIndex < shapeItems.length; shapeIndex += 1) {
-      try {
-        createShapeLayer(frame, shapeItems[shapeIndex], shapeIndex);
-      } catch (error) {
-        throw new Error(
-          `shape ${shapeIndex + 1} on slide ${index + 1}: ${error instanceof Error ? error.message : String(error)}`
-        );
-      }
+      createShapeLayer(frame, shapeItems[shapeIndex], shapeIndex);
     }
 
     const textItems = Array.isArray(slide.texts) ? slide.texts : [];

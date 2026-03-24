@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Research Insight</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --viewport-bg: #121212;
+      --page: #0f1621;
+      --panel: #2a313d;
+      --panel-soft: #232c38;
+      --panel-line: rgba(255, 255, 255, 0.08);
+      --text: #f2f5f8;
+      --muted: #b0b8c4;
+      --accent: #3ef0c0;
+      --accent-2: #4da3ff;
+      --accent-3: #86f2d2;
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
+      --w: 1920px;
+      --h: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 1540px;
+      background: var(--viewport-bg);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    .slide {
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+    }
+
+    .page {
+      width: var(--w);
+      height: var(--h);
+      position: relative;
+      overflow: hidden;
+      padding: 42px 46px 32px;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 50% 100%, rgba(255,255,255,0.03), transparent 34%),
+        linear-gradient(180deg, #0d1520 0%, #09111a 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255,255,255,0.02);
+      pointer-events: none;
+    }
+
+    .content,
+    .footer-row {
+      position: relative;
+      z-index: 1;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .top-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .column {
+      display: grid;
+      gap: 18px;
+    }
+
+    .tag {
+      width: fit-content;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #062721;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .headline {
+      display: grid;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .headline h1 {
+      margin: 0;
+      font-size: 46px;
+      font-weight: 700;
+      line-height: 1.28;
+      letter-spacing: -0.05em;
+    }
+
+    .headline .accent-line {
+      color: #56f7c8;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid var(--panel-line);
+      border-radius: 22px;
+      padding: 20px 22px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .panel-title {
+      margin: 0 0 14px;
+      color: #dbe3ee;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .survey-card {
+      display: grid;
+      gap: 18px;
+    }
+
+    .survey-card .survey-meta {
+      display: grid;
+      gap: 8px;
+    }
+
+    .survey-card .survey-meta strong {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .survey-card .survey-meta span {
+      color: #d7dfe9;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+    }
+
+    .survey-body {
+      display: grid;
+      grid-template-columns: 138px 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .donut {
+      --value: 46.9;
+      --primary: var(--accent);
+      --secondary: rgba(255,255,255,0.12);
+      width: 122px;
+      height: 122px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at center, #202833 0 53%, transparent 54%),
+        conic-gradient(var(--primary) 0 calc(var(--value) * 1%), var(--secondary) 0 100%);
+      box-shadow: inset 0 0 0 10px rgba(255,255,255,0.02);
+    }
+
+    .donut.blue {
+      --primary: #41b6ff;
+      --value: 42.1;
+    }
+
+    .donut span {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.06em;
+      color: var(--text);
+    }
+
+    .legend {
+      display: grid;
+      gap: 12px;
+    }
+
+    .legend-item {
+      display: grid;
+      grid-template-columns: 18px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      color: #dfe5ec;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    .legend-item em {
+      font-style: normal;
+      color: #eef2f6;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(62, 240, 192, 0.4);
+      justify-self: center;
+    }
+
+    .dot.c2 { background: #66d7ff; box-shadow: 0 0 10px rgba(102, 215, 255, 0.35); }
+    .dot.c3 { background: #4da3ff; box-shadow: 0 0 10px rgba(77, 163, 255, 0.35); }
+    .dot.c4 { background: #718199; box-shadow: 0 0 10px rgba(113, 129, 153, 0.25); }
+
+    .interview-card {
+      min-height: 128px;
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .interview-card p {
+      margin: 0;
+      color: #f0f4f7;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.65;
+      letter-spacing: -0.03em;
+    }
+
+    .result-zone {
+      margin-top: 26px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .result-top {
+      display: grid;
+      grid-template-columns: 1.15fr 0.925fr 0.925fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .result-hero {
+      padding: 8px 6px 0 4px;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+    }
+
+    .result-hero small,
+    .action-chip {
+      width: fit-content;
+      padding: 9px 14px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #072820;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .result-hero h2 {
+      margin: 0;
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.42;
+      letter-spacing: -0.05em;
+      color: #f5f7fb;
+    }
+
+    .metric-card {
+      min-height: 280px;
+      display: grid;
+      gap: 16px;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .metric-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .metric-top strong {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.3;
+    }
+
+    .metric-big {
+      text-align: right;
+      color: var(--accent);
+      font-size: 62px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.07em;
+    }
+
+    .metric-badge {
+      width: fit-content;
+      justify-self: end;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      color: #bfc7d2;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .bar-legend {
+      display: grid;
+      gap: 8px;
+      color: #b7c0cb;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .bar-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bar-legend i {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      display: inline-block;
+      background: #677089;
+    }
+
+    .bar-legend i.after {
+      background: linear-gradient(180deg, #58f6c5 0%, #4ed792 100%);
+    }
+
+    .bars {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      height: 132px;
+      padding-top: 8px;
+    }
+
+    .bar-group {
+      flex: 1;
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+    }
+
+    .bar-stack {
+      width: 100%;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      gap: 8px;
+      min-height: 116px;
+    }
+
+    .bar {
+      width: 28px;
+      border-radius: 10px 10px 4px 4px;
+      background: linear-gradient(180deg, rgba(111,124,151,0.9), rgba(111,124,151,0.3));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .bar.after {
+      background: linear-gradient(180deg, #5bf6c7 0%, #49d88f 100%);
+    }
+
+    .bar-label {
+      color: #93a1b3;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .action-panel {
+      padding: 20px 24px 22px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.06);
+      display: grid;
+      gap: 18px;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 28px;
+    }
+
+    .action-item {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .action-item h3 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.32;
+      letter-spacing: -0.04em;
+      color: #f5f7fb;
+    }
+
+    .action-item p {
+      margin: 0;
+      color: #b4bdc9;
+      font-size: 18px;
+      line-height: 1.68;
+      letter-spacing: -0.02em;
+    }
+
+    .footer-row {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      color: #9da7b4;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+  </style>
+</head>
+<body>
+  <section class="slide">
+    <div class="page">
+      <div class="content">
+        <div class="top-grid">
+          <section class="column">
+            <div class="tag">도입장벽</div>
+            <div class="headline">
+              <h1>AI를 써보긴 하지만</h1>
+              <h1 class="accent-line">결과를 신뢰하기 어려워 최종 반영을 망설입니다</h1>
+            </div>
+
+            <div class="panel survey-card">
+              <p class="panel-title">Survey</p>
+              <div class="survey-meta">
+                <strong>Q1. AI 결과를 바로 반영하지 못하는 이유는?</strong>
+              </div>
+              <div class="survey-body">
+                <div class="donut"><span>46.9%</span></div>
+                <div class="legend">
+                  <div class="legend-item"><span class="dot"></span><span>근거/출처 검증이 어렵다</span><em>46.9%</em></div>
+                  <div class="legend-item"><span class="dot c2"></span><span>도메인 맥락 반영이 부족하다</span><em>27.5%</em></div>
+                  <div class="legend-item"><span class="dot c3"></span><span>톤/포맷 수정 비용이 크다</span><em>15.6%</em></div>
+                  <div class="legend-item"><span class="dot c4"></span><span>보안/정책 이슈가 우려된다</span><em>10%</em></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel interview-card">
+              <p class="panel-title">Interview</p>
+              <p>답변은 빠른데 왜 이 결과가 나왔는지 설명이 없어서, 결국 사람이 다시 확인하는 시간이 많이 듭니다.</p>
+            </div>
+          </section>
+
+          <section class="column">
+            <div class="tag">운영지표</div>
+            <div class="headline">
+              <h1>도입은 진행 중이지만</h1>
+              <h1 class="accent-line">성과를 판단할 기준과 운영 룰이 명확하지 않습니다</h1>
+            </div>
+
+            <div class="panel survey-card">
+              <p class="panel-title">Survey</p>
+              <div class="survey-meta">
+                <strong>Q2. AI 기능 성과 측정에서 필요한 기준은?</strong>
+              </div>
+              <div class="survey-body">
+                <div class="donut blue"><span>42.1%</span></div>
+                <div class="legend">
+                  <div class="legend-item"><span class="dot"></span><span>업무 시간 단축</span><em>42.1%</em></div>
+                  <div class="legend-item"><span class="dot c3"></span><span>정확도/오류율 개선</span><em>34.4%</em></div>
+                  <div class="legend-item"><span class="dot c2"></span><span>사용률/재사용률</span><em>15.2%</em></div>
+                  <div class="legend-item"><span class="dot c4"></span><span>CS/운영 이슈 감소</span><em>8.3%</em></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel interview-card">
+              <p class="panel-title">Interview</p>
+              <p>팀마다 성공 기준이 달라서, 기능 개선 우선순위를 정할 때 계속 논쟁이 생깁니다.</p>
+            </div>
+          </section>
+        </div>
+
+        <div class="result-zone">
+          <div class="result-top">
+            <div class="result-hero">
+              <small>개선 결과</small>
+              <h2>설명 가능성, 팀 맥락 반영,<br />추적 가능성 요구가 동시에 확인되었고<br />성과 기준 정렬의 필요성도 드러났습니다</h2>
+            </div>
+
+            <div class="panel metric-card">
+              <div class="metric-top">
+                <strong>최종 반영을 망설이게 만드는<br />가장 큰 원인</strong>
+                <div class="metric-big">46.9%</div>
+              </div>
+              <div class="metric-badge">근거/출처 검증 부족</div>
+              <div>
+                <div class="bar-legend">
+                  <span><i></i>기존 응답군</span>
+                  <span><i class="after"></i>핵심 우선 검토 영역</span>
+                </div>
+                <div class="bars">
+                  <div class="bar-group"><div class="bar-stack"><div class="bar" style="height:72px;"></div></div><div class="bar-label">신뢰</div></div>
+                  <div class="bar-group"><div class="bar-stack"><div class="bar" style="height:68px;"></div></div><div class="bar-label">맥락</div></div>
+                  <div class="bar-group"><div class="bar-stack"><div class="bar" style="height:80px;"></div></div><div class="bar-label">수정비용</div></div>
+                  <div class="bar-group"><div class="bar-stack"><div class="bar after" style="height:108px;"></div></div><div class="bar-label">출처검증</div></div>
+                  <div class="bar-group"><div class="bar-stack"><div class="bar after" style="height:116px;"></div></div><div class="bar-label">설명성</div></div>
+                  <div class="bar-group"><div class="bar-stack"><div class="bar after" style="height:112px;"></div></div><div class="bar-label">추적성</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel metric-card">
+              <div class="metric-top">
+                <strong>성과 측정에서 가장 필요한<br />기준</strong>
+                <div class="metric-big">42.1%</div>
+              </div>
+              <div class="metric-badge">업무 시간 단축</div>
+              <div>
+                <div class="bar-legend">
+                  <span><i></i>현재 논의 상태</span>
+                  <span><i class="after"></i>우선 정렬 필요 영역</span>
+                </div>
+                <div class="bars">
+                  <div class="bar-group"><div class="bar-stack"><div class="bar" style="height:104px;"></div></div><div class="bar-label">1Q</div></div>
+                  <div class="bar-group"><div class="bar-stack"><div class="bar" style="height:108px;"></div></div><div class="bar-label">2Q</div></div>
+                  <div class="bar-group"><div class="bar-stack"><div class="bar" style="height:106px;"></div></div><div class="bar-label">3Q</div></div>
+                  <div class="bar-group"><div class="bar-stack"><div class="bar after" style="height:60px;"></div></div><div class="bar-label">시간</div></div>
+                  <div class="bar-group"><div class="bar-stack"><div class="bar after" style="height:48px;"></div></div><div class="bar-label">정확도</div></div>
+                  <div class="bar-group"><div class="bar-stack"><div class="bar after" style="height:38px;"></div></div><div class="bar-label">재사용</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-panel">
+            <div class="action-chip">후속 작업 계획</div>
+            <div class="action-grid">
+              <div class="action-item">
+                <h3>결과 설명 & 출처 근거 강화</h3>
+                <p>답변은 빠르지만 왜 이런 결과가 나왔는지 설명이 없다는 의견을 반영해, 출처 링크와 신뢰도 점수, 생성 근거를 함께 제시하는 구조가 필요합니다.</p>
+              </div>
+              <div class="action-item">
+                <h3>팀 용어/포맷 맞춤형 출력</h3>
+                <p>우리 팀 용어와 포맷을 반영하지 않으면 재작업 비용이 크다는 피드백을 바탕으로, 직무별 템플릿과 표현 규칙을 반영한 결과 생성이 필요합니다.</p>
+              </div>
+              <div class="action-item">
+                <h3>추적 가능성 & 성공 기준 정렬</h3>
+                <p>보안 정책상 어떤 데이터가 쓰였는지 추적 가능해야 하고, 팀마다 성공 기준이 달라 지속적인 논쟁이 발생한다는 점을 고려해 KPI와 로그 기준을 먼저 합의해야 합니다.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-row">
+        <div>FIELD RESEARCH</div>
+        <div>AI Survey & Interview Insight</div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

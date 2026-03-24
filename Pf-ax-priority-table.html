@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AX Priority Table</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --viewport-bg: #121212;
+      --page: #0f1621;
+      --panel: #2a313d;
+      --panel-soft: #232c38;
+      --line: rgba(255, 255, 255, 0.08);
+      --text: #f2f5f8;
+      --muted: #b0b8c4;
+      --accent: #3ef0c0;
+      --core: #3ef0c0;
+      --bridge: #55a8ff;
+      --dx: #8d83ff;
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
+      --w: 1920px;
+      --h: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 1540px;
+      background: var(--viewport-bg);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    .slide {
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+    }
+
+    .page {
+      width: var(--w);
+      height: var(--h);
+      position: relative;
+      overflow: hidden;
+      padding: 46px 52px 34px;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 78% 8%, rgba(255,255,255,0.06), transparent 18%),
+        radial-gradient(circle at 10% 92%, rgba(62,240,192,0.08), transparent 20%),
+        linear-gradient(180deg, #0d1520 0%, #09111a 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255,255,255,0.02);
+      pointer-events: none;
+    }
+
+    .content,
+    .footer-row {
+      position: relative;
+      z-index: 1;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 26px;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: #9aa6b4;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 54px;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.06em;
+    }
+
+    .desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.72;
+      letter-spacing: -0.02em;
+    }
+
+    .table-wrap {
+      flex: 1;
+      min-height: 0;
+      padding: 14px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      overflow: hidden;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    thead th {
+      padding: 18px 16px;
+      background: rgba(255,255,255,0.06);
+      color: #e5ebf2;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    tbody td {
+      padding: 17px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.45;
+      letter-spacing: -0.02em;
+      vertical-align: middle;
+    }
+
+    tbody tr:hover {
+      background: rgba(255,255,255,0.025);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .col-code { width: 12%; }
+    .col-name { width: 34%; }
+    .col-type { width: 14%; }
+    .col-score { width: 10%; text-align: center; }
+    .col-resource { width: 20%; }
+
+    thead .col-score,
+    tbody .col-score {
+      text-align: center;
+    }
+
+    .code {
+      color: #eff4f9;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .task-name {
+      color: #f2f5f8;
+      font-weight: 500;
+    }
+
+    .type-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 94px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.01em;
+      border: 1px solid transparent;
+    }
+
+    .type-badge.core {
+      color: var(--core);
+      background: rgba(62,240,192,0.12);
+      border-color: rgba(62,240,192,0.22);
+    }
+
+    .type-badge.bridge {
+      color: var(--bridge);
+      background: rgba(85,168,255,0.12);
+      border-color: rgba(85,168,255,0.22);
+    }
+
+    .type-badge.dx {
+      color: #c3bbff;
+      background: rgba(141,131,255,0.12);
+      border-color: rgba(141,131,255,0.22);
+    }
+
+    .score-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #f2f5f8;
+      font-weight: 700;
+      font-size: 17px;
+    }
+
+    .resource {
+      color: #d7e0ea;
+      font-weight: 500;
+    }
+
+    .legend {
+      margin-top: 16px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      color: #b8c2ce;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .legend i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .legend .core i { background: var(--core); }
+    .legend .bridge i { background: var(--bridge); }
+    .legend .dx i { background: var(--dx); }
+
+    .footer-row {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      color: #9da7b4;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+  </style>
+</head>
+<body>
+  <section class="slide">
+    <div class="page">
+      <div class="content">
+        <div class="hero">
+          <div>
+            <p class="eyebrow">AX TASK PRIORITIZATION</p>
+            <h1 class="title">과제 코드 기준 AX 우선순위 테이블</h1>
+          </div>
+          <p class="desc">
+            과제명, AX 분류, Value, Feasibility, 리소스 부담을 한 화면에서 비교할 수 있도록
+            정리한 테이블입니다. 기존 포트폴리오의 다크 톤과 패널 스타일을 유지하면서
+            분류별 배지와 점수 셀을 강조해 빠르게 우선순위를 읽을 수 있게 구성했습니다.
+          </p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="col-code">과제 코드</th>
+                <th class="col-name">과제명</th>
+                <th class="col-type">AX 분류</th>
+                <th class="col-score">Value</th>
+                <th class="col-score">Feasibility</th>
+                <th class="col-resource">리소스 부담</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="code">AX-04</td>
+                <td class="task-name">예지보전 &amp; 이상징후 알람 시스템</td>
+                <td><span class="type-badge core">Core AX</span></td>
+                <td class="col-score"><span class="score-pill">5</span></td>
+                <td class="col-score"><span class="score-pill">5</span></td>
+                <td class="resource">낮음(5천만)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-12</td>
+                <td class="task-name">에너지 효율 분석 &amp; 최적화</td>
+                <td><span class="type-badge bridge">Bridge AX</span></td>
+                <td class="col-score"><span class="score-pill">4</span></td>
+                <td class="col-score"><span class="score-pill">4</span></td>
+                <td class="resource">낮음(6천만)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-13</td>
+                <td class="task-name">SAP 데이터 수집 자동화</td>
+                <td><span class="type-badge dx">DX</span></td>
+                <td class="col-score"><span class="score-pill">2</span></td>
+                <td class="col-score"><span class="score-pill">5</span></td>
+                <td class="resource">낮음(4천만)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-02</td>
+                <td class="task-name">원가 실시간 모니터링</td>
+                <td><span class="type-badge core">Core AX</span></td>
+                <td class="col-score"><span class="score-pill">5</span></td>
+                <td class="col-score"><span class="score-pill">4</span></td>
+                <td class="resource">중간(8천만)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-03</td>
+                <td class="task-name">마루 스케줄링 자동화</td>
+                <td><span class="type-badge core">Core AX</span></td>
+                <td class="col-score"><span class="score-pill">4</span></td>
+                <td class="col-score"><span class="score-pill">4</span></td>
+                <td class="resource">중간(1억)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-05</td>
+                <td class="task-name">품질 리스크 조기 경보</td>
+                <td><span class="type-badge core">Core AX</span></td>
+                <td class="col-score"><span class="score-pill">4</span></td>
+                <td class="col-score"><span class="score-pill">4</span></td>
+                <td class="resource">중간(8천만)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-07</td>
+                <td class="task-name">설비 투자 대시보드</td>
+                <td><span class="type-badge core">Core AX</span></td>
+                <td class="col-score"><span class="score-pill">4</span></td>
+                <td class="col-score"><span class="score-pill">4</span></td>
+                <td class="resource">중간(1.2억)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-06</td>
+                <td class="task-name">원재료 구성 최적화</td>
+                <td><span class="type-badge core">Core AX</span></td>
+                <td class="col-score"><span class="score-pill">5</span></td>
+                <td class="col-score"><span class="score-pill">3</span></td>
+                <td class="resource">중간(8천만)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-08</td>
+                <td class="task-name">품질 데이터 거버넌스</td>
+                <td><span class="type-badge bridge">Bridge AX</span></td>
+                <td class="col-score"><span class="score-pill">2</span></td>
+                <td class="col-score"><span class="score-pill">4</span></td>
+                <td class="resource">낮음(4천만)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-10</td>
+                <td class="task-name">Production Master 자동화</td>
+                <td><span class="type-badge bridge">Bridge AX</span></td>
+                <td class="col-score"><span class="score-pill">2</span></td>
+                <td class="col-score"><span class="score-pill">3</span></td>
+                <td class="resource">낮음(6천만)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-15</td>
+                <td class="task-name">레드 시그널 템플릿 자동화</td>
+                <td><span class="type-badge dx">DX</span></td>
+                <td class="col-score"><span class="score-pill">2</span></td>
+                <td class="col-score"><span class="score-pill">3</span></td>
+                <td class="resource">낮음(6천만)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-09</td>
+                <td class="task-name">설비 보전 지식 자산화</td>
+                <td><span class="type-badge bridge">Bridge AX</span></td>
+                <td class="col-score"><span class="score-pill">3</span></td>
+                <td class="col-score"><span class="score-pill">3</span></td>
+                <td class="resource">중간(1.2억)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-01</td>
+                <td class="task-name">공정별 AI 레시피 추천</td>
+                <td><span class="type-badge core">Core AX</span></td>
+                <td class="col-score"><span class="score-pill">4</span></td>
+                <td class="col-score"><span class="score-pill">3</span></td>
+                <td class="resource">중간(1억)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-11</td>
+                <td class="task-name">기술 자산 내재화</td>
+                <td><span class="type-badge bridge">Bridge AX</span></td>
+                <td class="col-score"><span class="score-pill">2</span></td>
+                <td class="col-score"><span class="score-pill">3</span></td>
+                <td class="resource">중간(9천만)</td>
+              </tr>
+              <tr>
+                <td class="code">AX-14</td>
+                <td class="task-name">BI 고도화 &amp; 비용 포털</td>
+                <td><span class="type-badge dx">DX</span></td>
+                <td class="col-score"><span class="score-pill">2</span></td>
+                <td class="col-score"><span class="score-pill">3</span></td>
+                <td class="resource">중간(1억)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="legend">
+            <span class="core"><i></i>Core AX</span>
+            <span class="bridge"><i></i>Bridge AX</span>
+            <span class="dx"><i></i>DX</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-row">
+        <div>AX Task Prioritization</div>
+        <div>Value / Feasibility / Resource Comparison</div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

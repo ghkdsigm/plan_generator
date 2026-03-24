@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Survey Form</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --viewport-bg: #121212;
+      --page: #0f1621;
+      --panel: #2a313d;
+      --panel-soft: #232c38;
+      --line: rgba(255, 255, 255, 0.08);
+      --text: #f2f5f8;
+      --muted: #b0b8c4;
+      --accent: #3ef0c0;
+      --accent-blue: #4da3ff;
+      --accent-purple: #8a7dff;
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
+      --w: 1920px;
+      --h: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 1540px;
+      background: var(--viewport-bg);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    main { scroll-snap-type: y mandatory; }
+
+    .slide {
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      scroll-snap-align: start;
+    }
+
+    .page {
+      width: var(--w);
+      height: var(--h);
+      position: relative;
+      overflow: hidden;
+      padding: 46px 52px 34px;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 75% 8%, rgba(255,255,255,0.06), transparent 18%),
+        radial-gradient(circle at 12% 92%, rgba(77,163,255,0.12), transparent 22%),
+        linear-gradient(180deg, #0d1520 0%, #09111a 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255,255,255,0.02);
+      pointer-events: none;
+    }
+
+    .content,
+    .footer-row {
+      position: relative;
+      z-index: 1;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: #9aa6b4;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.06em;
+    }
+
+    .desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.7;
+      letter-spacing: -0.02em;
+    }
+
+    .grid {
+      flex: 1;
+      display: grid;
+      gap: 20px;
+      min-height: 0;
+    }
+
+    .grid.cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px 24px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-height: 0;
+    }
+
+    .question-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .question-label {
+      display: grid;
+      gap: 10px;
+    }
+
+    .qno {
+      color: #d8e0ea;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .question-title {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.32;
+      letter-spacing: -0.04em;
+    }
+
+    .badge {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .badge.teal {
+      background: rgba(62, 240, 192, 0.14);
+      color: var(--accent);
+      border: 1px solid rgba(62, 240, 192, 0.24);
+    }
+
+    .badge.blue {
+      background: rgba(77, 163, 255, 0.14);
+      color: var(--accent-blue);
+      border: 1px solid rgba(77, 163, 255, 0.24);
+    }
+
+    .badge.purple {
+      background: rgba(138, 125, 255, 0.14);
+      color: #c0b7ff;
+      border: 1px solid rgba(138, 125, 255, 0.24);
+    }
+
+    .option-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.55;
+      letter-spacing: -0.02em;
+    }
+
+    .option-item {
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .check {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      border: 1.5px solid rgba(255,255,255,0.34);
+      margin-top: 8px;
+    }
+
+    .help {
+      margin-top: auto;
+      color: #90a0b2;
+      font-size: 15px;
+      line-height: 1.55;
+      letter-spacing: -0.02em;
+    }
+
+    .matrix-panel {
+      grid-column: 1 / -1;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 16px 14px;
+      text-align: center;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    th:first-child,
+    td:first-child {
+      text-align: left;
+      width: 38%;
+      color: #e8edf4;
+    }
+
+    th {
+      color: #d5dde7;
+      font-weight: 700;
+      background: rgba(255,255,255,0.04);
+    }
+
+    td {
+      color: var(--muted);
+    }
+
+    .radio {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.32);
+      display: inline-block;
+    }
+
+    .footer-row {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      color: #9da7b4;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .pager {
+      position: fixed;
+      right: 26px;
+      bottom: 26px;
+      z-index: 20;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.78);
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="slide" data-page="1">
+      <div class="page">
+        <div class="content">
+          <div class="hero">
+            <div>
+              <p class="eyebrow">PART 1. 기본 정보 (3문항)</p>
+              <h1 class="title">응답자 기본 속성을 먼저 정리해<br />사업군, 역할, 직책별 차이를 확인합니다</h1>
+            </div>
+            <p class="desc">
+              사업군과 역할, 직책 구분에 따라 AI 도입 인식과 활용 패턴이 달라질 수 있기 때문에
+              설문 초반부에서 응답자의 조직 맥락을 명확히 수집하는 구성입니다.
+            </p>
+          </div>
+
+          <div class="grid cols-3">
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q1</span>
+                  <h2 class="question-title">귀하의 사업군을 선택해 주세요.</h2>
+                </div>
+                <span class="badge teal">단일 선택</span>
+              </div>
+              <ul class="option-list">
+                <li class="option-item"><span class="check"></span><span>소재</span></li>
+                <li class="option-item"><span class="check"></span><span>화학</span></li>
+                <li class="option-item"><span class="check"></span><span>자동차</span></li>
+                <li class="option-item"><span class="check"></span><span>미디어</span></li>
+                <li class="option-item"><span class="check"></span><span>기타(그룹 공통 지원부서)</span></li>
+              </ul>
+            </article>
+
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q2</span>
+                  <h2 class="question-title">귀하의 주요 업무 역할을 선택해 주세요.</h2>
+                </div>
+                <span class="badge teal">단일 선택</span>
+              </div>
+              <ul class="option-list" style="font-size:18px;">
+                <li class="option-item"><span class="check"></span><span>생산/품질/설비/안전</span></li>
+                <li class="option-item"><span class="check"></span><span>영업/마케팅/고객서비스</span></li>
+                <li class="option-item"><span class="check"></span><span>원재료/구매/물류</span></li>
+                <li class="option-item"><span class="check"></span><span>미디어/콘텐츠 제작</span></li>
+                <li class="option-item"><span class="check"></span><span>경영/기획/전략수립</span></li>
+                <li class="option-item"><span class="check"></span><span>재무/세무/회계</span></li>
+                <li class="option-item"><span class="check"></span><span>인사/법무/총무</span></li>
+                <li class="option-item"><span class="check"></span><span>IT/데이터분석</span></li>
+                <li class="option-item"><span class="check"></span><span>연구개발(R&amp;D)</span></li>
+                <li class="option-item"><span class="check"></span><span>단지운영/성능점검</span></li>
+                <li class="option-item"><span class="check"></span><span>기타: ____________</span></li>
+              </ul>
+            </article>
+
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q3</span>
+                  <h2 class="question-title">귀하의 직책 구분을 선택해 주세요.</h2>
+                </div>
+                <span class="badge teal">단일 선택</span>
+              </div>
+              <ul class="option-list">
+                <li class="option-item"><span class="check"></span><span>팀원(일반직원)</span></li>
+                <li class="option-item"><span class="check"></span><span>중간관리자(팀장, 부문장 등)</span></li>
+                <li class="option-item"><span class="check"></span><span>상위관리자(본부장, 실장, 임원)</span></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+
+        <div class="footer-row">
+          <div>AI Survey Form</div>
+          <div>PART 1. 기본 정보</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-page="2">
+      <div class="page">
+        <div class="content">
+          <div class="hero">
+            <div>
+              <p class="eyebrow">PART 2. AI 사용 경험 및 인식 변화 (5문항)</p>
+              <h1 class="title">AI 사용 여부, 자가 역량,<br />기대 효과와 인식 변화를 함께 수집합니다</h1>
+            </div>
+            <p class="desc">
+              3월 조사와 비교 가능한 문항은 그대로 유지하고,
+              실제 현업 체감 변화와 기대 수준을 함께 확인할 수 있도록 확장한 구성입니다.
+            </p>
+          </div>
+
+          <div class="grid cols-2">
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q4</span>
+                  <h2 class="question-title">귀하는 현재 업무에서 AI 도구를 활용하고 있습니까?</h2>
+                </div>
+                <span class="badge blue">3월과 동일</span>
+              </div>
+              <ul class="option-list">
+                <li class="option-item"><span class="check"></span><span>예, 활용하고 있습니다.</span></li>
+                <li class="option-item"><span class="check"></span><span>아니요, 활용하고 있지 않습니다.</span></li>
+              </ul>
+              <p class="help">참고: 2025년 3월 '활용 경험' 64%</p>
+            </article>
+
+            <article class="panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q5</span>
+                  <h2 class="question-title">귀하의 현재 AI 활용 역량은 어느 정도 수준이라고 생각하십니까?</h2>
+                </div>
+                <span class="badge blue">3월과 동일</span>
+              </div>
+              <ul class="option-list" style="font-size:18px;">
+                <li class="option-item"><span class="check"></span><span>매우 익숙하다 – AI를 적극 활용하고 결과를 해석할 수 있다. (5점)</span></li>
+                <li class="option-item"><span class="check"></span><span>익숙하다 – AI를 이해하고 업무에 적용할 수 있다. (4점)</span></li>
+                <li class="option-item"><span class="check"></span><span>보통이다 – AI를 사용할 수 있지만 활용에 한계가 있다. (3점)</span></li>
+                <li class="option-item"><span class="check"></span><span>익숙하지 않다 – AI 사용 경험이 적어 결과를 이해하거나 활용하기 어렵다. (2점)</span></li>
+                <li class="option-item"><span class="check"></span><span>전혀 익숙하지 않다 – AI 활용 방법을 잘 모른다. (1점)</span></li>
+              </ul>
+              <p class="help">참고: 2025년 3월 '자가 평가' 3.1점</p>
+            </article>
+
+            <article class="panel matrix-panel">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q6</span>
+                  <h2 class="question-title">AI가 귀하의 업무에 어떤 영향을 줄 것으로 기대하십니까?</h2>
+                </div>
+                <span class="badge blue">3월과 동일</span>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>항목</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>업무 생산성 향상</td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                  </tr>
+                  <tr>
+                    <td>직무 역량 강화</td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                  </tr>
+                  <tr>
+                    <td>창의적 사고와 혁신 촉진</td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                    <td><span class="radio"></span></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="help">참고: 3월 업무 생산성 향상 4.03점 / 직무 역량 강화 3.89점 / 창의적 사고와 혁신 촉진 3.68점</p>
+            </article>
+
+            <article class="panel" style="grid-column: 1 / -1;">
+              <div class="question-top">
+                <div class="question-label">
+                  <span class="qno">Q7</span>
+                  <h2 class="question-title">지난 3월과 비교하여 AI에 대한 귀하의 생각이 어떻게 변했습니까?</h2>
+                </div>
+                <span class="badge purple">신규</span>
+              </div>
+              <ul class="option-list">
+                <li class="option-item"><span class="check"></span><span>훨씬 긍정적으로 변했다 – AI의 실질적 효과를 체감함</span></li>
+                <li class="option-item"><span class="check"></span><span>긍정적으로 변했다 – AI 활용 가능성을 더 크게 느낌</span></li>
+                <li class="option-item"><span class="check"></span><span>비슷하다 – 큰 변화 없음</span></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+
+        <div class="footer-row">
+          <div>AI Survey Form</div>
+          <div>PART 2. AI 사용 경험 및 인식 변화</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="pager" id="pager">01 / 02</div>
+
+  <script>
+    const sections = document.querySelectorAll(".slide");
+    const pager = document.getElementById("pager");
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        pager.textContent = `${String(entry.target.dataset.page).padStart(2, "0")} / 02`;
+      });
+    }, { threshold: 0.58 });
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>

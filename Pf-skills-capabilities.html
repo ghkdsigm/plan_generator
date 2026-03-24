@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI/AX Skills & Capabilities</title>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+    :root {
+      --viewport-bg: #121212;
+      --page: #1f1f1f;
+      --panel: #2a2a2d;
+      --panel-soft: #313136;
+      --text: #f2f2f4;
+      --muted: #b3b7c0;
+      --line: rgba(255, 255, 255, 0.08);
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.3);
+      --accent-1: #21d126;
+      --accent-2: #5b7cff;
+      --accent-3: #7c3aed;
+      --w: 1920px;
+      --h: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 1540px;
+      background: var(--viewport-bg);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    .slide {
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+    }
+
+    .page {
+      width: var(--w);
+      height: var(--h);
+      position: relative;
+      overflow: hidden;
+      padding: 60px 80px;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 70% 10%, rgba(255,255,255,0.08), transparent 18%),
+        radial-gradient(circle at 18% 90%, rgba(91,124,255,0.14), transparent 22%),
+        linear-gradient(180deg, #17171a 0%, #121214 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      pointer-events: none;
+    }
+
+    .content,
+    .footer-row {
+      position: relative;
+      z-index: 1;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: #9ea4af;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: end;
+      margin-bottom: 34px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 58px;
+      font-weight: 200;
+      line-height: 1.08;
+      letter-spacing: -0.06em;
+      color: var(--text);
+    }
+
+    .desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 1.72;
+      letter-spacing: -0.02em;
+    }
+
+    .grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      min-height: 0;
+    }
+
+    .card {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 28px 30px;
+      border-radius: 16px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .card-label {
+      display: grid;
+      gap: 8px;
+    }
+
+    .card-label small {
+      color: #a8afb9;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .card-label h2 {
+      margin: 0;
+      font-size: 30px;
+      font-weight: 500;
+      line-height: 1.18;
+      letter-spacing: -0.05em;
+    }
+
+    .score {
+      flex: 0 0 auto;
+      min-width: 102px;
+      padding: 16px 14px 14px;
+      border-radius: 14px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .score span {
+      display: block;
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.06em;
+      color: var(--text);
+    }
+
+    .score strong {
+      display: block;
+      margin-top: 6px;
+      color: #c9d0d9;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+
+    .card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.82;
+      letter-spacing: -0.02em;
+    }
+
+    .accent-line {
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-color), rgba(255,255,255,0.04));
+      opacity: 0.9;
+    }
+
+    .footer-row {
+      margin-top: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .footer-right {
+      font-weight: 300;
+    }
+
+    .card.green { --accent-color: var(--accent-1); }
+    .card.blue { --accent-color: var(--accent-2); }
+    .card.purple { --accent-color: var(--accent-3); }
+  </style>
+</head>
+<body>
+  <section class="slide">
+    <div class="page">
+      <div class="content">
+        <p class="eyebrow">SKILLS & CAPABILITIES</p>
+        <div class="hero">
+          <h1 class="title">기획-분석-실행을 연결하는<br />핵심 역량</h1>
+          <p class="desc">
+            AI 서비스 전략 기획에서 요구되는 문제 정의, 데이터 설계,
+            실행 관리, 커뮤니케이션, 기술 이해, 프로토타이핑 역량을
+            현재 포트폴리오의 다크 톤 카드 스타일에 맞춰 정리한 버전입니다.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card green">
+            <div class="card-top">
+              <div class="card-label">
+                <small>기획 전략</small>
+                <h2>Problem Framing</h2>
+              </div>
+              <div class="score">
+                <span>95%</span>
+                <strong>CAPABILITY</strong>
+              </div>
+            </div>
+            <div class="accent-line"></div>
+            <ul>
+              <li>문제 정의 프레임워크</li>
+              <li>가설 기반 로드맵</li>
+              <li>서비스 정책 설계</li>
+              <li>이해관계자 정렬</li>
+            </ul>
+          </article>
+
+          <article class="card blue">
+            <div class="card-top">
+              <div class="card-label">
+                <small>AI/데이터</small>
+                <h2>AI Feature Planning</h2>
+              </div>
+              <div class="score">
+                <span>92%</span>
+                <strong>CAPABILITY</strong>
+              </div>
+            </div>
+            <div class="accent-line"></div>
+            <ul>
+              <li>LLM 기능 기획</li>
+              <li>Prompt Flow 설계</li>
+              <li>RAG 적용 시나리오</li>
+              <li>지표 및 로그 스키마 설계</li>
+            </ul>
+          </article>
+
+          <article class="card purple">
+            <div class="card-top">
+              <div class="card-label">
+                <small>프로덕트 실행</small>
+                <h2>Delivery Management</h2>
+              </div>
+              <div class="score">
+                <span>93%</span>
+                <strong>CAPABILITY</strong>
+              </div>
+            </div>
+            <div class="accent-line"></div>
+            <ul>
+              <li>PRD/IA/Wireframe</li>
+              <li>실험 설계(A/B Test)</li>
+              <li>백로그 운영</li>
+              <li>QA 및 릴리즈 관리</li>
+            </ul>
+          </article>
+
+          <article class="card blue">
+            <div class="card-top">
+              <div class="card-label">
+                <small>협업/커뮤니케이션</small>
+                <h2>UX Writing & Flow</h2>
+              </div>
+              <div class="score">
+                <span>90%</span>
+                <strong>CAPABILITY</strong>
+              </div>
+            </div>
+            <div class="accent-line"></div>
+            <ul>
+              <li>디자인 싱크</li>
+              <li>개발 요구사항 명세</li>
+              <li>경영진 보고</li>
+              <li>운영팀 매뉴얼 문서화</li>
+            </ul>
+          </article>
+
+          <article class="card purple">
+            <div class="card-top">
+              <div class="card-label">
+                <small>기술 아키텍쳐 이해</small>
+                <h2>Technical Architecture Understanding</h2>
+              </div>
+              <div class="score">
+                <span>91%</span>
+                <strong>CAPABILITY</strong>
+              </div>
+            </div>
+            <div class="accent-line"></div>
+            <ul>
+              <li>시스템 구조 설계 이해</li>
+              <li>API / Backend Flow 설계</li>
+              <li>Cloud & Deployment 구조 이해</li>
+              <li>AI 서비스 인프라 구조 설계</li>
+            </ul>
+          </article>
+
+          <article class="card green">
+            <div class="card-top">
+              <div class="card-label">
+                <small>신속한 프로토타이핑</small>
+                <h2>Rapid Prototyping</h2>
+              </div>
+              <div class="score">
+                <span>94%</span>
+                <strong>CAPABILITY</strong>
+              </div>
+            </div>
+            <div class="accent-line"></div>
+            <ul>
+              <li>Figma -> 실제 서비스 구현</li>
+              <li>AI 기능 PoC 개발</li>
+              <li>Frontend Prototype 제작</li>
+              <li>사용자 테스트용 MVP 구축</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+
+      <div class="footer-row">
+        <div>HWANGSEUNGHYUN | AI/AX SERVICE PLANNER</div>
+        <div class="footer-right">Skills & Capabilities</div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

@@ -531,234 +531,6 @@
         return customProperties.join(" ");
       }
 
-      function clampNumber(value, min, max) {
-        if (Number.isNaN(value)) return min;
-        return Math.min(Math.max(value, min), max);
-      }
-
-      function replaceDonutWithSvg(sourceElement, cloneElement) {
-        if (!sourceElement || !cloneElement) return;
-
-        const rect = sourceElement.getBoundingClientRect();
-        const size = Math.max(1, Math.round(Math.min(rect.width, rect.height)));
-        if (!size) return;
-
-        const style = getComputedStyle(sourceElement);
-        const rawValue = parseFloat(style.getPropertyValue("--value"));
-        const value = clampNumber(rawValue || 0, 0, 100);
-        const primary = style.getPropertyValue("--primary").trim() || style.getPropertyValue("--accent").trim() || "#3ef0c0";
-        const secondary = style.getPropertyValue("--secondary").trim() || "rgba(255,255,255,0.14)";
-        const strokeWidth = Math.max(10, Math.round(size * 0.16));
-        const radius = Math.max(4, (size - strokeWidth) / 2 - 2);
-        const circumference = 2 * Math.PI * radius;
-        const dashLength = (value / 100) * circumference;
-
-        cloneElement.style.background = "transparent";
-        cloneElement.style.boxShadow = "none";
-        cloneElement.style.display = "grid";
-        cloneElement.style.placeItems = "center";
-        cloneElement.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-            <circle
-              cx="${size / 2}"
-              cy="${size / 2}"
-              r="${radius}"
-              fill="none"
-              stroke="${secondary}"
-              stroke-width="${strokeWidth}"
-            />
-            <circle
-              cx="${size / 2}"
-              cy="${size / 2}"
-              r="${radius}"
-              fill="none"
-              stroke="${primary}"
-              stroke-width="${strokeWidth}"
-              stroke-linecap="round"
-              stroke-dasharray="${dashLength} ${circumference}"
-              transform="rotate(-90 ${size / 2} ${size / 2})"
-            />
-          </svg>
-        `;
-      }
-
-      function replaceBarsWithSvg(sourceElement, cloneElement) {
-        if (!sourceElement || !cloneElement) return;
-
-        const containerRect = sourceElement.getBoundingClientRect();
-        const width = Math.max(1, Math.round(containerRect.width));
-        const height = Math.max(1, Math.round(containerRect.height));
-        const barNodes = Array.from(sourceElement.querySelectorAll(".bar"));
-
-        if (!barNodes.length || !width || !height) return;
-
-        const rectMarkup = barNodes
-          .map((barNode) => {
-            const barRect = barNode.getBoundingClientRect();
-            const x = Math.max(0, Math.round(barRect.left - containerRect.left));
-            const y = Math.max(0, Math.round(barRect.top - containerRect.top));
-            const barWidth = Math.max(2, Math.round(barRect.width));
-            const barHeight = Math.max(2, Math.round(barRect.height));
-            const fill = barNode.classList.contains("after") ? "#57efbf" : "#667088";
-            const opacity = barNode.classList.contains("after") ? "1" : "0.95";
-            const radius = Math.max(4, Math.round(Math.min(barWidth, barHeight) * 0.18));
-
-            return `<rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" rx="${radius}" fill="${fill}" opacity="${opacity}" />`;
-          })
-          .join("");
-
-        cloneElement.style.background = "transparent";
-        cloneElement.style.boxShadow = "none";
-        cloneElement.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
-            ${rectMarkup}
-          </svg>
-        `;
-      }
-
-      function getElementBoxWithinPage(element, pageRect) {
-        const rect = element.getBoundingClientRect();
-        if (!rect.width || !rect.height) return null;
-
-        return {
-          x: Math.max(0, rect.left - pageRect.left),
-          y: Math.max(0, rect.top - pageRect.top),
-          width: Math.max(1, Math.round(rect.width)),
-          height: Math.max(1, Math.round(rect.height)),
-          opacity: clampNumber(Number(getComputedStyle(element).opacity) || 1, 0, 1),
-        };
-      }
-
-      function buildDonutSvgMarkup(element, width, height) {
-        const style = getComputedStyle(element);
-        const value = clampNumber(parseFloat(style.getPropertyValue("--value")) || 0, 0, 100);
-        const primary = style.getPropertyValue("--primary").trim() || style.getPropertyValue("--accent").trim() || "#3ef0c0";
-        const secondary = style.getPropertyValue("--secondary").trim() || "rgba(255,255,255,0.14)";
-        const size = Math.max(1, Math.min(width, height));
-        const strokeWidth = Math.max(10, Math.round(size * 0.16));
-        const radius = Math.max(4, (size - strokeWidth) / 2 - 2);
-        const circumference = 2 * Math.PI * radius;
-        const dashLength = (value / 100) * circumference;
-        const cx = width / 2;
-        const cy = height / 2;
-
-        return `
-<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
-  <circle
-    cx="${cx}"
-    cy="${cy}"
-    r="${radius}"
-    fill="none"
-    stroke="${secondary}"
-    stroke-width="${strokeWidth}"
-  />
-  <circle
-    cx="${cx}"
-    cy="${cy}"
-    r="${radius}"
-    fill="none"
-    stroke="${primary}"
-    stroke-width="${strokeWidth}"
-    stroke-linecap="round"
-    stroke-dasharray="${dashLength} ${circumference}"
-    transform="rotate(-90 ${cx} ${cy})"
-  />
-</svg>`;
-      }
-
-      function buildBarStackSvgMarkup(element, width, height) {
-        const containerRect = element.getBoundingClientRect();
-        const barNodes = Array.from(element.querySelectorAll(".bar"));
-        if (!barNodes.length) return "";
-
-        const rectMarkup = barNodes
-          .map((barNode) => {
-            const barRect = barNode.getBoundingClientRect();
-            const x = Math.max(0, Math.round(barRect.left - containerRect.left));
-            const y = Math.max(0, Math.round(barRect.top - containerRect.top));
-            const barWidth = Math.max(2, Math.round(barRect.width));
-            const barHeight = Math.max(2, Math.round(barRect.height));
-            const fill = barNode.classList.contains("after") ? "#57efbf" : "#667088";
-            const opacity = barNode.classList.contains("after") ? "1" : "0.95";
-            const radius = Math.max(4, Math.round(Math.min(barWidth, barHeight) * 0.18));
-
-            return `<rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" rx="${radius}" fill="${fill}" opacity="${opacity}" />`;
-          })
-          .join("");
-
-        return rectMarkup
-          ? `
-<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
-  ${rectMarkup}
-</svg>`
-          : "";
-      }
-
-      async function extractChartShapeItems(page) {
-        const pageRect = page.getBoundingClientRect();
-        const chartItems = [];
-
-        const donuts = Array.from(page.querySelectorAll(".donut"));
-        for (const donut of donuts) {
-          const box = getElementBoxWithinPage(donut, pageRect);
-          if (!box) continue;
-
-          const svg = buildDonutSvgMarkup(donut, box.width, box.height);
-          if (!svg) continue;
-
-          try {
-            chartItems.push({
-              ...box,
-              imageBase64: await svgToPngBase64(svg, box.width, box.height),
-            });
-          } catch (error) {
-            // Ignore chart image failures and keep importing the rest.
-          }
-        }
-
-        const barStacks = Array.from(page.querySelectorAll(".bar-stack"));
-        const barContainers = barStacks.length ? barStacks : Array.from(page.querySelectorAll(".bars"));
-
-        for (const barContainer of barContainers) {
-          const box = getElementBoxWithinPage(barContainer, pageRect);
-          if (!box) continue;
-
-          const svg = buildBarStackSvgMarkup(barContainer, box.width, box.height);
-          if (!svg) continue;
-
-          try {
-            chartItems.push({
-              ...box,
-              imageBase64: await svgToPngBase64(svg, box.width, box.height),
-            });
-          } catch (error) {
-            // Ignore chart image failures and keep importing the rest.
-          }
-        }
-
-        return chartItems;
-      }
-
-      function applyChartFallbacks(sourceRoot, cloneRoot) {
-        if (!sourceRoot || !cloneRoot) return;
-
-        const sourceDonuts = Array.from(sourceRoot.querySelectorAll(".donut"));
-        const cloneDonuts = Array.from(cloneRoot.querySelectorAll(".donut"));
-        const donutCount = Math.min(sourceDonuts.length, cloneDonuts.length);
-
-        for (let index = 0; index < donutCount; index += 1) {
-          replaceDonutWithSvg(sourceDonuts[index], cloneDonuts[index]);
-        }
-
-        const sourceBarStacks = Array.from(sourceRoot.querySelectorAll(".bar-stack, .bars"));
-        const cloneBarStacks = Array.from(cloneRoot.querySelectorAll(".bar-stack, .bars"));
-        const barCount = Math.min(sourceBarStacks.length, cloneBarStacks.length);
-
-        for (let index = 0; index < barCount; index += 1) {
-          replaceBarsWithSvg(sourceBarStacks[index], cloneBarStacks[index]);
-        }
-      }
-
       async function svgToJpegBase64(svgText, width, height) {
         const blob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
         const url = URL.createObjectURL(blob);
@@ -787,38 +559,8 @@
         }
       }
 
-      async function svgToPngBase64(svgText, width, height) {
-        const blob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-
-        try {
-          const image = new Image();
-          image.decoding = "sync";
-          image.src = url;
-
-          await new Promise((resolve, reject) => {
-            image.onload = resolve;
-            image.onerror = reject;
-          });
-
-          const canvas = document.createElement("canvas");
-          canvas.width = width;
-          canvas.height = height;
-          const context = canvas.getContext("2d");
-          context.clearRect(0, 0, width, height);
-          context.drawImage(image, 0, 0, width, height);
-
-          return canvas
-            .toDataURL("image/png")
-            .replace(/^data:image\/png;base64,/, "");
-        } finally {
-          URL.revokeObjectURL(url);
-        }
-      }
-
       async function createBackgroundImageBase64(page, styleText, sizeOverride) {
         const clone = page.cloneNode(true);
-        applyChartFallbacks(page, clone);
         const rootCustomProperties = serializeCustomProperties(page.ownerDocument.documentElement);
         const width =
           Math.round(sizeOverride && sizeOverride.width ? sizeOverride.width : page.getBoundingClientRect().width) || 1920;
@@ -911,7 +653,6 @@
           const page = pages[index];
           const rect = page.getBoundingClientRect();
           const computedStyle = getComputedStyle(page);
-          const chartShapes = await extractChartShapeItems(page);
 
           setStatus(`슬라이드 추출 중 ${index + 1} / ${pages.length}`);
 
@@ -928,7 +669,7 @@
             height: Math.round(rect.height) || 1080,
             backgroundColor: colorStringToRgba(computedStyle.backgroundColor) || { r: 31, g: 31, b: 31, a: 1 },
             backgroundImageBase64,
-            shapes: [...extractShapeItems(page), ...chartShapes],
+            shapes: extractShapeItems(page),
             texts: extractTextItems(page),
           });
         }
@@ -953,7 +694,6 @@
         }
 
         const styleText = collectStyleText(doc);
-        const chartShapes = await extractChartShapeItems(root);
         setStatus("웹페이지 전체를 추출하는 중...");
 
         let backgroundImageBase64 = null;
@@ -972,7 +712,7 @@
               height: Math.round(size.height) || 1024,
               backgroundColor: getDocumentBackgroundColor(doc),
               backgroundImageBase64,
-              shapes: [...extractShapeItems(root), ...chartShapes],
+              shapes: extractShapeItems(root),
               texts: extractTextItems(root),
             },
           ],

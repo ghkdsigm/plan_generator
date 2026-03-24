@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>기존 획득 비용 현황</title>
+  <style>
+    :root {
+      --bg: #272729;
+      --panel: #3a3a3d;
+      --panel-soft: #454548;
+      --panel-strong: #b7bcc7;
+      --text: #f1f1f3;
+      --muted: #c9c9cd;
+      --muted-soft: #9b9ba0;
+      --chip: #404044;
+      --accent-text: #2f2f33;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #161618;
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    .frame {
+      width: min(1200px, calc(100vw - 32px));
+      min-height: 675px;
+      padding: 28px 28px 20px;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .title {
+      margin: 0 0 26px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .copy {
+      padding-top: 26px;
+    }
+
+    .lead {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.5;
+      letter-spacing: -0.03em;
+    }
+
+    .chips {
+      display: grid;
+      gap: 10px;
+      justify-items: start;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 7px 12px;
+      border-radius: 4px;
+      background: var(--chip);
+      color: #d9d9dd;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .chart {
+      position: relative;
+      height: 540px;
+      padding: 8px 6px 0 0;
+    }
+
+    .bars {
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 36px;
+    }
+
+    .bar-group {
+      width: 170px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+    }
+
+    .value {
+      color: #d7d7db;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .bar {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      background: var(--panel);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 14px;
+      transform-origin: bottom;
+      transform: scaleY(0);
+      animation: rise 0.9s ease forwards;
+    }
+
+    .bar::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+
+    .bar-label {
+      position: relative;
+      z-index: 1;
+      color: var(--muted-soft);
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+
+    .bar.emphasis {
+      background: var(--panel-strong);
+    }
+
+    .bar.emphasis .bar-label {
+      color: var(--accent-text);
+      font-weight: 700;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #2f3135;
+      font-size: 48px;
+      line-height: 1;
+      font-weight: 300;
+    }
+
+    .bar-group:nth-child(1) .bar { animation-delay: 0.05s; }
+    .bar-group:nth-child(2) .bar { animation-delay: 0.12s; }
+    .bar-group:nth-child(3) .bar { animation-delay: 0.19s; }
+    .bar-group:nth-child(4) .bar { animation-delay: 0.26s; }
+
+    @keyframes rise {
+      from {
+        transform: scaleY(0);
+      }
+      to {
+        transform: scaleY(1);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .frame {
+        min-height: auto;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .copy {
+        padding-top: 0;
+      }
+
+      .chart {
+        height: auto;
+      }
+
+      .bars {
+        gap: 14px;
+      }
+
+      .bar-group {
+        width: calc((100% - 42px) / 4);
+      }
+
+      .value {
+        font-size: 15px;
+      }
+
+      .bar-label {
+        font-size: 14px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <h1 class="title">기존 획득 비용 현황</h1>
+
+    <section class="layout" aria-label="획득 비용 막대 그래프">
+      <div class="copy">
+        <p class="lead">Recency 7m+ 유지 2,600명을 활성화위해</p>
+        <div class="chips">
+          <div class="chip">인당 획득 비용 1,400원 필요</div>
+          <div class="chip">매월 364만 원씩 마케팅비 소진 중</div>
+          <div class="chip">Recency 7m+ 유지 활성화 비용 지속적으로 상승</div>
+        </div>
+      </div>
+
+      <div class="chart">
+        <div class="bars" id="bars">
+          <div class="bar-group">
+            <div class="value">400원</div>
+            <div class="bar" data-height="170">
+              <div class="bar-label">평균</div>
+            </div>
+          </div>
+
+          <div class="bar-group">
+            <div class="value">300원</div>
+            <div class="bar" data-height="135">
+              <div class="bar-label">Recency 2-3</div>
+            </div>
+          </div>
+
+          <div class="bar-group">
+            <div class="value">560원</div>
+            <div class="bar" data-height="240">
+              <div class="bar-label">Recency 4-6</div>
+            </div>
+          </div>
+
+          <div class="bar-group">
+            <div class="value">1,400 원</div>
+            <div class="bar emphasis" data-height="382">
+              <div class="arrow">↑</div>
+              <div class="bar-label">Recency 7+</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const bars = document.querySelectorAll(".bar");
+
+    bars.forEach((bar) => {
+      const height = Number(bar.dataset.height || 0);
+      bar.style.height = `${height}px`;
+    });
+  </script>
+</body>
+</html>

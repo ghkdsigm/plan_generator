@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projection Table Mockup</title>
+  <style>
+    :root {
+      --bg: #1a1a1b;
+      --panel: #2a2a2c;
+      --panel-2: #303033;
+      --grid: rgba(255, 255, 255, 0.12);
+      --text: #d6d6d8;
+      --muted: #8e8e92;
+      --header: #8f8f93;
+      --active-bg: #d9d9dc;
+      --active-text: #252527;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.04), transparent 22%),
+        linear-gradient(180deg, #181819 0%, #111112 100%);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    .stage {
+      width: min(920px, calc(100vw - 48px));
+      padding: 28px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+    }
+
+    .table-card {
+      overflow: hidden;
+      border: 1px solid var(--grid);
+      border-radius: 10px;
+      background: var(--panel);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    colgroup col:nth-child(1) { width: 25%; }
+    colgroup col:nth-child(2) { width: 25%; }
+    colgroup col:nth-child(3) { width: 25%; }
+    colgroup col:nth-child(4) { width: 25%; }
+
+    thead th {
+      height: 58px;
+      padding: 0 14px;
+      border-right: 1px solid var(--grid);
+      border-bottom: 1px solid var(--grid);
+      background: var(--panel-2);
+      color: var(--header);
+      font-size: 15px;
+      font-weight: 600;
+      text-align: left;
+      letter-spacing: -0.02em;
+    }
+
+    thead th:last-child,
+    tbody td:last-child {
+      border-right: 0;
+    }
+
+    tbody tr {
+      background: var(--panel);
+      transition: background-color 0.18s ease, color 0.18s ease;
+      cursor: pointer;
+    }
+
+    tbody td {
+      height: 64px;
+      padding: 0 14px;
+      border-right: 1px solid var(--grid);
+      border-bottom: 1px solid var(--grid);
+      color: #9f9fa4;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      vertical-align: middle;
+    }
+
+    tbody tr:hover {
+      background: #353538;
+    }
+
+    tbody tr.active {
+      background: var(--active-bg);
+    }
+
+    tbody tr.active td {
+      color: var(--active-text);
+      font-weight: 700;
+    }
+
+    .caption {
+      margin-top: 18px;
+      color: #c4c4c8;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .stage {
+        width: calc(100vw - 24px);
+        padding: 16px;
+      }
+
+      thead th,
+      tbody td {
+        padding: 12px 10px;
+        height: auto;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .caption {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <section class="table-card" aria-label="팜모닝 인당 획득 비용 개선 테이블">
+      <table>
+        <colgroup>
+          <col />
+          <col />
+          <col />
+          <col />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>활성화된 사용자 수</th>
+            <th>인당 획득 비용 (원)</th>
+            <th>1400원 대비 절감률 (%)</th>
+            <th>획득 효율 증가율 (%)</th>
+          </tr>
+        </thead>
+        <tbody id="projectionTableBody">
+          <tr data-active="false">
+            <td>500</td>
+            <td>2000</td>
+            <td>-43</td>
+            <td>-30</td>
+          </tr>
+          <tr class="active" data-active="true">
+            <td>714</td>
+            <td>1400</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr data-active="false">
+            <td>1000</td>
+            <td>1000</td>
+            <td>29</td>
+            <td>40</td>
+          </tr>
+          <tr data-active="false">
+            <td>2500</td>
+            <td>400</td>
+            <td>71</td>
+            <td>250</td>
+          </tr>
+          <tr data-active="false">
+            <td>5000</td>
+            <td>200</td>
+            <td>86</td>
+            <td>600</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <p class="caption">팜모닝 인당 획득 비용 개선시 효율 증가 프로젝션</p>
+  </main>
+
+  <script>
+    const rows = document.querySelectorAll("#projectionTableBody tr");
+
+    rows.forEach((row) => {
+      row.addEventListener("click", () => {
+        rows.forEach((item) => item.classList.remove("active"));
+        row.classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>

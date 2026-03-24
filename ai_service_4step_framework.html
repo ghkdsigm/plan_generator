@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 서비스 기획 4단계 프레임워크</title>
+  <style>
+    :root {
+      --bg: #111214;
+      --page: #1d1f22;
+      --panel: #292c31;
+      --panel-soft: #31353b;
+      --text: #f2f4f7;
+      --muted: #b8bec8;
+      --line: rgba(255, 255, 255, 0.08);
+      --line-strong: rgba(255, 255, 255, 0.14);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+      --green: #00ad50;
+      --green-deep: #00694d;
+      --blue: #32c7c7;
+      --orange: #ffb43c;
+      --purple: #8f77ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.04), transparent 22%),
+        linear-gradient(180deg, #0d0e10 0%, #111214 100%);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .page {
+      width: min(1500px, 100%);
+      background: var(--page);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      pointer-events: none;
+    }
+
+    .header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      color: #8fa1b3;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 8px 0 0;
+      font-size: 38px;
+      line-height: 1.2;
+      letter-spacing: -0.05em;
+    }
+
+    .summary {
+      max-width: 480px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+      letter-spacing: -0.02em;
+    }
+
+    .step-nav {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .step-chip {
+      min-height: 52px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      display: grid;
+      place-items: center;
+      color: #dfe4ea;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      cursor: pointer;
+      transition: border-color 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
+    }
+
+    .step-chip:hover,
+    .step-chip.active {
+      transform: translateY(-2px);
+      border-color: var(--line-strong);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .card.active,
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--line-strong);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header {
+      padding: 20px 22px;
+      color: #fff;
+      display: grid;
+      gap: 8px;
+    }
+
+    .step-1 .card-header {
+      background: linear-gradient(180deg, #ffca64 0%, var(--orange) 100%);
+      color: #2f2716;
+    }
+
+    .step-2 .card-header {
+      background: linear-gradient(180deg, #48d8d8 0%, var(--blue) 100%);
+    }
+
+    .step-3 .card-header {
+      background: linear-gradient(180deg, #1ccf73 0%, var(--green) 100%);
+    }
+
+    .step-4 .card-header {
+      background: linear-gradient(180deg, #ae9cff 0%, var(--purple) 100%);
+    }
+
+    .step-no {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: -0.04em;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      opacity: 0.92;
+      white-space: nowrap;
+    }
+
+    .card-body {
+      flex: 1;
+      padding: 22px;
+      display: grid;
+      align-content: start;
+      gap: 16px;
+      background: var(--panel);
+    }
+
+    .section-label {
+      display: inline-flex;
+      width: fit-content;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #eef2f7;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .sub-block {
+      display: grid;
+      gap: 10px;
+      padding-top: 2px;
+    }
+
+    .sub-title {
+      margin: 0;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    li {
+      position: relative;
+      padding-left: 22px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+      letter-spacing: -0.02em;
+      word-break: keep-all;
+    }
+
+    li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.03);
+    }
+
+    .step-1 li { color: #ffd489; }
+    .step-2 li { color: #84ecec; }
+    .step-3 li { color: #85efb7; }
+    .step-4 li { color: #c7bbff; }
+
+    li span {
+      color: var(--muted);
+    }
+
+    @media (max-width: 1180px) {
+      .header {
+        display: grid;
+      }
+
+      .step-nav,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 12px;
+      }
+
+      .page {
+        padding: 18px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .title-row {
+        display: grid;
+      }
+
+      .title {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="header">
+      <div>
+        <div class="eyebrow">AI Service Planning Framework</div>
+        <h1>AI 서비스 기획 내용을 4단계 실행 프레임워크로 재구성</h1>
+      </div>
+      <div class="summary">
+        주신 체크리스트를 기준으로 흐름이 자연스럽게 이어지도록 4단계 구조로 정리했습니다.
+        `Evaluation`과 `Operations`는 실제 운영 고도화 관점에서 함께 보는 경우가 많아 마지막 단계로 통합했습니다.
+      </div>
+    </section>
+
+    <section class="step-nav" aria-label="단계 선택">
+      <button class="step-chip active" data-step="1" type="button">1. Economics</button>
+      <button class="step-chip" data-step="2" type="button">2. Feasibility</button>
+      <button class="step-chip" data-step="3" type="button">3. Product Design</button>
+      <button class="step-chip" data-step="4" type="button">4. Evaluation + Operations</button>
+    </section>
+
+    <section class="grid" aria-label="AI 서비스 기획 4단계">
+      <article class="card step-1 active" data-step="1">
+        <header class="card-header">
+          <div class="step-no">1. 비즈니스 및 비용 설계</div>
+          <div class="title-row">
+            <h2 class="title">Economics</h2>
+            <div class="subtitle">핵심 체크리스트</div>
+          </div>
+        </header>
+        <div class="card-body">
+          <div class="section-label">Core Checklist</div>
+          <ul>
+            <li><span>AI 적합성 판단: 규칙 기반(If-else)으로 해결 가능한지, 반드시 LLM이 필요한지 검토</span></li>
+            <li><span>Unit Economics 산출: 사용자 1인당 평균 토큰 소모량 vs 예상 매출(LTV) 계산</span></li>
+            <li><span>수익 모델 기획: API 비용 변동에 대응할 구독 플랜 또는 종량제 모델 설계</span></li>
+            <li><span>데이터 확보 계획: RAG에 활용할 내부 데이터 자산 리스트업 및 저작권 검토</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="card step-2" data-step="2">
+        <header class="card-header">
+          <div class="step-no">2. 기술 검토 및 모델 선정</div>
+          <div class="title-row">
+            <h2 class="title">Feasibility</h2>
+            <div class="subtitle">핵심 체크리스트</div>
+          </div>
+        </header>
+        <div class="card-body">
+          <div class="section-label">Core Checklist</div>
+          <ul>
+            <li><span>모델 벤치마킹: GPT, Claude, Gemini, Llama 등 모델별 성능/비용/속도 비교 시트 작성</span></li>
+            <li><span>토큰 최적화 전략: Context Window 관리 및 비용 절감을 위한 프롬프트 압축 방안 수립</span></li>
+            <li><span>데이터 파이프라인 설계: PDF, 텍스트 등 비정형 데이터를 AI가 읽기 좋게 쪼개는 Chunking 규칙 정의</span></li>
+            <li><span>외부 API vs 자체 모델(sLLM) 판단: 보안 및 비용 관점의 인프라 구조 결정</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="card step-3" data-step="3">
+        <header class="card-header">
+          <div class="step-no">3. 서비스 및 UX 기획</div>
+          <div class="title-row">
+            <h2 class="title">Product Design</h2>
+            <div class="subtitle">핵심 체크리스트</div>
+          </div>
+        </header>
+        <div class="card-body">
+          <div class="section-label">Core Checklist</div>
+          <ul>
+            <li><span>System Prompt 설계: AI의 페르소나, 말투, 답변 형식, 제약 사항 정의</span></li>
+            <li><span>AI 특화 UX 설계: 스트리밍 답변 UI, 답변 재생성(Regenerate), 중단(Stop) 기능 기획</span></li>
+            <li><span>에러 핸들링: 할루시네이션 방지 문구 및 AI 답변 오류 시 신고/피드백 버튼 배치</span></li>
+            <li><span>가드레일 설정: 금지어 필터링 및 민감 정보 마스킹 로직 정의</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="card step-4" data-step="4">
+        <header class="card-header">
+          <div class="step-no">4. 성능 평가 및 운영 고도화</div>
+          <div class="title-row">
+            <h2 class="title">Evaluation + Operations</h2>
+            <div class="subtitle">핵심 체크리스트</div>
+          </div>
+        </header>
+        <div class="card-body">
+          <div class="section-label">Evaluation</div>
+          <div class="sub-block">
+            <ul>
+              <li><span>골든 셋 구축: 정답으로 간주할 질문-답변 쌍 데이터셋 최소 50~100개 확보</span></li>
+              <li><span>정성/정량 지표 수립: 답변 정확도, 유저 만족도, 응답 속도 등 핵심 KPI 설정</span></li>
+              <li><span>피드백 루프 기획: 유저의 좋아요/싫어요 데이터를 모델 개선에 반영하는 프로세스 설계</span></li>
+              <li><span>A/B 테스트: 프롬프트 버전별(v1 vs v2) 전환율 및 리텐션 비교 분석</span></li>
+            </ul>
+          </div>
+          <div class="section-label">Operations</div>
+          <div class="sub-block">
+            <ul>
+              <li><span>Rate Limit 설정: 특정 유저의 과도한 API 호출을 막기 위한 사용량 제한 기획</span></li>
+              <li><span>프롬프트 버전 관리: 성능 변화에 따른 프롬프트 히스토리 관리 체계 수립</span></li>
+              <li><span>보안 및 규제 대응: 데이터 서버 위치(국내외) 및 AI 윤리 가이드라인 준수 여부 체크</span></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const chips = document.querySelectorAll(".step-chip");
+    const cards = document.querySelectorAll(".card");
+
+    function activateStep(step) {
+      chips.forEach((chip) => {
+        chip.classList.toggle("active", chip.dataset.step === step);
+      });
+
+      cards.forEach((card) => {
+        card.classList.toggle("active", card.dataset.step === step);
+      });
+    }
+
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => activateStep(chip.dataset.step));
+    });
+
+    cards.forEach((card) => {
+      card.addEventListener("mouseenter", () => activateStep(card.dataset.step));
+    });
+  </script>
+</body>
+</html>

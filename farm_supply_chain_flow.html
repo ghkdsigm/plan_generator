@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>농산물 유통 구조 다이어그램</title>
+  <style>
+    :root {
+      --bg: #2a2a2d;
+      --panel: #303034;
+      --line: #4c4f58;
+      --line-soft: rgba(255, 255, 255, 0.08);
+      --text: #f2f2f4;
+      --muted: #70737c;
+      --green: #16f000;
+      --green-text: #0b4100;
+      --white-node: #f4f4f5;
+      --white-text: #2b2b2f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #141416;
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    .canvas {
+      width: min(1200px, calc(100vw - 32px));
+      min-height: 520px;
+      padding: 28px 32px 36px;
+      background: var(--bg);
+      border-radius: 18px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .title {
+      margin: 0 0 36px;
+      color: #e6e6e9;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .diagram {
+      position: relative;
+      height: 360px;
+    }
+
+    .links {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .loop {
+      fill: none;
+      stroke: var(--line);
+      stroke-width: 2;
+    }
+
+    .main-line {
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-dasharray: 1600;
+      stroke-dashoffset: 1600;
+      animation: drawLine 1.4s ease forwards;
+    }
+
+    .node {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      height: 58px;
+      padding: 0 34px;
+      border-radius: 999px;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .node.white {
+      background: var(--white-node);
+      color: var(--white-text);
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+    }
+
+    .node.green {
+      height: 54px;
+      border-radius: 4px;
+      background: var(--green);
+      color: var(--green-text);
+      font-size: 17px;
+      font-weight: 800;
+      padding: 0 18px;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .node.green:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+    }
+
+    .label {
+      position: absolute;
+      min-width: 86px;
+      height: 54px;
+      padding: 0 18px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      background: rgb(42 42 45);
+      z-index: 1;
+    }
+
+    .farmer {
+      left: 0;
+      top: 118px;
+      width: 96px;
+    }
+
+    .consumer {
+      right: 0;
+      top: 118px;
+      width: 118px;
+    }
+
+    .green-1 {
+      left: 178px;
+      top: 127px;
+      width: 208px;
+    }
+
+    .greenlabs {
+      left: 492px;
+      top: 128px;
+      width: 116px;
+    }
+
+    .green-2 {
+      left: 694px;
+      top: 127px;
+      width: 248px;
+    }
+
+    .lab-1-top {
+      left: 177px;
+      top: 12px;
+      width: 92px;
+    }
+
+    .lab-1-bottom {
+      left: 165px;
+      top: 214px;
+      width: 120px;
+    }
+
+    .lab-2-top {
+      left: 502px;
+      top: 10px;
+      width: 92px;
+    }
+
+    .lab-2-bottom {
+      left: 638px;
+    top: 233px;
+      width: 108px;
+    }
+
+    .lab-3-top {
+      right: 240px;
+      top: 10px;
+      width: 102px;
+    }
+
+    @keyframes drawLine {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .canvas {
+        width: calc(100vw - 20px);
+        padding: 20px;
+      }
+
+      .title {
+        font-size: 20px;
+      }
+
+      .diagram {
+        height: auto;
+        display: grid;
+        gap: 14px;
+      }
+
+      .links,
+      .label {
+        display: none;
+      }
+
+      .node {
+        position: static;
+        width: 100%;
+      }
+
+      .node.white,
+      .node.green {
+        height: 52px;
+        font-size: 16px;
+      }
+
+      .node.green {
+        border-radius: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="canvas">
+    <h1 class="title">농민 to 소비자 단계에서 불필요한 과정으로 인해 가격 거품 형성</h1>
+
+    <section class="diagram" aria-label="농산물 유통 구조 흐름도">
+      <svg class="links" viewBox="0 0 1136 360" preserveAspectRatio="none" aria-hidden="true">
+        <path class="main-line" d="M 82 156 H 178 H 482 H 598 H 694 H 942 H 1084" />
+
+        <path class="loop" d="M 140 156 L 140 60 Q 140 40 160 40 H 284 Q 304 40 304 60 L 304 240 Q 304 260 324 260 H 458 Q 478 260 478 240 L 478 60 Q 478 40 498 40 H 602 Q 622 40 622 60 L 622 240 Q 622 260 642 260 H 742 Q 762 260 762 240 L 762 60 Q 762 40 782 40 H 916 Q 936 40 936 60 L 936 156" />
+      </svg>
+
+      <div class="label lab-1-top">작목반</div>
+      <div class="label lab-1-bottom">산지수집상</div>
+      <div class="label lab-2-top">공판장</div>
+      <div class="label lab-2-bottom">중도매인</div>
+      <div class="label lab-3-top">소매상</div>
+
+      <div class="node white farmer">농민</div>
+      <div class="node green green-1">팜모닝 데이터 활용하여 농민 최소싱</div>
+      <div class="node green greenlabs">Greenlabs</div>
+      <div class="node green green-2">유통 단계 축소로 가격 경쟁력 확보</div>
+      <div class="node white consumer">소비자</div>
+    </section>
+  </main>
+
+  <script>
+    const greenNodes = document.querySelectorAll(".node.green");
+
+    greenNodes.forEach((node) => {
+      node.addEventListener("mouseenter", () => {
+        greenNodes.forEach((item) => (item.style.filter = "brightness(0.94)"));
+        node.style.filter = "brightness(1.04)";
+      });
+
+      node.addEventListener("mouseleave", () => {
+        greenNodes.forEach((item) => (item.style.filter = ""));
+      });
+    });
+  </script>
+</body>
+</html>

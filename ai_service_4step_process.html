@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 서비스 기획 4단계 프로세스</title>
+  <style>
+    :root {
+      --bg: #121315;
+      --page: #1b1d20;
+      --panel: #24272b;
+      --panel-soft: #2d3136;
+      --line: rgba(255, 255, 255, 0.08);
+      --line-strong: rgba(255, 255, 255, 0.16);
+      --text: #f2f4f6;
+      --muted: #b1b7c0;
+      --muted-soft: #858c96;
+      --accent: #d7dde5;
+      --accent-soft: #8e98a5;
+      --shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.04), transparent 20%),
+        linear-gradient(180deg, #0e0f10 0%, #131416 100%);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    .page {
+      width: min(1600px, 100%);
+      padding: 34px 34px 40px;
+      background: var(--page);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      pointer-events: none;
+    }
+
+    .header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 34px;
+    }
+
+    .eyebrow {
+      color: var(--muted-soft);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 10px 0 0;
+      font-size: 40px;
+      line-height: 1.18;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+    }
+
+    .summary {
+      max-width: 460px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+      letter-spacing: -0.02em;
+    }
+
+    .process {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+      align-items: start;
+    }
+
+    .process-line {
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      top: 82px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.28), rgba(255,255,255,0.08));
+      z-index: 0;
+    }
+
+    .step {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 16px;
+    }
+
+    .step-head {
+      min-height: 148px;
+      padding: 18px 18px 20px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid var(--line);
+      display: grid;
+      align-content: start;
+      gap: 10px;
+    }
+
+    .step-index {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      background: var(--panel-soft);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .step-title {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.24;
+      letter-spacing: -0.04em;
+      font-weight: 700;
+    }
+
+    .step-subtitle {
+      color: var(--muted-soft);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .step-body {
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      min-height: 360px;
+      display: grid;
+      align-content: start;
+      gap: 14px;
+    }
+
+    .label {
+      display: inline-flex;
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      color: #e5e9ee;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    li {
+      position: relative;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.62;
+      letter-spacing: -0.02em;
+      word-break: keep-all;
+    }
+
+    li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+    }
+
+    .step:hover .step-head,
+    .step:hover .step-body {
+      border-color: var(--line-strong);
+      transform: translateY(-2px);
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted-soft);
+      font-size: 13px;
+      line-height: 1.6;
+      letter-spacing: -0.02em;
+    }
+
+    @media (max-width: 1260px) {
+      .header {
+        display: grid;
+      }
+
+      .process {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .process-line {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 12px;
+      }
+
+      .page {
+        padding: 20px 18px 24px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .process {
+        grid-template-columns: 1fr;
+      }
+
+      .step-head {
+        min-height: auto;
+      }
+
+      .step-body {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="header">
+      <div>
+        <div class="eyebrow">AI Service Planning Process</div>
+        <h1>한눈에 보는 AI 서비스 기획 4단계</h1>
+      </div>
+      <div class="summary">
+        세부 체크리스트를 전부 늘어놓기보다, 실제 기획 흐름이 보이도록 4개의 단계로 단순화했습니다.
+        비용 검토부터 기술 검증, UX 설계, 운영 고도화까지 순서대로 빠르게 읽을 수 있는 프로세스형 인포그래픽입니다.
+      </div>
+    </section>
+
+    <section class="process" aria-label="AI 서비스 기획 4단계 프로세스">
+      <div class="process-line" aria-hidden="true"></div>
+
+      <article class="step">
+        <div class="step-head">
+          <div class="step-index">01</div>
+          <h2 class="step-title">비즈니스 및 비용 설계</h2>
+          <div class="step-subtitle">Economics</div>
+        </div>
+        <div class="step-body">
+          <div class="label">핵심 체크</div>
+          <ul>
+            <li>LLM이 꼭 필요한 문제인지 먼저 판단</li>
+            <li>사용자 1인당 토큰 비용과 LTV 계산</li>
+            <li>구독형 또는 종량제 수익 모델 설계</li>
+            <li>RAG용 내부 데이터와 저작권 검토</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-head">
+          <div class="step-index">02</div>
+          <h2 class="step-title">기술 검토 및 모델 선정</h2>
+          <div class="step-subtitle">Feasibility</div>
+        </div>
+        <div class="step-body">
+          <div class="label">핵심 체크</div>
+          <ul>
+            <li>GPT, Claude, Gemini, Llama 벤치마킹</li>
+            <li>Context Window와 프롬프트 압축 전략 설계</li>
+            <li>PDF·텍스트 데이터 Chunking 규칙 정의</li>
+            <li>외부 API와 자체 모델 구조를 비용·보안 기준으로 판단</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-head">
+          <div class="step-index">03</div>
+          <h2 class="step-title">서비스 및 UX 기획</h2>
+          <div class="step-subtitle">Product Design</div>
+        </div>
+        <div class="step-body">
+          <div class="label">핵심 체크</div>
+          <ul>
+            <li>AI 페르소나와 답변 형식을 포함한 System Prompt 설계</li>
+            <li>스트리밍, 재생성, 중단 기능 등 AI 특화 UX 정의</li>
+            <li>환각 방지 문구와 오류 신고 흐름 설계</li>
+            <li>금지어 필터링과 개인정보 마스킹 가드레일 정리</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-head">
+          <div class="step-index">04</div>
+          <h2 class="step-title">성능 평가 및 운영 고도화</h2>
+          <div class="step-subtitle">Evaluation + Operations</div>
+        </div>
+        <div class="step-body">
+          <div class="label">핵심 체크</div>
+          <ul>
+            <li>골든 셋 구축과 정확도·만족도·속도 KPI 수립</li>
+            <li>좋아요/싫어요 기반 피드백 루프와 A/B 테스트 운영</li>
+            <li>Rate Limit과 프롬프트 버전 관리 체계 수립</li>
+            <li>데이터 서버 위치와 AI 윤리 기준까지 점검</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <div class="footer-note">
+      4단계는 좌에서 우로 읽히는 프로세스 구조로 구성했으며, 색상은 강조를 최소화한 모노톤 중심으로 정리했습니다.
+    </div>
+  </main>
+</body>
+</html>

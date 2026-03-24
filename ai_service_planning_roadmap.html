@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 서비스 기획 로드맵</title>
+  <style>
+    :root {
+      --viewport-bg: #121212;
+      --page: #1f1f1f;
+      --panel: #2a2a2d;
+      --panel-soft: #313136;
+      --text: #f2f2f4;
+      --muted: #c1c5cc;
+      --muted-soft: #a3a8b2;
+      --line: rgba(255, 255, 255, 0.08);
+      --line-strong: rgba(255, 255, 255, 0.14);
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
+      --teal: #38c5c7;
+      --teal-soft: #54d7d7;
+      --orange: #ffae2f;
+      --orange-soft: #ffc65f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.04), transparent 24%),
+        linear-gradient(180deg, #0e0e0f 0%, #111214 100%);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    }
+
+    .page {
+      width: min(1600px, calc(100vw - 40px));
+      padding: 36px;
+      background: var(--page);
+      box-shadow: var(--shadow);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      pointer-events: none;
+    }
+
+    .intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 26px;
+    }
+
+    .eyebrow {
+      color: var(--muted-soft);
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 8px 0 0;
+      font-size: 38px;
+      line-height: 1.18;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+    }
+
+    .summary {
+      max-width: 520px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.72;
+      letter-spacing: -0.02em;
+    }
+
+    .bands {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+      margin-bottom: 20px;
+    }
+
+    .band {
+      min-height: 60px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .band.theory {
+      background: linear-gradient(180deg, var(--orange-soft) 0%, var(--orange) 100%);
+    }
+
+    .band.practice {
+      grid-column: 2 / 5;
+      background: linear-gradient(180deg, #48d6d7 0%, #2bb8bb 100%);
+    }
+
+    .roadmap {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      min-height: 460px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover,
+    .card.active {
+      transform: translateY(-4px);
+      border-color: var(--line-strong);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+    }
+
+    .card-header {
+      padding: 20px 22px 18px;
+      min-height: 122px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+      color: #fff;
+    }
+
+    .card-header.orange {
+      background: linear-gradient(180deg, var(--orange-soft) 0%, var(--orange) 100%);
+    }
+
+    .card-header.teal {
+      background: linear-gradient(180deg, #4ad8d9 0%, #2ebdbe 100%);
+    }
+
+    .card-kicker {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      opacity: 0.95;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.26;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+      word-break: keep-all;
+    }
+
+    .card-body {
+      flex: 1;
+      padding: 20px 20px 22px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
+        var(--panel);
+      display: grid;
+      align-content: start;
+      gap: 16px;
+    }
+
+    .section-title {
+      margin: 0;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.45;
+      letter-spacing: -0.03em;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: var(--line);
+      margin-top: 2px;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    li {
+      position: relative;
+      padding-left: 22px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.68;
+      letter-spacing: -0.02em;
+      word-break: keep-all;
+    }
+
+    li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.95;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.03);
+    }
+
+    .orange-list li {
+      color: #ffd48a;
+    }
+
+    .teal-list li {
+      color: #88ece8;
+    }
+
+    .teal-list li span,
+    .orange-list li span {
+      color: var(--muted);
+    }
+
+    .practice-label {
+      display: inline-flex;
+      width: fit-content;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e7eaef;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card-1 {
+      grid-column: 1 / span 2;
+    }
+
+    .card-2 {
+      grid-column: 3 / span 2;
+    }
+
+    .card-3 {
+      grid-column: 5 / span 2;
+    }
+
+    .card-4 {
+      grid-column: 2 / span 2;
+    }
+
+    .card-5 {
+      grid-column: 4 / span 2;
+    }
+
+    .footer-note {
+      margin-top: 22px;
+      color: var(--muted-soft);
+      font-size: 14px;
+      line-height: 1.6;
+      letter-spacing: -0.02em;
+    }
+
+    @media (max-width: 1280px) {
+      .page {
+        padding: 24px;
+      }
+
+      .bands {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .roadmap {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .band.practice {
+        grid-column: 1 / 3;
+      }
+
+      .card-1,
+      .card-2,
+      .card-3,
+      .card-4,
+      .card-5 {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .intro {
+        display: grid;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .roadmap,
+      .bands {
+        grid-template-columns: 1fr;
+      }
+
+      .band.practice {
+        grid-column: auto;
+      }
+
+      .card {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <div>
+        <div class="eyebrow">AI Service Planning Roadmap</div>
+        <h1>AI 서비스 기획 학습 흐름을 기존 다크 포트폴리오 스타일로 재구성한 로드맵</h1>
+      </div>
+      <div class="summary">
+        이론부터 실무 적용까지의 흐름이 한눈에 보이도록 카드형 구조로 정리했습니다.
+        원본 이미지의 정보 구조와 단계 연결성은 유지하면서, 기존 `Pf.html`의 다크 패널 톤과
+        밀도 높은 타이포 스타일에 맞춰 다시 디자인했습니다.
+      </div>
+    </section>
+
+    <section class="bands" aria-label="학습 구간">
+      <div class="band theory">AI 서비스 기획 - 이론</div>
+      <div class="band practice">AI 서비스 기획 - 실무</div>
+    </section>
+
+    <section class="roadmap" aria-label="AI 서비스 기획 로드맵">
+      <article class="card card-1">
+        <header class="card-header orange">
+          <div class="card-kicker">1. 비즈니스 및 비용 설계</div>
+          <h2 class="card-title">Economics</h2>
+        </header>
+        <div class="card-body">
+          <h3 class="section-title">핵심 체크리스트</h3>
+          <ul class="orange-list">
+            <li><span>AI 적합성 판단: 규칙 기반(If-else)으로 해결 가능한지, 반드시 LLM이 필요한지 검토</span></li>
+            <li><span>Unit Economics 산출: 사용자 1인당 평균 토큰 소모량 vs 예상 매출(LTV) 계산</span></li>
+            <li><span>수익 모델 기획: API 비용 변동에 대응할 구독 플랜 또는 종량제 모델 설계</span></li>
+            <li><span>데이터 확보 계획: RAG에 활용할 내부 데이터 자산 리스트업 및 저작권 검토</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="card card-2">
+        <header class="card-header teal">
+          <div class="card-kicker">2. 기술 검토 및 모델 선정</div>
+          <h2 class="card-title">Feasibility</h2>
+        </header>
+        <div class="card-body">
+          <h3 class="section-title">핵심 체크리스트</h3>
+          <ul class="teal-list">
+            <li><span>모델 벤치마킹: GPT, Claude, Gemini, Llama 등 모델별 성능/비용/속도 비교 시트 작성</span></li>
+            <li><span>토큰 최적화 전략: Context Window 관리 및 비용 절감을 위한 프롬프트 압축 방안 수립</span></li>
+            <li><span>데이터 파이프라인 설계: PDF, 텍스트 등 비정형 데이터를 AI가 읽기 좋게 쪼개는 Chunking 규칙 정의</span></li>
+            <li><span>외부 API vs 자체 모델(sLLM) 판단: 보안 및 비용 관점의 인프라 구조 결정</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="card card-3">
+        <header class="card-header teal">
+          <div class="card-kicker">3. 서비스 및 UX 기획</div>
+          <h2 class="card-title">Product Design</h2>
+        </header>
+        <div class="card-body">
+          <h3 class="section-title">핵심 체크리스트</h3>
+          <ul class="teal-list">
+            <li><span>System Prompt 설계: AI의 페르소나, 말투, 답변 형식, 제약 사항 정의</span></li>
+            <li><span>AI 특화 UX 설계: 스트리밍 답변 UI, 답변 재생성(Regenerate), 중단(Stop) 기능 기획</span></li>
+            <li><span>에러 핸들링: 할루시네이션 방지 문구 및 AI 답변 오류 시 신고/피드백 버튼 배치</span></li>
+            <li><span>가드레일 설정: 금지어 필터링 및 민감 정보 마스킹 로직 정의</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="card card-4">
+        <header class="card-header teal">
+          <div class="card-kicker">4. 성능 평가 및 고도화</div>
+          <h2 class="card-title">Evaluation</h2>
+        </header>
+        <div class="card-body">
+          <h3 class="section-title">핵심 체크리스트</h3>
+          <ul class="teal-list">
+            <li><span>골든 셋 구축: 정답으로 간주할 질문-답변 쌍 데이터셋 최소 50~100개 확보</span></li>
+            <li><span>정성/정량 지표 수립: 답변 정확도, 유저 만족도, 응답 속도 등 핵심 KPI 설정</span></li>
+            <li><span>피드백 루프 기획: 유저의 좋아요/싫어요 데이터를 모델 개선에 반영하는 프로세스 설계</span></li>
+            <li><span>A/B 테스트: 프롬프트 버전별(v1 vs v2) 전환율 및 리텐션 비교 분석</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="card card-5">
+        <header class="card-header teal">
+          <div class="card-kicker">5. 운영 및 리스크 관리</div>
+          <h2 class="card-title">Operations</h2>
+        </header>
+        <div class="card-body">
+          <h3 class="section-title">핵심 체크리스트</h3>
+          <ul class="teal-list">
+            <li><span>Rate Limit 설정: 특정 유저의 과도한 API 호출을 막기 위한 사용량 제한 기획</span></li>
+            <li><span>프롬프트 버전 관리: 성능 변화에 따른 프롬프트 히스토리 관리 체계 수립</span></li>
+            <li><span>보안 및 규제 대응: 데이터 서버 위치(국내외) 및 AI 윤리 가이드라인 준수 여부 체크</span></li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <div class="footer-note">
+      카드에 마우스를 올리면 강조되며, 원본 다이어그램의 단계 흐름을 기존 포트폴리오의 다크 카드 디자인 언어로 재해석했습니다.
+    </div>
+  </main>
+
+  <script>
+    const cards = document.querySelectorAll(".card");
+
+    cards.forEach((card) => {
+      card.addEventListener("mouseenter", () => {
+        cards.forEach((item) => item.classList.remove("active"));
+        card.classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>

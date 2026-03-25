@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projection Table Mockup</title>
+  <title>Projection Table Mockup 3 Columns</title>
   <style>
     :root {
       --bg: #1a1a1b;
@@ -34,7 +34,7 @@
     }
 
     .stage {
-      width: min(920px, calc(100vw - 48px));
+      width: min(860px, calc(100vw - 48px));
       padding: 28px;
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.03);
@@ -54,10 +54,9 @@
       table-layout: fixed;
     }
 
-    colgroup col:nth-child(1) { width: 25%; }
-    colgroup col:nth-child(2) { width: 25%; }
-    colgroup col:nth-child(3) { width: 25%; }
-    colgroup col:nth-child(4) { width: 25%; }
+    colgroup col:nth-child(1) { width: 34%; }
+    colgroup col:nth-child(2) { width: 13%; }
+    colgroup col:nth-child(3) { width: 53%; }
 
     thead th {
       height: 58px;
@@ -129,10 +128,9 @@
 </head>
 <body>
   <main class="stage">
-    <section class="table-card" aria-label="AX 과제 우선순위 테이블">
+    <section class="table-card" aria-label="팜모닝 획득 효율 3열 테이블">
       <table>
         <colgroup>
-          <col />
           <col />
           <col />
           <col />
@@ -140,46 +138,40 @@
         <thead>
           <tr>
             <th>과제명</th>
-            <th>종합 스코어</th>
-            <th>투자비용</th>
+            <th>투표 순위</th>
             <th>효과</th>
           </tr>
         </thead>
         <tbody id="projectionTableBody">
           <tr data-active="false">
-            <td>AX-04 예지보전</td>
-            <td>25점</td>
-            <td>50,000,000</td>
-            <td>14억/년</td>
+            <td>AX-25 브레인스토밍 DW-BRAIN</td>
+            <td>1</td>
+            <td>아이데이션 효과 및 생산력 극대화</td>
           </tr>
           <tr data-active="false">
-            <td>AX-12 에너지 효율</td>
-            <td>20점</td>
-            <td>60,000,000</td>
-            <td>6억/년</td>
+            <td>AIoT-01 차량 외부 합성 파노라마</td>
+            <td>2</td>
+            <td>경쟁 매매 단지 대비 턴테이블 컨텐츠 & 수익 확보</td>
           </tr>
           <tr data-active="false">
-            <td>AX-13 SAP 자동화</td>
-            <td>20점</td>
-            <td>40,000,000</td>
-            <td>1억/년</td>
+            <td>AX-22 엠파크 스마트 카메이트</td>
+            <td>3</td>
+            <td>고객신뢰 및 기술력 확보 & 상사 영업 경쟁력 제고</td>
           </tr>
           <tr data-active="false">
-            <td>AX-02 원가 모니터링</td>
-            <td>16.7점</td>
-            <td>80,000,000</td>
-            <td>50억/년</td>
+            <td>AIoT-05 3D집들이 AR 합성 파노라마</td>
+            <td>4</td>
+            <td>외주 비용/시간 절감 & BtoB 영업 확대 효과</td>
           </tr>
           <tr data-active="false">
-            <td>AX-03 마루 스케줄링</td>
-            <td>16점</td>
-            <td>100,000,000</td>
-            <td>20억/년</td>
+            <td>AX-31 DAOP</td>
+            <td>5</td>
+            <td>비개발직군 시스템 활용 편의성 제고</td>
           </tr>
         </tbody>
       </table>
     </section>
-    <p class="caption">AX 과제 우선순위 및 기대 효과 테이블</p>
+    <p class="caption">팜모닝 인당 획득 비용 개선시 효율 증가 3열 프로젝션</p>
   </main>
 </body>
 </html>
